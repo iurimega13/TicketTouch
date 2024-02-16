@@ -1,2 +1,2 @@
 # TicketTouch
-App desenvolvido para TCC do curso de Engenharia de Software
+App em desenvolvimento para tese de TCC do curso de Engenharia de Software
