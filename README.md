@@ -32,3 +32,16 @@
 - [ ] Acompanhamento de Métricas de Desempenho: Painéis e relatórios para acompanhar métricas de desempenho, como tempo médio de resposta, tempo médio de resolução e índice de satisfação do cliente.
 - [ ] Gestão de Ativos: Capacidade de rastrear e gerenciar ativos relacionados aos tickets de suporte, como hardware, software e outros recursos técnicos.
 
+## Requisitos do Banco de Dados
+
+- [ ] Modelo de Dados: Desenvolver um modelo de dados adequado para armazenar informações sobre usuários, tickets, histórico de interações, configurações do sistema, entre outros.
+- [ ] Segurança dos Dados: Implementar medidas de segurança para proteger os dados armazenados no banco de dados, como criptografia de dados, controle de acesso e auditoria.
+- [ ] Desempenho: Projetar o banco de dados para garantir um bom desempenho, considerando fatores como índices adequados, particionamento de tabelas e otimização de consultas.
+- [ ] Escalabilidade: Garantir que o banco de dados seja capaz de lidar com um aumento no volume de dados e transações ao longo do tempo, escalando horizontal ou verticalmente conforme necessário.
+- [ ] Disponibilidade: Implementar mecanismos de alta disponibilidade e recuperação de desastres para minimizar o tempo de inatividade do sistema em caso de falhas no banco de dados.
+- [ ] Backup e Restauração: Estabelecer procedimentos regulares de backup e restauração para proteger os dados contra perda ou corrupção, com testes periódicos de restauração.
+- [ ] Integridade Referencial: Utilizar chaves estrangeiras e restrições de integridade referencial para garantir a consistência dos dados e evitar inconsistências ou conflitos.
+- [ ] Normalização: Aplicar técnicas de normalização para reduzir a redundância de dados e melhorar a eficiência do armazenamento e consulta de informações.
+- [ ] Indexação: Identificar e criar índices adequados para acelerar consultas frequentes e melhorar o desempenho geral do banco de dados.
+- [ ] Suporte a Transações: Implementar controle de transações para garantir a consistência dos dados e permitir operações de rollback em caso de falhas ou erros.
+- [ ] Monitoramento e Diagnóstico: Configurar ferramentas de monitoramento e diagnóstico para acompanhar o desempenho do banco de dados e identificar possíveis problemas ou gargalos.
