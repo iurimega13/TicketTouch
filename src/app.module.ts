@@ -6,9 +6,26 @@ import { AdminsModule } from './admins/admins.module';
 import { TechniciansModule } from './technicians/technicians.module';
 import { TicketsModule } from './tickets/tickets.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [UserModule, AdminsModule, TechniciansModule, TicketsModule, NotificationsModule],
+  imports: [
+    
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local'],
+    }),
+    TypeOrmModule.forRoot({
+      database: `tickettouch`,
+      host: `localhost`,
+      password: `mysecretpassword`,
+      port: 5432,
+      username: `postgres`,
+      type: 'postgres',
+      synchronize: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+    }),
+    UserModule, AdminsModule, TechniciansModule, TicketsModule, NotificationsModule],
   controllers: [AppController],
   providers: [AppService],
 })
