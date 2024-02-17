@@ -24,7 +24,6 @@
 ## Funcionalidades
 
 - [ ] Portal de Autoatendimento: Um portal de autoatendimento onde os clientes podem encontrar respostas para suas perguntas mais comuns sem a necessidade de abrir um ticket.
-- [ ] Formulários Customizáveis de Ticket: Capacidade de criar formulários de ticket personalizados para capturar informações específicas do cliente e do problema.
 - [ ] Automatização de Fluxo de Trabalho: Recursos para automatizar tarefas comuns de suporte, como roteamento automático de tickets, respostas automáticas e atribuição de prioridades.
 - [ ] SLAs (Acordos de Nível de Serviço): Funcionalidade para definir e acompanhar os SLAs para garantir que os tickets sejam resolvidos dentro do prazo estabelecido.
 - [ ] Colaboração em Equipe: Capacidade de colaborar em equipe para resolver tickets, atribuir tarefas a outros membros da equipe e trabalhar juntos em resoluções de problemas mais complexos.
