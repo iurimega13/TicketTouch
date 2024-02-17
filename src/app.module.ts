@@ -22,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: 5432,
       username: `postgres`,
       type: 'postgres',
-      synchronize: true,
+      synchronize: false,
       entities: ['dist/**/*.entity{.ts,.js}'],
     }),
     UserModule, AdminsModule, TechniciansModule, TicketsModule, NotificationsModule],
