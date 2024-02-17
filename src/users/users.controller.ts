@@ -1,10 +1,16 @@
-import { Controller, Get } from '@nestjs/common';
-
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { createUserDto } from './dtos/createUser.dto'; // Import the missing module or class
 @Controller('users')
 export class UsersController {
 
-    @Get()
-    async getUsers() {
-        return JSON.stringify({ test: 'Get all users' });
+    @Post()
+    async createUsers(
+        @Body() createUser: createUserDto
+        ) { 
+        return {
+            message: 'User created successfully',
+            ...createUser,
+            password: '**********'
+        };
     }
 }
