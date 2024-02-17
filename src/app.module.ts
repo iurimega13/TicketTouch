@@ -8,7 +8,7 @@ import { TicketsModule } from './tickets/tickets.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EquipmentsModule } from './equipaments/equipments.module';}
+import { EquipmentsModule } from './equipaments/equipments.module';
 
 @Module({
   imports: [
