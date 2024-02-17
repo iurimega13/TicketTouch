@@ -1,0 +1,268 @@
+-- Active: 1708188709739@@127.0.0.1@5432@tickettouch@public
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  registration VARCHAR UNIQUE,
+  email VARCHAR UNIQUE,
+  password VARCHAR,
+  role VARCHAR,
+  phone_number VARCHAR,
+  unit_id INT,
+  department_id INT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (unit_id) REFERENCES units(id),
+  FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+
+COMMENT ON TABLE users IS 'Tabela que armazena informações dos usuários do sistema';
+
+COMMENT ON COLUMN users.id IS 'Identificador único do usuário';
+COMMENT ON COLUMN users.name IS 'Nome do usuário';
+COMMENT ON COLUMN users.registration IS 'Matricula do usuário';
+COMMENT ON COLUMN users.email IS 'Endereço de e-mail do usuário';
+COMMENT ON COLUMN users.password IS 'Senha do usuário (criptografada)';
+COMMENT ON COLUMN users.role IS 'Função do usuário (cliente, técnico, administrador)';
+COMMENT ON COLUMN users.phone_number IS 'Número de telefone do usuário';
+COMMENT ON COLUMN users.unit_id IS 'ID da unidade à qual o usuário está associado';
+COMMENT ON COLUMN users.department_id IS 'ID do departamento ao qual o usuário está associado';
+COMMENT ON COLUMN users.created_at IS 'Data e hora de criação do usuário';
+COMMENT ON COLUMN users.updated_at IS 'Data e hora da última atualização do usuário';
+
+CREATE TABLE units (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  address VARCHAR,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+COMMENT ON TABLE units IS 'Tabela que armazena informações das unidades';
+
+COMMENT ON COLUMN units.id IS 'Identificador único da unidade';
+COMMENT ON COLUMN units.name IS 'Nome da unidade';
+COMMENT ON COLUMN units.address IS 'Endereço da unidade';
+COMMENT ON COLUMN units.created_at IS 'Data e hora de criação da unidade';
+COMMENT ON COLUMN units.updated_at IS 'Data e hora da última atualização da unidade';
+
+CREATE TABLE departments (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  unit_id INT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (unit_id) REFERENCES units(id)
+);
+
+COMMENT ON TABLE departments IS 'Tabela que armazena informações dos departamentos';
+
+COMMENT ON COLUMN departments.id IS 'Identificador único do departamento';
+COMMENT ON COLUMN departments.name IS 'Nome do departamento';
+COMMENT ON COLUMN departments.unit_id IS 'ID da unidade à qual o departamento pertence';
+COMMENT ON COLUMN departments.created_at IS 'Data e hora de criação do departamento';
+COMMENT ON COLUMN departments.updated_at IS 'Data e hora da última atualização do departamento';
+
+CREATE TABLE tickets (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR,
+  description TEXT,
+  priority VARCHAR,
+  status VARCHAR,
+  category_id INT,
+  user_id INT,
+  technician_id INT,
+  organization_id INT,
+  due_date TIMESTAMP,
+  sla_id INT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (technician_id) REFERENCES users(id),
+  FOREIGN KEY (category_id) REFERENCES ticket_categories(id),
+  FOREIGN KEY (sla_id) REFERENCES slas(id)
+);
+
+COMMENT ON TABLE tickets IS 'Tabela que armazena informações dos tickets';
+
+COMMENT ON COLUMN tickets.id IS 'Identificador único do ticket';
+COMMENT ON COLUMN tickets.title IS 'Título do ticket';
+COMMENT ON COLUMN tickets.description IS 'Descrição do problema relatado no ticket';
+COMMENT ON COLUMN tickets.priority IS 'Prioridade do ticket';
+COMMENT ON COLUMN tickets.status IS 'Status do ticket (aberto, em andamento, fechado, etc.)';
+COMMENT ON COLUMN tickets.category_id IS 'ID da categoria do ticket';
+COMMENT ON COLUMN tickets.user_id IS 'ID do usuário que abriu o ticket';
+COMMENT ON COLUMN tickets.technician_id IS 'ID do técnico atribuído ao ticket';
+COMMENT ON COLUMN tickets.organization_id IS 'ID da organização relacionada ao ticket';
+COMMENT ON COLUMN tickets.due_date IS 'Data de vencimento do ticket';
+COMMENT ON COLUMN tickets.sla_id IS 'ID do SLA relacionado ao ticket';
+COMMENT ON COLUMN tickets.created_at IS 'Data e hora de criação do ticket';
+COMMENT ON COLUMN tickets.updated_at IS 'Data e hora da última atualização do ticket';
+
+CREATE TABLE ticket_categories (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  description TEXT
+);
+
+COMMENT ON TABLE ticket_categories IS 'Tabela que armazena informações das categorias de ticket';
+
+COMMENT ON COLUMN ticket_categories.id IS 'Identificador único da categoria de ticket';
+COMMENT ON COLUMN ticket_categories.name IS 'Nome da categoria';
+COMMENT ON COLUMN ticket_categories.description IS 'Descrição da categoria de ticket';
+
+CREATE TABLE attachments (
+  id SERIAL PRIMARY KEY,
+  ticket_id INT,
+  filename VARCHAR,
+  file_path VARCHAR,
+  created_at TIMESTAMP,
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id)
+);
+
+COMMENT ON TABLE attachments IS 'Tabela que armazena informações dos anexos dos tickets';
+
+COMMENT ON COLUMN attachments.id IS 'Identificador único do anexo';
+COMMENT ON COLUMN attachments.ticket_id IS 'ID do ticket relacionado ao anexo';
+COMMENT ON COLUMN attachments.filename IS 'Nome do arquivo';
+COMMENT ON COLUMN attachments.file_path IS 'Caminho do arquivo';
+COMMENT ON COLUMN attachments.created_at IS 'Data e hora de criação do anexo';
+
+CREATE TABLE ticket_changes (
+  id SERIAL PRIMARY KEY,
+  ticket_id INT,
+  user_id INT,
+  change_type VARCHAR,
+  old_value VARCHAR,
+  new_value VARCHAR,
+  created_at TIMESTAMP,
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+COMMENT ON TABLE ticket_changes IS 'Tabela que armazena informações das alterações nos tickets';
+
+COMMENT ON COLUMN ticket_changes.id IS 'Identificador único da alteração no ticket';
+COMMENT ON COLUMN ticket_changes.ticket_id IS 'ID do ticket relacionado à alteração';
+COMMENT ON COLUMN ticket_changes.user_id IS 'ID do usuário que realizou a alteração';
+COMMENT ON COLUMN ticket_changes.change_type IS 'Tipo de alteração (status, prioridade, atribuição, etc.)';
+COMMENT ON COLUMN ticket_changes.old_value IS 'Valor antigo';
+COMMENT ON COLUMN ticket_changes.new_value IS 'Novo valor';
+COMMENT ON COLUMN ticket_changes.created_at IS 'Data e hora da alteração';
+
+CREATE TABLE user_feedback (
+  id SERIAL PRIMARY KEY,
+  ticket_id INT,
+  user_id INT,
+  rating INT,
+  comment TEXT,
+  created_at TIMESTAMP,
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+COMMENT ON TABLE user_feedback IS 'Tabela que armazena informações do feedback dos usuários';
+
+COMMENT ON COLUMN user_feedback.id IS 'Identificador único do feedback do usuário';
+COMMENT ON COLUMN user_feedback.ticket_id IS 'ID do ticket relacionado ao feedback';
+COMMENT ON COLUMN user_feedback.user_id IS 'ID do usuário que deu o feedback';
+COMMENT ON COLUMN user_feedback.rating IS 'Avaliação do usuário (por exemplo, de 1 a 5)';
+COMMENT ON COLUMN user_feedback.comment IS 'Comentário do usuário';
+COMMENT ON COLUMN user_feedback.created_at IS 'Data e hora do feedback';
+
+CREATE TABLE slas (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  description TEXT,
+  response_time INT,
+  resolution_time INT
+);
+
+COMMENT ON TABLE slas IS 'Tabela que armazena informações dos SLAs (Acordos de Nível de Serviço)';
+
+COMMENT ON COLUMN slas.id IS 'Identificador único do SLA';
+COMMENT ON COLUMN slas.name IS 'Nome do SLA';
+COMMENT ON COLUMN slas.description IS 'Descrição do SLA';
+COMMENT ON COLUMN slas.response_time IS 'Tempo de resposta em minutos';
+COMMENT ON COLUMN slas.resolution_time IS 'Tempo de resolução em minutos';
+
+CREATE TABLE equipments (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  description TEXT,
+  serial_number VARCHAR,
+  unit_id INT,
+  user_id INT,
+  ticket_id INT,
+  is_shared BOOLEAN,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (unit_id) REFERENCES units(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id)
+);
+
+COMMENT ON TABLE equipments IS 'Tabela que armazena informações dos equipamentos';
+
+COMMENT ON COLUMN equipments.id IS 'Identificador único do equipamento';
+COMMENT ON COLUMN equipments.name IS 'Nome do equipamento';
+COMMENT ON COLUMN equipments.description IS 'Descrição do equipamento';
+COMMENT ON COLUMN equipments.serial_number IS 'Número de série do equipamento';
+COMMENT ON COLUMN equipments.unit_id IS 'ID da unidade à qual o equipamento está associado';
+COMMENT ON COLUMN equipments.user_id IS 'ID do usuário associado ao equipamento (opcional)';
+COMMENT ON COLUMN equipments.ticket_id IS 'ID do ticket associado ao equipamento (opcional)';
+COMMENT ON COLUMN equipments.is_shared IS 'Indica se o equipamento é compartilhado (true) ou particular (false)';
+COMMENT ON COLUMN equipments.created_at IS 'Data e hora de criação do equipamento';
+COMMENT ON COLUMN equipments.updated_at IS 'Data e hora da última atualização do equipamento';
+
+CREATE TABLE collaborations (
+  id SERIAL PRIMARY KEY,
+  ticket_id INT,
+  user_id INT,
+  created_at TIMESTAMP,
+  FOREIGN KEY (ticket_id) REFERENCES tickets(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+COMMENT ON TABLE collaborations IS 'Tabela que armazena informações das colaborações nos tickets';
+
+COMMENT ON COLUMN collaborations.id IS 'Identificador único da colaboração';
+COMMENT ON COLUMN collaborations.ticket_id IS 'ID do ticket ao qual a colaboração está associada';
+COMMENT ON COLUMN collaborations.user_id IS 'ID do usuário (técnico ou analista) envolvido na colaboração';
+COMMENT ON COLUMN collaborations.created_at IS 'Data e hora de criação da colaboração';
+
+CREATE TABLE user_settings (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  notification_settings VARCHAR,
+  theme VARCHAR,
+  language VARCHAR,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+COMMENT ON TABLE user_settings IS 'Tabela que armazena informações das configurações do usuário';
+
+COMMENT ON COLUMN user_settings.id IS 'Identificador único das configurações do usuário';
+COMMENT ON COLUMN user_settings.user_id IS 'ID do usuário ao qual as configurações pertencem';
+COMMENT ON COLUMN user_settings.notification_settings IS 'Configurações de notificação do usuário (por exemplo, preferências de e-mail)';
+COMMENT ON COLUMN user_settings.theme IS 'Tema preferido do usuário para a interface do sistema';
+COMMENT ON COLUMN user_settings.language IS 'Idioma preferido do usuário para o sistema';
+COMMENT ON COLUMN user_settings.created_at IS 'Data e hora de criação das configurações do usuário';
+COMMENT ON COLUMN user_settings.updated_at IS 'Data e hora da última atualização das configurações do usuário';
+
+CREATE TABLE faqs (
+  id SERIAL PRIMARY KEY,
+  question VARCHAR UNIQUE,
+  answer TEXT,
+  created_at TIMESTAMP,
+  updated_at TIMESTAMP
+);
+
+COMMENT ON TABLE faqs IS 'Tabela que armazena informações das respostas rápidas';
+
+COMMENT ON COLUMN faqs.id IS 'Identificador único da resposta rápida';
+COMMENT ON COLUMN faqs.question IS 'Pergunta relacionada à resposta rápida';
+COMMENT ON COLUMN faqs.answer IS 'Resposta rápida';
+COMMENT ON COLUMN faqs.created_at IS 'Data e hora de criação da resposta rápida';
+COMMENT ON COLUMN faqs.updated_at IS 'Data e hora da última atualização da resposta rápida';
