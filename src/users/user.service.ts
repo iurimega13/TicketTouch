@@ -59,12 +59,12 @@ export class UserService {
     async findByRegistration(registration: string): Promise<UserEntity> {
         // Encontra um usuário pelo seu registro no banco de dados
         const user = await this.userRepository.findOne({ where: { registration } });
-
+    
         // Se o usuário não for encontrado, lança NotFoundException
         if (!user) {
             throw new NotFoundException(`Usuário com registro ${registration} não encontrado`);
         }
-
+    
         return user;
     }
 
