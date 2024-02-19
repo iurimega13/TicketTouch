@@ -8,7 +8,7 @@ import { JwtService } from '@nestjs/jwt'; // Importa a classe JwtService do paco
 import { ReturnUserDto } from 'src/users/dtos/returnUser.dto';
 import { LoginPayload } from './dtos/loginPayload.dto';
 
-@Injectable() // Indica que a classe é um serviço injetável
+@Injectable() 
 export class AuthService {
     constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {} // Injeta o serviço UserService e JwtService no construtor
 
