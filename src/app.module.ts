@@ -15,17 +15,20 @@ import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
   imports: [
     // Configuração do ambiente e banco de dados
     ConfigModule.forRoot({
+      isGlobal: true, // Define que o módulo é global
       envFilePath: ['.env.development.local'], // Define o arquivo de ambiente a ser carregado
     }),
-    TypeOrmModule.forRoot({
-      database: `tickettouch`, // Nome do banco de dados
-      host: `localhost`, // Host do banco de dados
-      password: `mysecretpassword`, // Senha do banco de dados
-      port: 5432, // Porta do banco de dados
-      username: `postgres`, // Nome de usuário do banco de dados
-      type: 'postgres', // Tipo do banco de dados
-      synchronize: false, // Sincroniza automaticamente o esquema do banco de dados com as entidades
-      entities: ['dist/**/*.entity{.ts,.js}'], // Localização das entidades
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres', // Tipo do banco de dados
+        database: process.env.DB_DATABASE, // Nome do banco de dados
+        host: process.env.DB_HOST, // Host do banco de dados
+        password: process.env.DB_PASSWORD, // Senha do banco de dados
+        port: parseInt(process.env.DB_PORT), // Porta do banco de dados
+        username: process.env.DB_USERNAME, // Nome de usuário do banco de dados
+        synchronize: false, // Sincroniza automaticamente o esquema do banco de dados com as entidades
+        entities: ['dist/**/*.entity{.ts,.js}'], // Localização das entidades
+      }),
     }),
     // Importação dos módulos
     UserModule, AdminsModule, TechniciansModule, TicketsModule, NotificationsModule, AuthModule
@@ -33,4 +36,5 @@ import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
   controllers: [AppController], // Controladores fornecidos pelo módulo
   providers: [AppService], // Serviços fornecidos pelo módulo
 })
+
 export class AppModule {} // Define a classe AppModule como módulo principal da aplicação
