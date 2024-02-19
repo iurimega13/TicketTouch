@@ -1,8 +1,8 @@
 -- Active: 1708188709739@@127.0.0.1@5432@tickettouch@public
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
+  registration INTERGER UNIQUE,
   name VARCHAR,
-  registration VARCHAR UNIQUE,
   email VARCHAR UNIQUE,
   password VARCHAR,
   role VARCHAR,
@@ -10,7 +10,6 @@ CREATE TABLE users (
   unit_id INT,
   department_id INT,
   created_at TIMESTAMP,
-  updated_at TIMESTAMP,
   FOREIGN KEY (unit_id) REFERENCES units(id),
   FOREIGN KEY (department_id) REFERENCES departments(id)
 );
@@ -27,7 +26,6 @@ COMMENT ON COLUMN users.phone_number IS 'Número de telefone do usuário';
 COMMENT ON COLUMN users.unit_id IS 'ID da unidade à qual o usuário está associado';
 COMMENT ON COLUMN users.department_id IS 'ID do departamento ao qual o usuário está associado';
 COMMENT ON COLUMN users.created_at IS 'Data e hora de criação do usuário';
-COMMENT ON COLUMN users.updated_at IS 'Data e hora da última atualização do usuário';
 
 CREATE TABLE units (
   id SERIAL PRIMARY KEY,
@@ -214,21 +212,6 @@ COMMENT ON COLUMN equipments.is_shared IS 'Indica se o equipamento é compartilh
 COMMENT ON COLUMN equipments.created_at IS 'Data e hora de criação do equipamento';
 COMMENT ON COLUMN equipments.updated_at IS 'Data e hora da última atualização do equipamento';
 
-CREATE TABLE collaborations (
-  id SERIAL PRIMARY KEY,
-  ticket_id INT,
-  user_id INT,
-  created_at TIMESTAMP,
-  FOREIGN KEY (ticket_id) REFERENCES tickets(id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-COMMENT ON TABLE collaborations IS 'Tabela que armazena informações das colaborações nos tickets';
-
-COMMENT ON COLUMN collaborations.id IS 'Identificador único da colaboração';
-COMMENT ON COLUMN collaborations.ticket_id IS 'ID do ticket ao qual a colaboração está associada';
-COMMENT ON COLUMN collaborations.user_id IS 'ID do usuário (técnico ou analista) envolvido na colaboração';
-COMMENT ON COLUMN collaborations.created_at IS 'Data e hora de criação da colaboração';
 
 CREATE TABLE user_settings (
   id SERIAL PRIMARY KEY,
