@@ -2,14 +2,23 @@ import { Module } from '@nestjs/common'; // Importa o decorator Module do NestJS
 import { AppController } from './app.controller'; // Importa o controlador AppController
 import { AppService } from './app.service'; // Importa o serviço AppService
 import { UserModule } from './users/user.module'; // Importa o módulo UserModule
-import { AdminsModule } from './users/admins.module'; // Importa o módulo AdminsModule
-import { TechniciansModule } from './users/technicians.module'; // Importa o módulo TechniciansModule
 import { TicketsModule } from './tickets/tickets.module'; // Importa o módulo TicketsModule
 import { NotificationsModule } from './notifications/notifications.module'; // Importa o módulo NotificationsModule
 import { ConfigModule } from '@nestjs/config'; // Importa o módulo ConfigModule do NestJS
 import { TypeOrmModule } from '@nestjs/typeorm'; // Importa o módulo TypeOrmModule do NestJS
-import { EquipmentsModule } from './equipaments/equipments.module'; // Importa o módulo EquipmentsModule
+import { EquipmentsModule } from './equipments/equipments.module'; // Importa o módulo EquipmentsModule
 import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
+import { APP_GUARD } from '@nestjs/core';  // Importa o APP_GUARD do NestJS
+import { RolesGuard } from './guards/roles.guards'; // Importa o guard RolesGuard
+import { UnitsService } from './units/units.service';  // Importa o serviço UnitsService
+import { DepartamentsService } from './departaments/departaments.service'; // Importa o serviço DepartamentsService
+import { TicketCategoriesModule } from './ticket-categories/ticket-categories.module'; // Importa o módulo TicketCategoriesModule
+import { AttachmentsModule } from './attachments/attachments.module'; // Importa o módulo AttachmentsModule
+import { TicketChangesModule } from './ticket-changes/ticket-changes.module'; // Importa o módulo TicketChangesModule
+import { UserFeedbackService } from './user-feedback/user-feedback.service'; // Importa o serviço UserFeedbackService
+import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
+import { UserSettingsService } from './user-settings/user-settings.service'; // Importa o serviço UserSettingsService
+import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
 
 @Module({
   imports: [
@@ -31,10 +40,19 @@ import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
       }),
     }),
     // Importação dos módulos
-    UserModule, AdminsModule, TechniciansModule, TicketsModule, NotificationsModule, AuthModule
+    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule,
   ],
   controllers: [AppController], // Controladores fornecidos pelo módulo
-  providers: [AppService], // Serviços fornecidos pelo módulo
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    UnitsService,
+    DepartamentsService,
+    UserFeedbackService,
+    UserSettingsService
+  ], // Serviços fornecidos pelo módulo
 })
 
-export class AppModule {} // Define a classe AppModule como módulo principal da aplicação
+export class AppModule { } // Define a classe AppModule como módulo principal da aplicação
