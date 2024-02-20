@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common'; // Importa o decorator Injectable do NestJS
 import { hash } from 'bcrypt'; // Importa a função hash do bcrypt para criptografar senhas
-import { createUserDto } from './dtos/createUser.dto'; // Importa o DTO para criar um usuário
+import { CreateUserDto } from './dtos/createUser.dto'; // Importa o DTO para criar um usuário
 import { UserEntity } from './entities/user.entity'; // Importa a classe UserEntity
 import { InjectRepository } from '@nestjs/typeorm'; // Importa o decorator InjectRepository do TypeORM para injeção de dependência
 import { Repository } from 'typeorm'; // Importa a classe Repository do TypeORM para interagir com o banco de dados
@@ -15,29 +15,35 @@ export class UserService {
     ){}
    
 
-    async createUser(createUserDto: createUserDto): Promise<UserEntity> {
-        try {
-            // Criptografa a senha usando bcrypt
-            const saltOrRounds = 10; // Define o número de rounds para a criptografia
-            const passwordHashed = await hash(createUserDto.password, saltOrRounds); // Criptografa a senha
-    
-            const now = new Date();
-    
-            // Salva o usuário no banco de dados
-            return await this.userRepository.save({
-                ...createUserDto,
-                password: passwordHashed, // Armazena a senha criptografada
-                createdAt: now,
-            });
-        } catch (error) {
-            // Se ocorrer um erro de violação de restrição única (por exemplo, registro duplicado), lança uma exceção de conflito
-            if (error.code === '23505') { // Código específico do PostgreSQL para violação de restrição única
-                throw new ConflictException('Registro duplicado');
-            } else {
-                throw error; // Se for outro tipo de erro, lança a exceção original
-            }
+    async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    console.log(createUserDto);
+    try {
+        // Criptografa a senha usando bcrypt
+        const saltOrRounds = 10; // Define o número de rounds para a criptografia
+        const passwordHashed = await hash(createUserDto.password, saltOrRounds); // Criptografa a senha
+
+        const now = new Date();
+
+        // Cria um novo objeto user com os dados do DTO, a senha criptografada e a data atual
+        const user = {
+            ...createUserDto,
+            password: passwordHashed,
+            created_at: now,
+        };
+
+        // Salva o usuário no banco de dados
+        return await this.userRepository.save(user);
+        
+    } catch (error) {
+        // Se ocorrer um erro de violação de restrição única (por exemplo, registro duplicado), lança uma exceção de conflito
+        if (error.code === '23505') { // Código específico do PostgreSQL para violação de restrição única
+            throw new ConflictException('Registro duplicado');
+        } else {
+            throw error; // Se for outro tipo de erro, lança a exceção original
         }
     }
+   
+}
 
     async getAllUsers(): Promise<UserEntity[]> {
         // Retorna todos os usuários do banco de dados
@@ -70,7 +76,7 @@ export class UserService {
 
     async findByRegistration(registration: string): Promise<UserEntity> {
         // Encontra um usuário pelo seu registro no banco de dados
-        const user = await this.userRepository.findOne({ where: { registration } });
+        const user = await this.userRepository.findOne({ where: { registration: Number(registration) } });
     
         // Se o usuário não for encontrado, lança NotFoundException
         if (!user) {

@@ -26,9 +26,15 @@ export class UserEntity {
     @Column({name: 'phone_number'})
     phone_number: string;
 
+    @Column({ nullable: true })
+    unit_id: number;
+
     @ManyToOne(() => UnitEntity)
     @JoinColumn({name: 'unit_id'})
     unit: UnitEntity;
+
+    @Column({ nullable: true })
+    department_id: number;
 
     @ManyToOne(() => DepartamentEntity)
     @JoinColumn({name: 'department_id'})
