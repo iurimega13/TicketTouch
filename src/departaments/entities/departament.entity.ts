@@ -1,6 +1,7 @@
 import { UnitEntity } from "src/units/entities/unit.entity";
-import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Entity } from "typeorm";
 
+@Entity({name: 'departaments'})
 export class DepartamentEntity{
 
     @PrimaryGeneratedColumn()
