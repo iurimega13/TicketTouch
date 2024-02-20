@@ -16,8 +16,8 @@ export class SlaEntity {
     time: string;
 
     @Column({name: 'response_time', nullable: false})
-    response_time: string;
+    response_time: number;
 
     @Column({name: 'resolution_time', nullable: false})
-    resolution_time: string;
+    resolution_time: number;
 }
