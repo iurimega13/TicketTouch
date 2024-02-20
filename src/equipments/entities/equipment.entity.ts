@@ -7,7 +7,7 @@ import { TicketEntity } from '../../tickets/entities/ticket.entity';
 
 
 @Entity('equipments')
-export class EquipmentsEntity {
+export class EquipmentEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -19,7 +19,7 @@ export class EquipmentsEntity {
     description: string;
 
     @Column({name: 'serial_number', nullable: false})
-    serial_number: string;
+    serial_number: number;
 
     @ManyToOne(() => UnitEntity)
     @JoinColumn({name: 'unit_id'})
