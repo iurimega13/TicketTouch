@@ -15,10 +15,7 @@ export class SettingsEntity {
 
     @Column({name: 'theme', nullable: false})
     theme: string;
-
-    @Column({name: 'language', nullable: false})
-    language: string;
-
+    
     @CreateDateColumn({name: 'created_at', nullable: false})
     created_at: Date;
 
