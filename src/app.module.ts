@@ -19,6 +19,8 @@ import { UserFeedbackService } from './user-feedback/user-feedback.service'; // 
 import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
 import { UserSettingsService } from './user-settings/user-settings.service'; // Importa o serviço UserSettingsService
 import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
+import { DepartamentsModule } from './departaments/departaments.module';
+import { UnitsModule } from './units/units.module';
 
 @Module({
   imports: [
@@ -40,7 +42,7 @@ import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
       }),
     }),
     // Importação dos módulos
-    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule,
+    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartamentsModule
   ],
   controllers: [AppController], // Controladores fornecidos pelo módulo
   providers: [AppService,
@@ -48,11 +50,7 @@ import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    UnitsService,
-    DepartamentsService,
-    UserFeedbackService,
-    UserSettingsService
-  ], // Serviços fornecidos pelo módulo
+  ], 
 })
 
 export class AppModule { } // Define a classe AppModule como módulo principal da aplicação
