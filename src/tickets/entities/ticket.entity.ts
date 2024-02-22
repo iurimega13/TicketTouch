@@ -1,5 +1,5 @@
 import { SlaEntity } from "src/slas/entities/sla.entity";
-import { CategoryEntity } from "src/ticket-categories/entities/category.entity";
+import { TicketCategoryEntity } from "src/ticket-categories/entities/ticketCategory.entity";
 import { UnitEntity } from "src/units/entities/unit.entity";
 import { UserEntity } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -22,9 +22,9 @@ export class TicketEntity {
     @Column({name: 'status', nullable: false})
     status: string; // Define o tipo da coluna como string
 
-    @ManyToOne(() => CategoryEntity)
+    @ManyToOne(() => TicketCategoryEntity)
     @JoinColumn({name: 'category_id'})
-    category: CategoryEntity;
+    category: TicketCategoryEntity;
     
     @ManyToOne(() => UserEntity)
     @JoinColumn({name: 'user_id'})

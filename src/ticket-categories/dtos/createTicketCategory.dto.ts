@@ -1,7 +1,7 @@
 import { IsString } from "class-validator";
 
 
-export class CreateCategoryDto {
+export class CreateTicketCategoryDto {
 
     @IsString()
     name: string;

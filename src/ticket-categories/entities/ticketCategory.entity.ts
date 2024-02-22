@@ -2,7 +2,7 @@ import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Ent
 
 
 @Entity({name: 'ticket_categories'})
-export class CategoryEntity {
+export class TicketCategoryEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
