@@ -25,8 +25,8 @@ export class UnitsController {
     // Usa o decorador @Put(':id') para definir que este método deve ser chamado quando uma requisição PUT for feita para a rota '/units/:id'
     @UsePipes(ValidationPipe)
     @Put(':id')
-    async updateUnit(@Param('id') id: number, @Body() updateUnitDto: UpdateUnitDto): Promise<UnitEntity> {
-        return this.unitsService.updateUnit(id, updateUnitDto);
+    async updateUnit(@Body() updateUnitDto: UpdateUnitDto): Promise<UnitEntity> {
+        return this.unitsService.updateUnit(updateUnitDto);
     }
 
     // Método para deletar uma unidade existente
