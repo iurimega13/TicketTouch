@@ -35,22 +35,21 @@ export class UnitsService {
     }
 
     // Método para atualizar uma unidade existente
-    async updateUnit(id: number, updateUnitDto: UpdateUnitDto): Promise<UnitEntity> {
+    async updateUnit(updateUnitDto: UpdateUnitDto): Promise<UnitEntity> {
         try {
             // Buscando a unidade pelo ID
-            const unit = await this.getUnitById(id);
-            
+            const unit = await this.getUnitById(updateUnitDto.id);
             // Lançando um erro se a unidade não for encontrada
             if (!unit) {
                 throw new Error('Unit not found');
             }
-            // Criando um novo objeto com os dados da unidade atualizados e a data de atualização
+            // Atualizando a unidade com os dados do DTO e a data de atualização
             const updatedUnit = {
                 ...unit,
                 ...updateUnitDto,
                 updatedAt: new Date(),
             };
-            // Salvando a unidade atualizada no banco de dados e retornando a unidade atualizada
+            // Salvando a unidade no banco de dados e retornando a unidade salva
             return await this.unitRepository.save(updatedUnit);
         } catch (error) {
             // Lançando um erro se algo der errado
