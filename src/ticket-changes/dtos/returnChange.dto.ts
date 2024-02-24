@@ -1,19 +1,19 @@
-import { ChangeEntity } from "../entities/changes.entity";
+import { TicketChangeEntity } from "../entities/ticketChanges.entity";
 
 
 export class ReturnChangeDto {
     id: number;
-    userId: number;
-    ticketId: number;
+    user_id: number;
+    ticket_id: number;
     change_type: string;
     old_value: string;
     new_value: string;
     created_at: Date;
 
-    constructor(change: ChangeEntity){
+    constructor(change: TicketChangeEntity){
         this.id = change.id;
-        this.userId = change.user.id;
-        this.ticketId = change.ticket.id;
+        this.user_id = change.user.id;
+        this.ticket_id = change.ticket.id;
         this.change_type = change.change_type;
         this.old_value = change.old_value;
         this.new_value = change.new_value;
