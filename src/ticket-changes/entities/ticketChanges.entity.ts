@@ -1,9 +1,9 @@
 import { TicketEntity } from 'src/tickets/entities/ticket.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({name: 'ticket_changes'})
-export class ChangeEntity {
+export class TicketChangeEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
