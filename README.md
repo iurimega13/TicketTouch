@@ -5,87 +5,60 @@
 
 O projeto consiste no desenvolvimento de um sistema de gerenciamento de tickets de suporte para uma empresa fictícia, como parte de uma tese de TCC do curso de Engenharia de Software. O sistema tem como objetivo principal fornecer uma plataforma centralizada para o gerenciamento eficiente de tickets de suporte, permitindo que os usuários solicitem assistência, os técnicos forneçam suporte e os administradores monitorem e analisem o desempenho da equipe de suporte.
 
-##### Principais Funcionalidades:
+# IURI GALDINO RODRIGUES DA SILVA
 
-1. **Cadastro de Usuário e Técnico:** Os usuários podem se registrar no sistema com informações básicas, como nome, endereço de e-mail e senha. Os administradores têm a capacidade de criar e gerenciar contas de usuários e técnicos.
+## TICKETTOUCH - Sistema de Gerenciamento de Tickets de Suporte
 
-2. **Visualização de Tickets:** Os usuários podem visualizar o histórico de seus tickets anteriores, incluindo status e detalhes da resolução.
+Canaã dos Carajás  
+03/2024
 
-3. **Atribuição de Prioridades:** Os técnicos podem atribuir prioridades aos tickets com base na gravidade do problema relatado.
+### 1. INTRODUÇÃO – TEMA E PROBLEMATIZAÇÃO
+Com a crescente complexidade dos ambientes corporativos e a dependência cada vez maior de tecnologia, a demanda por sistemas de helpdesk eficientes para suporte a equipamentos e sistemas internos tem se tornado uma necessidade premente para muitas empresas. A gestão adequada desses recursos é essencial para garantir a continuidade das operações e o desempenho otimizado das equipes de trabalho.
+A necessidade de sistemas de helpdesk específicos para suporte interno é impulsionada pela diversidade e pela constante evolução dos sistemas e equipamentos utilizados pelas empresas. Funcionários em todos os níveis dependem desses recursos para realizar suas tarefas diárias e resolver problemas técnicos de forma rápida e eficaz.
+No entanto, muitas empresas enfrentam desafios ao implementar e manter sistemas de helpdesk internos eficientes. A falta de uma plataforma centralizada para gerenciar tickets de suporte pode levar a atrasos na resolução de problemas, comunicação ineficiente entre equipes de suporte e usuários, e dificuldades na análise do desempenho do suporte técnico.
+Diante desses desafios, é crucial desenvolver soluções de software que atendam às necessidades específicas das empresas em relação ao suporte interno a equipamentos e sistemas. Uma abordagem proativa na gestão do suporte técnico pode contribuir significativamente para a produtividade e a eficiência operacional da organização.
 
-4. **Lista de Tickets em Aberto:** Os administradores podem visualizar uma lista de todos os tickets em aberto, classificados por prioridade e status.
+### 2. JUSTIFICATIVA
+A justificativa para o desenvolvimento do projeto reside na importância de fornecer às empresas uma ferramenta eficaz para gerenciar suas operações de suporte técnico interno. A demanda por sistemas de helpdesk dedicados a esse fim está em constante crescimento devido à complexidade crescente dos ambientes corporativos e à necessidade de garantir a disponibilidade contínua de sistemas e equipamentos essenciais para as operações diárias.
+O projeto TicketTouch surge como uma resposta a essa demanda específica, oferecendo uma solução abrangente para o gerenciamento de tickets de suporte técnico interno. Através deste sistema, empresas poderão melhorar a eficiência de suas operações de suporte, reduzir tempos de resposta, aumentar a satisfação dos usuários e garantir uma comunicação clara e eficaz entre equipes de suporte e usuários finais. A ênfase na usabilidade e na minimização da digitação extensiva na interface do sistema visa facilitar o uso e maximizar a eficiência para o desenvolvedor solo envolvido.
 
-5. **Anexar Arquivos:** Os usuários podem anexar arquivos relevantes, como capturas de tela ou documentos, ao criar um novo ticket.
+### 3. OBJETIVOS
+#### 3.1 Objetivo Geral:
+Desenvolver um sistema de gerenciamento de tickets de suporte para melhorar a eficiência operacional e a qualidade do serviço de suporte ao cliente.
+#### 3.2 Objetivos Específicos:
+- [ ] Levantar os requisitos do sistema.
+- [ ] Projetar a arquitetura do sistema, incluindo a estrutura de banco de dados e interfaces de usuário.
+- [ ] Implementar as funcionalidades do sistema seguindo as melhores práticas de engenharia de software.
+- [ ] Realizar testes para garantir a qualidade e confiabilidade do sistema.
+- [ ] Implantar o sistema em ambiente de produção.
+- [ ] Avaliar o desempenho do sistema após a implantação e realizar ajustes conforme necessário.
 
-6. **Notificações Instantâneas:** Os técnicos recebem notificações instantâneas quando um novo ticket é atribuído a eles.
+### 4. ESPECIFICAÇÕES INICIAIS DO SOFTWARE
+#### 4.1 Escopo do Produto
+O escopo do produto consiste em desenvolver um sistema de gerenciamento de tickets de suporte, que permita aos usuários solicitar assistência, técnicos fornecer suporte e administradores monitorar e analisar o desempenho da equipe de suporte.
+#### 4.2 Funcionalidades do Produto
+- [ ] Cadastro de Administrador, Usuário e Técnico
+- [ ] Visualização de Tickets
+- [ ] Atribuição de Prioridades
+- [ ] Lista de Tickets em Aberto
+- [ ] Anexar Arquivos
+- [ ] Notificações Instantâneas
+- [ ] Relatórios de Desempenho
+- [ ] Fechamento de Tickets
+- [ ] Pesquisa e Filtros
+#### 4.3 Ambiente Operacional e Tecnologias
+O sistema será desenvolvido utilizando as seguintes tecnologias:
+- Backend: NestJS
+- Frontend: React
+- Banco de Dados: PostgreSQL
 
-7. **Relatórios de Desempenho:** Os administradores podem gerar relatórios sobre o desempenho da equipe de suporte, incluindo métricas como tempo médio de resolução e taxa de satisfação do cliente.
-
-8. **Edição de Tickets:** Os usuários podem editar ou atualizar informações em seus tickets enquanto estiverem em aberto.
-
-9. **Pesquisa e Filtros:** Os técnicos podem pesquisar e filtrar tickets com base em diferentes critérios, como prioridade, data de criação e cliente.
-
-10. **Portal de Autoatendimento:** Um portal onde os clientes podem encontrar respostas para suas perguntas mais comuns sem a necessidade de abrir um ticket.
-
-11. **Automatização de Fluxo de Trabalho:** Recursos para automatizar tarefas comuns de suporte, como roteamento automático de tickets e respostas automáticas.
-
-12. **SLAs (Acordos de Nível de Serviço):** Funcionalidade para definir e acompanhar os SLAs para garantir que os tickets sejam resolvidos dentro do prazo estabelecido.
-
-13. **Colaboração em Equipe:** Capacidade de colaborar em equipe para resolver tickets, atribuir tarefas a outros membros da equipe e trabalhar juntos em resoluções de problemas mais complexos.
-
-14. **Base de Conhecimento:** Uma base de conhecimento integrada onde os agentes podem criar e manter artigos e tutoriais úteis para ajudar os clientes a resolver problemas por conta própria.
-
-15. **Acompanhamento de Métricas de Desempenho:** Painéis e relatórios para acompanhar métricas de desempenho, como tempo médio de resposta e índice de satisfação do cliente.
-
-16. **Gestão de Ativos:** Capacidade de rastrear e gerenciar ativos relacionados aos tickets de suporte, como hardware, software e outros recursos técnicos.
-
-### Requisitos do Banco de Dados:
-
-O banco de dados deve ser projetado para armazenar informações sobre usuários, tickets, histórico de interações, configurações do sistema e outros dados relevantes para o funcionamento do sistema. Deve garantir segurança, desempenho, escalabilidade e disponibilidade adequados, além de suportar backups regulares, integridade referencial e normalização de dados. Deve também oferecer suporte a transações e ser monitorado regularmente para identificar e resolver possíveis problemas de desempenho.
-
-Essa é uma visão geral do projeto, destacando suas principais funcionalidades e requisitos do banco de dados. O desenvolvimento seguirá as práticas recomendadas de engenharia de software e banco de dados para garantir a qualidade e eficiência do sistema.
-
-
-## Requisitos de Sistema
-
-- [ ] Cadastro de Usuário: Os usuários devem ser registrados no sistema com informações: nome, endereço de e-mail e senha padrão (deverá ser trocada no login).
-- [ ] Cadastro de Técnico: Os Administradores devem ter a capacidade de criar e gerenciar contas de técnico e usuários no sistema.
-- [ ] Visualização de Tickets: Os usuários devem poder visualizar o histórico de seus tickets anteriores, incluindo status e detalhes da resolução.
-- [ ] Atribuição de Prioridades: Os técnicos devem poder atribuir prioridades aos tickets com base na gravidade do problema relatado.
-- [ ] Lista de Tickets em Aberto: O sistema deve permitir que os Administradores visualizem uma lista de todos os tickets em aberto, classificados por prioridade e status.
-- [ ] Anexar Arquivos: Os usuários devem poder anexar arquivos relevantes, como capturas de tela ou documentos, ao criar um novo ticket.
-- [ ] Notificações Instantâneas: Os técnicos devem receber notificações instantâneas quando um novo ticket é atribuído a eles.
-- [ ] Relatórios de Desempenho: Os Administradores devem ter a capacidade de gerar relatórios sobre o desempenho da equipe de suporte, incluindo métricas como tempo médio de resolução e taxa de satisfação do cliente.
-- [ ] Edição de Tickets: Os usuários devem poder editar ou atualizar informações em seus tickets, como a descrição do problema, enquanto o ticket estiver em aberto.
-- [ ] Pesquisa e Filtros: Os técnicos devem poder pesquisar e filtrar tickets com base em diferentes critérios, como prioridade, data de criação e cliente.
-- [ ] Interface Responsiva: O sistema deve fornecer uma interface de usuário amigável e responsiva que funcione bem em dispositivos móveis e desktops.
-- [ ] Atribuição Específica: Os Administradores devem poder designar um técnico específico para um ticket.
-- [ ] Notificações Automáticas: Os usuários devem receber notificações automáticas quando um novo ticket é criado e quando há atualizações no status do ticket.
-- [ ] Notas Internas: Os técnicos devem poder adicionar notas internas aos tickets para registrar informações relevantes que não são visíveis para o cliente.
-- [ ] Avaliação de Suporte: O sistema deve permitir que os usuários avaliem a qualidade do suporte recebido após a resolução do ticket.
-- [ ] Controle de Acesso: O sistema deve liberar funcionalidades de acordo com o nível de acesso do usuário.
-- [ ] Acompanhamento em Tempo Real: Os usuários devem poder visualizar o status de seus tickets em tempo real.
-
-## Funcionalidades
-
-- [ ] Portal de Autoatendimento: Um portal de autoatendimento onde os clientes podem encontrar respostas para suas perguntas mais comuns sem a necessidade de abrir um ticket.
-- [ ] Automatização de Fluxo de Trabalho: Recursos para automatizar tarefas comuns de suporte, como roteamento automático de tickets, respostas automáticas e atribuição de prioridades.
-- [ ] SLAs (Acordos de Nível de Serviço): Funcionalidade para definir e acompanhar os SLAs para garantir que os tickets sejam resolvidos dentro do prazo estabelecido.
-- [ ] Colaboração em Equipe: Capacidade de colaborar em equipe para resolver tickets, atribuir tarefas a outros membros da equipe e trabalhar juntos em resoluções de problemas mais complexos.
-- [ ] Base de Conhecimento: Uma base de conhecimento integrada onde os agentes podem criar e manter artigos e tutoriais úteis para ajudar os clientes a resolver problemas por conta própria.
-- [ ] Acompanhamento de Métricas de Desempenho: Painéis e relatórios para acompanhar métricas de desempenho, como tempo médio de resposta, tempo médio de resolução e índice de satisfação do cliente.
-- [ ] Gestão de Ativos: Capacidade de rastrear e gerenciar ativos relacionados aos tickets de suporte, como hardware, software e outros recursos técnicos.
-
-## Requisitos do Banco de Dados
-
-- [x] Modelo de Dados: Desenvolver um modelo de dados adequado para armazenar informações sobre usuários, tickets, histórico de interações, configurações do sistema, entre outros.
-- [ ] Segurança dos Dados: Implementar medidas de segurança para proteger os dados armazenados no banco de dados, como criptografia de dados, controle de acesso e auditoria.
-- [ ] Desempenho: Projetar o banco de dados para garantir um bom desempenho, considerando fatores como índices adequados, particionamento de tabelas e otimização de consultas.
-- [ ] Escalabilidade: Garantir que o banco de dados seja capaz de lidar com um aumento no volume de dados e transações ao longo do tempo, escalando horizontal ou verticalmente conforme necessário.
-- [ ] Disponibilidade: Implementar mecanismos de alta disponibilidade e recuperação de desastres para minimizar o tempo de inatividade do sistema em caso de falhas no banco de dados.
-- [ ] Backup e Restauração: Estabelecer procedimentos regulares de backup e restauração para proteger os dados contra perda ou corrupção, com testes periódicos de restauração.
-- [ ] Integridade Referencial: Utilizar chaves estrangeiras e restrições de integridade referencial para garantir a consistência dos dados e evitar inconsistências ou conflitos.
-- [ ] Normalização: Aplicar técnicas de normalização para reduzir a redundância de dados e melhorar a eficiência do armazenamento e consulta de informações.
-- [ ] Indexação: Identificar e criar índices adequados para acelerar consultas frequentes e melhorar o desempenho geral do banco de dados.
-- [ ] Suporte a Transações: Implementar controle de transações para garantir a consistência dos dados e permitir operações de rollback em caso de falhas ou erros.
-- [ ] Monitoramento e Diagnóstico: Configurar ferramentas de monitoramento e diagnóstico para acompanhar o desempenho do banco de dados e identificar possíveis problemas ou gargalos.
+### 5. METODOLOGIA
+Para o desenvolvimento deste projeto, será adotada uma abordagem iterativa e flexível, adaptada às necessidades de um desenvolvedor solo. Embora a metodologia Agile seja comumente utilizada em equipes, alguns de seus princípios podem ser aplicados de forma independente para maximizar a eficiência e a qualidade do produto final.
+#### 5.1 Abordagem Iterativa:
+O desenvolvimento será dividido em iterações curtas e incrementais, focadas em entregas de funcionalidades específicas. Isso permitirá uma abordagem progressiva e controlada, facilitando o gerenciamento do projeto por uma única pessoa.
+#### 5.2 Feedback Contínuo:
+Apesar de não haver uma equipe formal de stakeholders, será importante buscar feedback regularmente, seja através de revisões próprias ou de testes com usuários finais. Isso ajudará a garantir que o produto esteja alinhado com as expectativas e requisitos do cliente, mesmo que esse cliente seja você mesmo.
+#### 5.3 Flexibilidade e Adaptabilidade:
+Como único desenvolvedor, será necessário manter uma postura flexível e adaptável às mudanças. Alterações nos requisitos ou descobertas durante o processo de desenvolvimento podem exigir ajustes no planejamento e na implementação do projeto.
+#### 5.4 Documentação Adequada:
+Embora o foco principal seja o desenvolvimento do software, será importante manter uma documentação adequada do projeto. Isso inclui registros de requisitos, design, implementação e testes, garantindo a compreensão e a rastreabilidade do trabalho realizado.
