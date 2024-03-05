@@ -1,7 +1,7 @@
-import { UnitEntity } from "src/units/entities/unit.entity";
-import { DepartamentEntity } from "src/departaments/entities/departament.entity";
-import { TicketEntity } from "src/tickets/entities/ticket.entity";
-import { UserEntity } from "src/users/entities/user.entity";
+import { UnitEntity } from "../../units/entities/unit.entity";
+import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { TicketEntity } from "../../tickets/entities/ticket.entity";
+import { UserEntity } from "../../users/entities/user.entity";
 import { EquipmentEntity } from "../entities/equipment.entity";
 
 export class ReturnEquipmentDto {

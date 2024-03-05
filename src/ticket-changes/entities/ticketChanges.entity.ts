@@ -1,5 +1,5 @@
-import { TicketEntity } from 'src/tickets/entities/ticket.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { TicketEntity } from '../../tickets/entities/ticket.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({name: 'ticket_changes'})

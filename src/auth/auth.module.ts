@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'; // Importa o decorator Module do NestJS
 import { AuthController } from './auth.controller'; // Importa o controlador AuthController
 import { AuthService } from './auth.service'; // Importa o serviço AuthService
-import { UserModule } from 'src/users/user.module'; // Importa o módulo UserModule
+import { UserModule } from '../users/user.module'; // Importa o módulo UserModule
 import { JwtModule } from '@nestjs/jwt'; // Importa o módulo JwtModule do NestJS
 
 @Module({ 

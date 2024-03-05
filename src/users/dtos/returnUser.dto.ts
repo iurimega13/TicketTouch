@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user.entity";
-import { UnitEntity } from "src/units/entities/unit.entity";
-import { DepartamentEntity } from "src/departaments/entities/departament.entity";
+import { UnitEntity } from "../../units/entities/unit.entity";
+import { DepartamentEntity } from "../../departaments/entities/departament.entity";
 
 export class ReturnUserDto {
     id: number;

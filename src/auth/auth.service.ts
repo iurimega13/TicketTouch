@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'; // Importa o decorator Injectable e NotFoundException do NestJS
-import { UserEntity } from 'src/users/entities/user.entity'; // Importa a classe UserEntity
+import { UserEntity } from '../users/entities/user.entity'; // Importa a classe UserEntity
 import { LoginDto } from './dtos/login.dto'; // Importa o DTO para login
-import { UserService } from 'src/users/user.service'; // Importa o serviço UserService
+import { UserService } from '../users/user.service'; // Importa o serviço UserService
 import { compare } from 'bcrypt'; // Importa a função compare do bcrypt para comparar senhas
 import { ReturnLogin } from './dtos/returnLogin.dto';
 import { JwtService } from '@nestjs/jwt'; // Importa a classe JwtService do pacote @nestjs/jwt
-import { ReturnUserDto } from 'src/users/dtos/returnUser.dto';
+import { ReturnUserDto } from '../users/dtos/returnUser.dto';
 import { LoginPayload } from './dtos/loginPayload.dto';
 
 @Injectable() 

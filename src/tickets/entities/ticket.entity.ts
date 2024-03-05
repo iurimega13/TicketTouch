@@ -1,7 +1,7 @@
-import { SlaEntity } from "src/slas/entities/sla.entity";
-import { TicketCategoryEntity } from "src/ticket-categories/entities/ticketCategory.entity";
-import { UnitEntity } from "src/units/entities/unit.entity";
-import { UserEntity } from "src/users/entities/user.entity";
+import { SlaEntity } from "../../slas/entities/sla.entity";
+import { TicketCategoryEntity } from "../../ticket-categories/entities/ticketCategory.entity";
+import { UnitEntity } from "../../units/entities/unit.entity";
+import { UserEntity } from "../../users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 

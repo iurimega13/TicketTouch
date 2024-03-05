@@ -1,8 +1,8 @@
 import { IsString, IsNumber, IsBoolean } from "class-validator";
-import { DepartamentEntity } from "src/departaments/entities/departament.entity";
-import { TicketEntity } from "src/tickets/entities/ticket.entity";
-import { UnitEntity } from "src/units/entities/unit.entity";
-import { UserEntity } from "src/users/entities/user.entity";
+import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { TicketEntity } from "../../tickets/entities/ticket.entity";
+import { UnitEntity } from "../../units/entities/unit.entity";
+import { UserEntity } from "../../users/entities/user.entity";
 import { JoinColumn, ManyToOne } from "typeorm";
 
 
