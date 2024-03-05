@@ -3,7 +3,7 @@ import { UnitEntity } from "../../units/entities/unit.entity";
 import { DepartamentEntity } from "../../departaments/entities/departament.entity";
 
 export class ReturnUserDto {
-    id: number;
+    id: string;
     registration: number;
     name: string;
     email: string;
