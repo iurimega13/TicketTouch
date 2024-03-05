@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateFaqDto } from './dtos/createFaq.dto';
 import { ReturnFaqDto } from './dtos/returnFaq.dto';
 import { FaqEntity } from './entities/faq.entity';
@@ -25,5 +25,10 @@ export class FaqsController {
     @Get()
     async getAllFaqs(): Promise<ReturnFaqDto[]> {
         return (await this.faqsService.getAllFaqs()).map((FaqEntity) => new ReturnFaqDto(FaqEntity));
+    }
+
+    @Delete(':id')
+    async deleteFaq(@Param('id') id: string): Promise<void> {
+        await this.faqsService.deleteFaq(id);
     }
 }
