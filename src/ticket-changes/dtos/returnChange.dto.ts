@@ -3,7 +3,7 @@ import { TicketChangeEntity } from "../entities/ticketChanges.entity";
 
 export class ReturnChangeDto {
     id: number;
-    user_id: number;
+    user_id: string;
     ticket_id: number;
     change_type: string;
     old_value: string;
