@@ -1,5 +1,5 @@
 import { TicketEntity } from "../entities/ticket.entity";
-import { CategoryEntity } from "src/ticket-categories/entities/category.entity";
+import { TicketCategoryEntity } from "../../ticket-categories/entities/ticketCategory.entity";
 import { UnitEntity } from "src/units/entities/unit.entity";
 import { UserEntity } from "src/users/entities/user.entity";
 import { SlaEntity } from "src/slas/entities/sla.entity";
@@ -10,7 +10,7 @@ export class ReturnTicketDto {
     description: string;
     priority: string;
     status: string;
-    category: CategoryEntity;
+    category: TicketCategoryEntity;
     user: UserEntity;
     technician: UserEntity;
     unit: UnitEntity;
