@@ -1,5 +1,5 @@
 import { UpdateFaqDto } from './dtos/updateFaq.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FaqEntity } from './entities/faq.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,12 +15,8 @@ export class FaqsService {
 
     async createFaq(createFaqDto: CreateFaqDto): Promise<FaqEntity> {
         try {
-            const now = new Date();
-
             const faq = {
                 ...createFaqDto,
-                createdAt: now,
-                updatedAt: now,
             };
             return await this.faqRepository.save(faq);
             }
@@ -30,19 +26,16 @@ export class FaqsService {
     }
 
 
-    async updateFaq( updateFaqDto: UpdateFaqDto): Promise<FaqEntity> {
+    async updateFaq(id: string, updateFaqDto: UpdateFaqDto): Promise<FaqEntity> {
         try {
-            const faq = await this.getFaqById(updateFaqDto.id);
+            const faq = await this.getFaqById(id);
             if (!faq) {
                 throw new Error('FAQ not found');
             }
-
             const updatedFaq = {
                 ...faq,
                 ...updateFaqDto,
-                updatedAt: new Date(),
             };
-
             return await this.faqRepository.save(updatedFaq);
         } catch (error) {
             throw new Error(error);
@@ -53,20 +46,23 @@ export class FaqsService {
         try {
             return await this.faqRepository.find();
         } catch (error) {
-            throw new Error(error);
+            throw new NotFoundException(error.message);
         }
     }
 
 
-    async getFaqById(id: number): Promise<FaqEntity> {
+    async getFaqById(id: string): Promise<FaqEntity> {
         try {
-            const faq = await this.faqRepository.findOne({ where: { id }});
-            if (!faq) {
-                throw new Error('FAQ not found');
-            }
-            return faq;
+            return await this.faqRepository.findOneOrFail({ where: { id } });
         } catch (error) {
-            throw new Error(error);
+            throw new NotFoundException(error.message);
         }
+    }
+
+
+    async deleteFaq(id: string): Promise<void> {
+        await this.getFaqById(id);
+        await this.faqRepository.softDelete(id);
+
     }
 }
