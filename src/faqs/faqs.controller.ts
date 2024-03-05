@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateFaqDto } from './dtos/createFaq.dto';
 import { ReturnFaqDto } from './dtos/returnFaq.dto';
 import { FaqEntity } from './entities/faq.entity';
@@ -11,15 +11,15 @@ export class FaqsController {
     constructor(private readonly faqsService: FaqsService) {}
 
     @UsePipes(ValidationPipe)
-    @Post()
+    @Post('CreateFaq')
     async createFaq(@Body() createFaqDto: CreateFaqDto): Promise<FaqEntity> {
         return this.faqsService.createFaq(createFaqDto);
     }
 
     @UsePipes(ValidationPipe)
-    @Post()
-    async updateFaq(@Body() updateFaqDto: UpdateFaqDto): Promise<FaqEntity> {
-        return this.faqsService.updateFaq(updateFaqDto);
+    @Put(':id')
+    async updateFaq(@Param('id') id: string,@Body() updateFaqDto: UpdateFaqDto): Promise<FaqEntity> {
+        return this.faqsService.updateFaq(id, updateFaqDto);
     }
 
     @Get()
