@@ -50,7 +50,7 @@ export class UserService {
         return this.userRepository.find();
     }
 
-    async findById(id: number): Promise<UserEntity> {
+    async findById(id: string): Promise<UserEntity> {
         // Encontra um usuário pelo seu ID no banco de dados
         const user = await this.userRepository.findOne({ where: { id } });
 
