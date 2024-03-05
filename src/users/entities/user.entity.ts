@@ -5,8 +5,8 @@ import { DepartamentEntity } from "../../departaments/entities/departament.entit
 
 @Entity({name: 'users'})
 export class UserEntity {
-    @PrimaryGeneratedColumn()
-    id : number;
+    @PrimaryGeneratedColumn('uuid')
+    id : string;
 
     @Column({name: 'registration', nullable: false, unique: true})
     registration: number;
