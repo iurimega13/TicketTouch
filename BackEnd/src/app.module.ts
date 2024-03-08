@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'; // Importa o módulo TypeOrmMod
 import { EquipmentsModule } from './equipments/equipments.module'; // Importa o módulo EquipmentsModule
 import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
 import { APP_GUARD } from '@nestjs/core';  // Importa o APP_GUARD do NestJS
-import { RolesGuard } from './guards/roles.guards'; // Importa o guard RolesGuard
+// import { RolesGuard } from './guards/roles.guards'; // Importa o guard RolesGuard
 import { TicketCategoriesModule } from './ticket-categories/ticket-categories.module'; // Importa o módulo TicketCategoriesModule
 import { AttachmentsModule } from './attachments/attachments.module'; // Importa o módulo AttachmentsModule
 import { TicketChangesModule } from './ticket-changes/ticket-changes.module'; // Importa o módulo TicketChangesModule
@@ -44,10 +44,10 @@ import { UnitsModule } from './units/units.module';
   ],
   controllers: [AppController], // Controladores fornecidos pelo módulo
   providers: [AppService,
-    {
+    /* {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },
+    }, */
   ], 
 })
 
