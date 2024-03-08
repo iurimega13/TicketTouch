@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module'; // Assumindo que você tem um AppModule que importa o ConfigModule
+import { AppModule } from '../app.module'; // Assumindo que você tem um AppModule que importa o ConfigModule
 
 async function createDataSource(): Promise<DataSource> {
   const app = await NestFactory.createApplicationContext(AppModule);
