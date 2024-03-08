@@ -23,7 +23,7 @@ import { UnitsModule } from './units/units.module';
     // Configuração do ambiente e banco de dados
     ConfigModule.forRoot({
       isGlobal: true, // Define que o módulo é global
-      envFilePath: ['.env.development.local'], // Define o arquivo de ambiente a ser carregado
+      envFilePath: ['../.env'], // Define o arquivo de ambiente a ser carregado
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule], 
