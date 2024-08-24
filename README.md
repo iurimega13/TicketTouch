@@ -26,8 +26,8 @@ O projeto TicketTouch surge como uma resposta a essa demanda específica, oferec
 #### 3.1 Objetivo Geral:
 Desenvolver um sistema de gerenciamento de tickets de suporte para melhorar a eficiência operacional e a qualidade do serviço de suporte ao cliente.
 #### 3.2 Objetivos Específicos:
-- [ ] Levantar os requisitos do sistema.
-- [ ] Projetar a arquitetura do sistema, incluindo a estrutura de banco de dados e interfaces de usuário.
+- [x] Levantar os requisitos do sistema.
+- [x] Projetar a arquitetura do sistema, incluindo a estrutura de banco de dados e interfaces de usuário.
 - [ ] Implementar as funcionalidades do sistema seguindo as melhores práticas de engenharia de software.
 - [ ] Realizar testes para garantir a qualidade e confiabilidade do sistema.
 - [ ] Implantar o sistema em ambiente de produção.
