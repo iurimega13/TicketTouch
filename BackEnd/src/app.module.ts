@@ -26,19 +26,20 @@ import { UnitsModule } from './units/units.module';
       envFilePath: ['../.env'], // Define o arquivo de ambiente a ser carregado
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], 
-      inject: [ConfigService], 
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres', // Tipo do banco de dados
-        database: configService.get('DB_DATABASE'), // Nome do banco de dados
-        host: configService.get('DB_HOST'), // Host do banco de dados
-        password: configService.get('DB_PASSWORD'), // Senha do banco de dados
-        port: Number(configService.get('DB_PORT')), // Porta do banco de dados
-        username: configService.get('DB_USERNAME'), // Nome de usuário do banco de dados
+        type: 'postgres',
+        database: configService.get('DATABASE_NAME'), // Nome do banco de dados
+        host: configService.get('DATABASE_HOST'), // Host do banco de dados
+        password: configService.get('DATABASE_PASSWORD'), // Senha do banco de dados
+        port: Number(configService.get('DATABASE_PORT')), // Porta do banco de dados
+        username: configService.get('DATABASE_USER'), // Nome de usuário do banco de dados
         synchronize: false, // Sincroniza automaticamente o esquema do banco de dados com as entidades
         entities: ['dist/**/*.entity{.ts,.js}'], // Localização das entidades
       }),
     }),
+    
     // Importação dos módulos
     UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartamentsModule
   ],
