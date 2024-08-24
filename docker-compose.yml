@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  #backend:
+  #  build:
+  #    context: ./BackEnd
+  #    dockerfile: Dockerfile
+  #  environment:
+  #    DATABASE_HOST: ${DATABASE_HOST}
+  #    DATABASE_PORT: ${DATABASE_PORT}
+  #    DATABASE_USER: ${DATABASE_USER}
+  #    DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  #    DATABASE_NAME: ${DATABASE_NAME}
+  #  depends_on:
+  #    - db
+  #  ports:
+  #    - "3000:3000"
+
+  #frontend:
+  #  build:
+  #    context: ./FrontEnd
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "3001:3000"
+  #  depends_on:
+  #    - backend
+
+volumes:
+  db_data:
