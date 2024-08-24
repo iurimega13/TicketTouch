@@ -1,7 +1,7 @@
 # compiled output
-/BackEnd/node_modules
-/BackEnd/build
-/BackEnd/dist
+/backend/node_modules
+/backend/build
+/backend/dist
 
 /frontend/node_modules
 /frontend/build

@@ -1,4 +1,4 @@
-import { FaqEntity } from "../../faqs/entities/faq.entity";
+import { FaqEntity } from "../entities/faq.entity";
 
 export class ReturnFaqDto {
     id: string;
