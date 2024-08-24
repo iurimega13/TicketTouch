@@ -1,7 +1,7 @@
 # compiled output
-/tickettouch/BackEnd/dist
-/tickettouch/BackEnd/node_modules
-/tickettouch/BackEnd/build
+/BackEnd/node_modules
+/BackEnd/build
+/BackEnd/dist
 
 # Logs
 logs

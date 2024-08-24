@@ -1,1 +1,0 @@
-{"version":3,"file":"returnTicketCategory.dto.js","sourceRoot":"","sources":["../../../src/ticket-categories/dtos/returnTicketCategory.dto.ts"],"names":[],"mappings":";;;AAGA,MAAa,iBAAiB;IAK1B,YAAY,cAAoC;QAC5C,IAAI,CAAC,EAAE,GAAG,cAAc,CAAC,EAAE,CAAC;QAC5B,IAAI,CAAC,IAAI,GAAG,cAAc,CAAC,IAAI,CAAC;QAChC,IAAI,CAAC,WAAW,GAAG,cAAc,CAAC,WAAW,CAAC;IAClD,CAAC;CACJ;AAVD,8CAUC"}

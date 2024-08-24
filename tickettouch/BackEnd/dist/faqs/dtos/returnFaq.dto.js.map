@@ -1,1 +1,0 @@
-{"version":3,"file":"returnFaq.dto.js","sourceRoot":"","sources":["../../../src/faqs/dtos/returnFaq.dto.ts"],"names":[],"mappings":";;;AAEA,MAAa,YAAY;IAKrB,YAAY,GAAc;QACtB,IAAI,CAAC,EAAE,GAAG,GAAG,CAAC,EAAE,CAAC;QACjB,IAAI,CAAC,QAAQ,GAAG,GAAG,CAAC,QAAQ,CAAC;QAC7B,IAAI,CAAC,MAAM,GAAG,GAAG,CAAC,MAAM,CAAC;IAC7B,CAAC;CACJ;AAVD,oCAUC"}
