@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common'; // Importa decorators e módulos do NestJS
-import { AppService } from './app.service'; // Importa o serviço AppService
+import { Controller, Get } from '@nestjs/common'; 
+import { AppService } from './app.service'; 
 
-@Controller() // Define este como o controlador principal
+@Controller('api') 
 export class AppController {
-  constructor(private readonly appService: AppService) {} // Injeta o serviço AppService no construtor
+  constructor(private readonly appService: AppService) {} 
 
-  @Get() // Define um método GET para a rota raiz
+  @Get('hello')
   getHello(): string {
-    return this.appService.getHello(); // Retorna a mensagem de boas-vindas obtida do serviço AppService
+    return this.appService.getHello();
   }
 }
