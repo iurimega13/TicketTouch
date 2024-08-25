@@ -69,7 +69,7 @@ export class UnitsService {
     }
 
     // Método para buscar uma unidade pelo ID
-    async getUnitById(id: number): Promise<UnitEntity> {
+    async getUnitById(id: string): Promise<UnitEntity> {
         try {
             // Buscando a unidade pelo ID no banco de dados
             const unit = await this.unitRepository.findOne({ where: { id } });
@@ -86,7 +86,7 @@ export class UnitsService {
     }
 
     // Método para deletar uma unidade pelo ID
-    async deleteUnit(id: number): Promise<void> {
+    async deleteUnit(id: string): Promise<void> {
         try {
             // Buscando a unidade pelo ID
             const unit = await this.getUnitById(id);

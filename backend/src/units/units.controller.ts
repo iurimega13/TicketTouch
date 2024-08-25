@@ -32,7 +32,7 @@ export class UnitsController {
     // Método para deletar uma unidade existente
     // Usa o decorador @Delete(':id') para definir que este método deve ser chamado quando uma requisição DELETE for feita para a rota '/units/:id'
     @Delete(':id')
-    async deleteUnit(@Param('id') id: number): Promise<void> {
+    async deleteUnit(@Param('id') id: string): Promise<void> {
         return this.unitsService.deleteUnit(id);
     }
 

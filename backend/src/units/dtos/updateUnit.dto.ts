@@ -3,9 +3,9 @@ import { IsString, IsNotEmpty, IsNumber } from "class-validator";
 
 export class UpdateUnitDto {
 
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  id: number;
+  id: string;
   
   @IsString()
   @IsNotEmpty()

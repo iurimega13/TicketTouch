@@ -2,7 +2,7 @@ import { UnitEntity } from "../entities/unit.entity";
 
 
 export class ReturnUnitDto {
-    id: number;
+    id: string;
     name: string;
     address: string;
     created_at: Date;
