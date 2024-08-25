@@ -27,24 +27,26 @@ export class TicketCategoriesService {
         }
     }
     
-    // Método para atualizar uma categoria de ticket existente
-    async updateTicketCategory(updateTicketCategoryDto: UpdateTicketCategoryDto): Promise<TicketCategoryEntity> {
-        try {
-            const ticketCategory = await this.getTicketCategoryById(updateTicketCategoryDto.id);
-            if (!ticketCategory) {
-                throw new Error('Ticket Category not found'); // Retorna um erro caso a categoria de ticket não seja encontrada
-            }
-
-            const updatedTicketCategory = {
-                ...ticketCategory,
-                ...updateTicketCategoryDto,
-            };
-
-            return await this.ticketCategoryRepository.save(updatedTicketCategory);
-        } catch (error) {
-            throw new Error(error);
+    /// Método para atualizar uma categoria de ticket existente
+// ticket-categories.service.ts
+async updateTicketCategory(updateTicketCategoryDto: UpdateTicketCategoryDto): Promise<TicketCategoryEntity> {
+    try {
+        const ticketCategory = await this.getTicketCategoryById(updateTicketCategoryDto.id);
+        if (!ticketCategory) {
+            throw new Error('Ticket Category not found'); // Retorna um erro caso a categoria de ticket não seja encontrada
         }
+
+        const updatedTicketCategory = {
+            ...ticketCategory,
+            ...updateTicketCategoryDto,
+        };
+
+        return await this.ticketCategoryRepository.save(updatedTicketCategory);
+    } catch (error) {
+        throw new Error(error);
     }
+}
+
 
     // Método para buscar todas as categorias de ticket
     async getAllTicketCategories(): Promise<TicketCategoryEntity[]> {
@@ -57,7 +59,7 @@ export class TicketCategoriesService {
 
 
     // Método para buscar uma categoria de ticket por id
-    async getTicketCategoryById(id: number): Promise<TicketCategoryEntity> {
+    async getTicketCategoryById(id: string): Promise<TicketCategoryEntity> {
         try {
             return await this.ticketCategoryRepository.findOne({where: {id}});
         } catch (error) {
@@ -66,7 +68,7 @@ export class TicketCategoriesService {
     }
 
     // Método para deletar uma categoria de ticket existente
-    async deleteTicketCategory(id: number): Promise<void> {
+    async deleteTicketCategory(id: string): Promise<void> {
         try {
             const ticketCategory = await this.getTicketCategoryById(id);
             if (!ticketCategory) {

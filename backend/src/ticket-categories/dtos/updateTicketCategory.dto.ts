@@ -1,14 +1,14 @@
-import { IsNumber, IsNotEmpty, IsString, IsOptional } from "class-validator";
+import { IsNotEmpty, IsString, IsOptional } from "class-validator";
 
 
 export class UpdateTicketCategoryDto {
     
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    id: number;
+    id: string;
 
     @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     name: string;
 
     @IsString()

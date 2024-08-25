@@ -3,8 +3,8 @@ import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Ent
 
 @Entity({name: 'ticket_categories'})
 export class TicketCategoryEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({name: 'name', nullable: false})
     name: string;

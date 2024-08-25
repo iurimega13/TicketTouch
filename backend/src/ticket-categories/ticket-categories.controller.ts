@@ -28,7 +28,7 @@ export class TicketCategoriesController {
     // Método para deletar uma categoria de ticket existente
     // Usa o decorador @Delete(':id') para definir que este método deve ser chamado quando uma requisição DELETE for feita para a rota '/ticket-categories/:id'
     @Delete(':id')
-    async deleteTicketCategory(@Param('id') id: number): Promise<void> {
+    async deleteTicketCategory(@Param('id') id: string): Promise<void> {
         return this.ticketCategoriesService.deleteTicketCategory(id);
     }
 

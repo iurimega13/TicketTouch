@@ -2,7 +2,7 @@ import { TicketCategoryEntity } from "../entities/ticketCategory.entity";
 
 
 export class ReturnCategoryDto {
-    id: number;
+    id: string;
     name: string;
     description: string;
 
