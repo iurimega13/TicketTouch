@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsBoolean } from "class-validator";
-import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { DepartmentEntity } from "../../departments/entities/department.entity";
 import { TicketEntity } from "../../tickets/entities/ticket.entity";
 import { UnitEntity } from "../../units/entities/unit.entity";
 import { UserEntity } from "../../users/entities/user.entity";
@@ -25,7 +25,7 @@ export class CreateEquipmentDto {
     @JoinColumn({ name: 'unit_id' })
     unit_id: number;
 
-    @ManyToOne(() => DepartamentEntity)
+    @ManyToOne(() => DepartmentEntity)
     @JoinColumn({ name: 'departament_id' })
     departament_id: number;
 

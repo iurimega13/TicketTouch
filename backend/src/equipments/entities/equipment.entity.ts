@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { UnitEntity } from '../../units/entities/unit.entity';
-import { DepartamentEntity } from '../../departaments/entities/departament.entity';
+import { DepartmentEntity } from '../../departments/entities/department.entity';
 import { UserEntity } from '../../users/entities/user.entity';
 import { TicketEntity } from '../../tickets/entities/ticket.entity';
 
@@ -25,9 +25,9 @@ export class EquipmentEntity {
     @JoinColumn({name: 'unit_id'})
     unit: UnitEntity;
 
-    @ManyToOne(() => DepartamentEntity)
+    @ManyToOne(() => DepartmentEntity)
     @JoinColumn({name: 'departament_id'})
-    departament: DepartamentEntity;
+    departament: DepartmentEntity;
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({name: 'user_id'})

@@ -40,5 +40,5 @@ export class UpdateEquipmentDto {
     @IsNumber()
     @IsNotEmpty()
     @IsOptional()
-    departament_id: number;
+    department_id: number;
 }

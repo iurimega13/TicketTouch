@@ -1,5 +1,5 @@
 import { UnitEntity } from "../../units/entities/unit.entity";
-import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { DepartmentEntity } from "../../departments/entities/department.entity";
 import { TicketEntity } from "../../tickets/entities/ticket.entity";
 import { UserEntity } from "../../users/entities/user.entity";
 import { EquipmentEntity } from "../entities/equipment.entity";
@@ -11,7 +11,7 @@ export class ReturnEquipmentDto {
     serial_number: number;
     user: UserEntity;
     unit: UnitEntity;
-    department: DepartamentEntity;
+    department: DepartmentEntity;
     ticket: TicketEntity;
     is_shared: boolean;
 
