@@ -3,8 +3,8 @@ import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, CreateDa
 
 @Entity({name: 'settings'})
 export class SettingsEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({name: 'user_id'})

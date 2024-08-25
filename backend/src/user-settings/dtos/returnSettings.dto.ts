@@ -3,7 +3,7 @@ import { SettingsEntity } from "../entities/settings.entity";
 
 
 export class ReturnSettingsDto {
-    id: number;
+    id: string;
     user_id: UserEntity;
     theme: string;
     notifications_settings: string;

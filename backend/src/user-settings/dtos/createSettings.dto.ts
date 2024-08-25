@@ -4,7 +4,7 @@ import { IsNumber, IsString } from "class-validator";
 export class CreateSettingsDto {
 
     @IsNumber()
-    user_id: number;
+    user_id: string;
 
     @IsString()
     theme: string;
