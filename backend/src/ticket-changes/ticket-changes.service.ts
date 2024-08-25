@@ -24,7 +24,7 @@ export class TicketChangesService {
         }
     }
 
-    async getChangesByTicketId(ticket_id: number): Promise<ReturnChangeDto[]> {
+    async getChangesByTicketId(ticket_id: string): Promise<ReturnChangeDto[]> {
         try {
             const changes = await this.ticketChangeRepository.find({
                 where: {

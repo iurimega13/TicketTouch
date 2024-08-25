@@ -1,16 +1,16 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsSurrogatePair } from "class-validator";
 import { CreateDateColumn } from "typeorm";
 
 
 export class CreateChangeDto {
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    userId: number;
+    userId: string;
 
     @IsNotEmpty()
-    @IsNumber()
-    ticketId: number;
+    @IsString()
+    ticketId: string;
 
     @IsNotEmpty()
     @IsString()

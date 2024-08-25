@@ -16,7 +16,7 @@ export class TicketChangesController {
     }
 
     @Get(':ticket_id')
-    async getChangesByTicketId(@Param('ticket_id') ticket_id: number): Promise<ReturnChangeDto[]> {
+    async getChangesByTicketId(@Param('ticket_id') ticket_id: string): Promise<ReturnChangeDto[]> {
         return this.ticketChangesService.getChangesByTicketId(ticket_id);
     }
 }
