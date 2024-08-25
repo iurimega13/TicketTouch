@@ -11,7 +11,7 @@ export class DepartmentEntity{
     name: string;
 
     @ManyToOne(() => UnitEntity)
-    @JoinColumn({name: 'unit_id'})
+    @JoinColumn({name: 'unit_name'})
     unit: UnitEntity;
 
     @CreateDateColumn({name: 'created_at', nullable: false})

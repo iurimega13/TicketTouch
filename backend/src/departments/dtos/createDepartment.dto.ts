@@ -1,11 +1,11 @@
-import { IsString, IsNumber } from "class-validator";
+import { IsString} from "class-validator";
 
 
 export class CreateDepartmentDto {
     @IsString()
     name: string;
 
-    @IsNumber()
-    unit_id: number;
+    @IsString()
+    unit_name: string;
 
 }

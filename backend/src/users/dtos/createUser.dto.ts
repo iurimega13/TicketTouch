@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import {IsString } from "class-validator";
 
 export class CreateUserDto {
     
@@ -20,9 +20,9 @@ export class CreateUserDto {
     @IsString()
     username: string;
 
-    @IsNumber()
-    unit_id: number;
+    @IsString()
+    unit_name: string;
 
-    @IsNumber()
-    department_id: number;
+    @IsString()
+    department_name: string;
 }

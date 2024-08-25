@@ -30,7 +30,7 @@ export class EquipmentEntity {
     departament: DepartmentEntity;
 
     @ManyToOne(() => UserEntity)
-    @JoinColumn({name: 'user_id'})
+    @JoinColumn({name: 'user_name'})
     user: UserEntity;
 
     @ManyToOne(() => TicketEntity)

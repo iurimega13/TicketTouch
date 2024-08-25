@@ -5,7 +5,7 @@ import { UpdateDepartmentDto } from './dtos/updateDepartment.dto';
 import { DepartmentEntity } from './entities/department.entity';
 import { CreateDepartmentDto } from './dtos/createDepartment.dto';
 
-@Controller('departaments')
+@Controller('departments')
 export class DepartamentsController {
 
     constructor(private readonly DepartmentsService: DepartmentsService) {}

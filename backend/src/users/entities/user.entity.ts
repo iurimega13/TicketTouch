@@ -26,18 +26,13 @@ export class UserEntity {
     @Column({name: 'phone_number'})
     phone_number: string;
 
-    @Column({ nullable: false })
-    unit_id: number;
 
     @ManyToOne(() => UnitEntity)
-    @JoinColumn({name: 'unit_id'})
+    @JoinColumn({name: 'unit_name'})
     unit: UnitEntity;
 
-    @Column({ nullable: false })
-    department_id: number;
-
     @ManyToOne(() => DepartmentEntity)
-    @JoinColumn({name: 'department_id'})
+    @JoinColumn({name: 'department_name'})
     department: DepartmentEntity;
 
     @CreateDateColumn({name: 'created_at', type: 'timestamp'})
