@@ -7,8 +7,8 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 
 @Entity({name: 'tickets'}) // Define o nome da tabela no banco de dados
 export class TicketEntity {
-    @PrimaryGeneratedColumn() // Define a coluna como chave primária e auto incrementável
-    id: number; // Define o tipo da coluna como número
+    @PrimaryGeneratedColumn('uuid') // Define a coluna como chave primária e auto incrementável
+    id: string; // Define o tipo da coluna como número
 
     @Column({name: 'title', nullable: false})
     title: string; // Define o tipo da coluna como string

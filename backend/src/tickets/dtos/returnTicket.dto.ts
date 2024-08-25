@@ -5,7 +5,7 @@ import { UserEntity } from "src/users/entities/user.entity";
 import { SlaEntity } from "src/slas/entities/sla.entity";
 
 export class ReturnTicketDto {
-    id: number;
+    id: string;
     title: string;
     description: string;
     priority: string;

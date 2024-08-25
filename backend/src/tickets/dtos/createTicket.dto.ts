@@ -15,16 +15,16 @@ export class CreateTicketDto {
     status: string;
 
     @IsNumber()
-    category_id: number;
+    category_id: string;
 
     @IsNumber()
-    user_id: number;
+    user_id: string;
 
     @IsNumber()
-    technician_id: number;
+    technician_id: string;
 
     @IsNumber()
-    unit_id: number;
+    unit_id: string;
 
     @IsDate()
     due_date: Date;
