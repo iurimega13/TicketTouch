@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UpdateDepartamentDto } from './dtos/updateDepartament.dto';
-import { DepartamentEntity } from './entities/departament.entity';
-import { CreateDepartamentDto } from './dtos/createDepartament.dto';
+import { UpdateDepartmentDto } from './dtos/updateDepartment.dto';
+import { DepartmentEntity } from './entities/department.entity';
+import { CreateDepartmentDto } from './dtos/createDepartment.dto';
 
 @Injectable()
-export class DepartamentsService {
+export class DepartmentsService {
 
     // Injeção de dependência do repositório de departamentos
     constructor(
-        @InjectRepository(DepartamentEntity)
-        private readonly departamentRepository: Repository<DepartamentEntity>,
+        @InjectRepository(DepartmentEntity)
+        private readonly departmentRepository: Repository<DepartmentEntity>,
     ) {}
 
     // Método para criar um novo departamento
-    async createDepartament(createDepartamentDto: CreateDepartamentDto): Promise<DepartamentEntity> {
+    async createDepartment(createDepartmentDto: CreateDepartmentDto): Promise<DepartmentEntity> {
         try {
             // Criando um novo objeto departament com os dados do DTO e as datas de criação e atualização
             const departament = {
-                ...createDepartamentDto,
+                ...createDepartmentDto,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
             // Salvando o departamento no banco de dados e retornando o departamento salvo
-            return await this.departamentRepository.save(departament);
+            return await this.departmentRepository.save(departament);
         }
         catch (error) {
             // Lançando um erro se algo der errado
@@ -33,23 +33,23 @@ export class DepartamentsService {
     }
 
     // Método para atualizar um departamento existente
-    async updateDepartament(id: number, updateDepartamentDto: UpdateDepartamentDto): Promise<DepartamentEntity> {
+    async updateDepartment(id: string, updateDepartmentDto: UpdateDepartmentDto): Promise<DepartmentEntity> {
         try {
             // Buscando o departamento pelo ID
-            const departament = await this.getDepartamentById(id);
+            const department = await this.getDepartmentById(id);
             
             // Lançando um erro se o departamento não for encontrado
-            if (!departament) {
+            if (!department) {
                 throw new Error('Departament not found');
             }
             // Criando um novo objeto com os dados do departamento atualizados e a data de atualização
-            const updatedDepartament = {
-                ...departament,
-                ...updateDepartamentDto,
+            const updatedDepartment = {
+                ...department,
+                ...updateDepartmentDto,
                 updatedAt: new Date(),
             };
             // Salvando o departamento atualizado no banco de dados e retornando o departamento atualizado
-            return await this.departamentRepository.save(updatedDepartament);
+            return await this.departmentRepository.save(updatedDepartment);
         } catch (error) {
             // Lançando um erro se algo der errado
             throw new Error(error);
@@ -57,10 +57,10 @@ export class DepartamentsService {
     }
 
     // Método para buscar todos os departamentos
-    async getAllDepartaments(): Promise<DepartamentEntity[]> {
+    async getAllDepartments(): Promise<DepartmentEntity[]> {
         try {
             // Buscando todos os departamentos no banco de dados e retornando a lista de departamentos
-            return await this.departamentRepository.find();
+            return await this.departmentRepository.find();
         } catch (error) {
             // Lançando um erro se algo der errado
             throw new Error(error);
@@ -68,10 +68,10 @@ export class DepartamentsService {
     }
 
     // Método para buscar um departamento pelo ID
-    async getDepartamentById(id: number): Promise<DepartamentEntity> {
+    async getDepartmentById(id: string): Promise<DepartmentEntity> {
         try {
             // Buscando o departamento pelo ID e retornando o departamento encontrado
-            return await this.departamentRepository.findOne({ where: { id } });
+            return await this.departmentRepository.findOne({ where: { id } });
         } catch (error) {
             // Lançando um erro se algo der errado
             throw new Error(error);
@@ -79,10 +79,10 @@ export class DepartamentsService {
     }
 
     // Método para deletar um departamento existente
-    async deleteDepartament(id: number): Promise<void> {
+    async deleteDepartament(id: string): Promise<void> {
         try {
             // Deletando o departamento pelo ID
-            await this.departamentRepository.delete(id);
+            await this.departmentRepository.delete(id);
         } catch (error) {
             // Lançando um erro se algo der errado
             throw new Error(error);

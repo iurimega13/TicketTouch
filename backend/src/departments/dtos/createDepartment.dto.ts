@@ -1,7 +1,7 @@
 import { IsString, IsNumber } from "class-validator";
 
 
-export class CreateDepartamentDto {
+export class CreateDepartmentDto {
     @IsString()
     name: string;
 

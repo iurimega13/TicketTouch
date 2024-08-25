@@ -1,11 +1,11 @@
 import { UnitEntity } from "../../units/entities/unit.entity";
 import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Entity } from "typeorm";
 
-@Entity({name: 'departaments'})
-export class DepartamentEntity{
+@Entity({name: 'departments'})
+export class DepartmentEntity{
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @Column({name: 'name', nullable: false})
     name: string;

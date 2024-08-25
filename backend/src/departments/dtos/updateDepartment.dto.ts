@@ -1,11 +1,11 @@
 import { IsNumber, IsNotEmpty, IsString } from "class-validator";
 
 
-export class UpdateDepartamentDto {
+export class UpdateDepartmentDto {
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    id: number;
+    id: string;
     
     @IsString()
     @IsNotEmpty()
