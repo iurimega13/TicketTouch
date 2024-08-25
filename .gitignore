@@ -68,3 +68,5 @@ commands.txt
 .prettierrc
 
 .eslintrc.js
+
+.hintrc

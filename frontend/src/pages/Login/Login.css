@@ -32,8 +32,8 @@
       text-align: center;
       font-size: 12px;
       padding: 1rem;
-      user-select: none;
-      -webkit-user-select: none; /* Add this line */
+      -webkit-user-select: none;
+      user-select: none; /* Add this line */
       margin-top:-45px;
   }
   
