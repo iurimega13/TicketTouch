@@ -15,7 +15,7 @@ import { AttachmentsModule } from './attachments/attachments.module'; // Importa
 import { TicketChangesModule } from './ticket-changes/ticket-changes.module'; // Importa o módulo TicketChangesModule
 import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
 import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
-import { DepartamentsModule } from './departaments/departaments.module';
+import { DepartamentsModule } from './departments/departments.module';
 import { UnitsModule } from './units/units.module';
 
 @Module({
