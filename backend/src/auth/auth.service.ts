@@ -14,11 +14,11 @@ export class AuthService {
 
     async login(LoginDto: LoginDto): Promise<ReturnLogin> {
         // Busca o usuário pelo registro fornecido no DTO de login
-        const user = await this.userService.findByRegistration(LoginDto.registration);
+        const user = await this.userService.findByUsername(LoginDto.username);
         
         // Se o usuário não for encontrado, lança NotFoundException
         if (!user) {
-            throw new NotFoundException(`Usuário com registro ${LoginDto.registration} não encontrado`);
+            throw new NotFoundException(`Usuário com registro ${LoginDto.username} não encontrado`);
         }
     
         // Compara a senha fornecida com a senha armazenada no banco de dados
