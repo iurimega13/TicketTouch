@@ -17,8 +17,8 @@ export class CreateUserDto {
     @IsString()
     phone_number: string;
 
-    @IsNumber()
-    registration: number;
+    @IsString()
+    username: string;
 
     @IsNumber()
     unit_id: number;

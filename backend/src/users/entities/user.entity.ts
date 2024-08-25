@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { UnitEntity } from "../../units/entities/unit.entity";
-import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { DepartmentEntity } from "../../departments/entities/department.entity";
 
 
 @Entity({name: 'users'})
@@ -8,8 +8,8 @@ export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
     id : string;
 
-    @Column({name: 'registration', nullable: false, unique: true})
-    registration: number;
+    @Column({name: 'username', nullable: false, unique: true})
+    username: string;
 
     @Column({name: 'name', nullable: false})
     name: string;
@@ -26,19 +26,19 @@ export class UserEntity {
     @Column({name: 'phone_number'})
     phone_number: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: false })
     unit_id: number;
 
     @ManyToOne(() => UnitEntity)
     @JoinColumn({name: 'unit_id'})
     unit: UnitEntity;
 
-    @Column({ nullable: true })
+    @Column({ nullable: false })
     department_id: number;
 
-    @ManyToOne(() => DepartamentEntity)
+    @ManyToOne(() => DepartmentEntity)
     @JoinColumn({name: 'department_id'})
-    department: DepartamentEntity;
+    department: DepartmentEntity;
 
     @CreateDateColumn({name: 'created_at', type: 'timestamp'})
     created_at: Date;

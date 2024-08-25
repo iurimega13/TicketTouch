@@ -1,21 +1,21 @@
 import { UserEntity } from "../entities/user.entity";
 import { UnitEntity } from "../../units/entities/unit.entity";
-import { DepartamentEntity } from "../../departaments/entities/departament.entity";
+import { DepartmentEntity } from "../../departments/entities/department.entity";
 
 export class ReturnUserDto {
     id: string;
-    registration: number;
+    username: string;
     name: string;
     email: string;
     role: string;
     phone_number: string;
     unit: UnitEntity;
-    department: DepartamentEntity;
+    department: DepartmentEntity;
     created_at: Date;
 
     constructor(user: UserEntity) {
         this.id = user.id;
-        this.registration = user.registration;
+        this.username = user.username;
         this.name = user.name;
         this.email = user.email;
         this.role = user.role;
