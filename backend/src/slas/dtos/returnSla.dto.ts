@@ -3,7 +3,7 @@ import { SlaEntity } from "../entities/sla.entity";
 
 export class ReturnSlaDto {
 
-    id: number;
+    id: string;
     name: string;
     description: string;
     response_time: number;
