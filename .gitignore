@@ -70,3 +70,4 @@ commands.txt
 .eslintrc.js
 
 .hintrc
+yarn.lock
