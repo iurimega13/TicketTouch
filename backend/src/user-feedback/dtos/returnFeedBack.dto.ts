@@ -4,7 +4,7 @@ import { FeedbackEntity } from "../entities/feedback.entity";
 
 
 export class ReturnFeedbackDto {
-    id: number;
+    id: string;
     user: UserEntity;
     ticket: TicketEntity;
     rating: number;

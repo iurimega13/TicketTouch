@@ -5,8 +5,8 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 @Entity('feedback')
 export class FeedbackEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @ManyToOne(() => UserEntity)
     @JoinColumn({name: 'user_id'})
