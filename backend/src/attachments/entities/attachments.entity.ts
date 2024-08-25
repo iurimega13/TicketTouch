@@ -3,8 +3,8 @@ import { TicketEntity } from '../../tickets/entities/ticket.entity';
 
 @Entity({name: 'attachments'})
 export class AttachmentEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
     @ManyToOne(() => TicketEntity)
     @JoinColumn({name: 'ticket_id'})

@@ -2,8 +2,8 @@ import { AttachmentEntity } from "../entities/attachments.entity";
 
 
 export class ReturnAttachmentDto {
-    id: number;
-    ticket_id: number;
+    id: string;
+    ticket_id: string;
     file_path: string;
     created_at: Date;
 

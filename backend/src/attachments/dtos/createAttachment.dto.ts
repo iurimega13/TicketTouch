@@ -4,7 +4,7 @@ export class CreateAttachmentDto {
     
     
     @IsNumber()
-    ticket_id: number;
+    ticket_id: string;
 
     @IsString()
     file_path: string;
