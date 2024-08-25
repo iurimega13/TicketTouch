@@ -4,7 +4,7 @@ import { DepartmentEntity } from "../entities/department.entity";
 export class ReturnDepartmentDto {
     id: string;
     name: string;
-    unit_id: number;
+    unit_id: string;
     created_at: Date;
 
     constructor(departament: DepartmentEntity) {
