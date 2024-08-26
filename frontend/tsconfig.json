@@ -14,7 +14,9 @@
     "isolatedModules": true,
     "jsx": "react"
   },
-  "include": ["src"],
+  "include": ["src",
+    "node_modules"    
+],
   "files": [
     "src/styles/styled.d.ts"
   ]

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { NavbarContainer, Menu, ToggleButton, ProfileSection, Avatar, Dropdown, DropdownItem } from "./style";
+import { NavbarContainer, Menu, ToggleButton, ProfileSection, Avatar, Dropdown, DropdownItem } from "./styles";
 
 interface NavbarProps {
   toggleTheme: () => void;
