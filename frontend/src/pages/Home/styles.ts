@@ -6,7 +6,9 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  user-select: none;
+  background-color: ${props => props.theme.colors.background};
+  color: ${props => props.theme.colors.text};
 `;
 
 export const Title = styled.h1`

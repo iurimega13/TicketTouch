@@ -1,25 +1,57 @@
 import styled from 'styled-components';
+import { Checkbox as AntCheckbox } from 'antd';
 
-export const Container = styled.div`
+export const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40vw; 
-  height: 40vh;
+  height: 90vh;
+  background-color: ${props => props.theme.colors.background};
+  padding: 0 20px;  /* Adicionando algum padding para telas menores */
+`;
+
+export const LogoContainer = styled.div`
+  user-select: none;
+  img {
+    width: 20vw; 
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    img {
+      width: 50vw;  /* Ajustando o tamanho da imagem em telas menores */
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      width: 80vw;  /* Ajustando ainda mais para telas muito pequenas */
+    }
+  }
+`;
+
+export const Container = styled.div`
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;  /* Ajustando a largura para se ajustar bem em diferentes tamanhos */
+  max-width: 400px;  /* Limita a largura máxima */
   background-color: ${props => props.theme.colors.secundary};
   padding: 20px;
-  position: absolute; 
-  top: 50%; 
-  left: 50%;
-  transform: translate(-50%, -50%); 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   color: ${props => props.theme.colors.text};
   border-radius: 10px; 
 
   @media (max-width: 768px) {
-    width: 90vw; /* Ajusta a largura para telas menores */
-    height: auto; /* Permite que a altura se ajuste ao conteúdo */
+    width: 95%;
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
     padding: 10px;
   }
 `;
@@ -27,7 +59,7 @@ export const Container = styled.div`
 export const Title = styled.h1`
   font-size: 2rem;
   margin-bottom: 1rem;
-  text-align: center; /* Centraliza o texto */
+  text-align: center;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -35,54 +67,6 @@ export const Title = styled.h1`
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
-  }
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centraliza os itens no formulário */
-  width: 100%; /* Ajusta a largura para preencher o container */
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-`;
-
-export const Input = styled.input`
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%; /* Ajusta a largura para preencher o formulário */
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.4rem;
-  }
-`;
-
-export const Button = styled.button`
-  padding: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.4rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.3rem;
   }
 `;
 
@@ -98,10 +82,29 @@ export const ButtonContainer = styled.div`
   }
 `;
 
-export const rememberMe = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const StyledCheckbox = styled(AntCheckbox)`
+  .ant-checkbox-wrapper {
+    color: ${props => props.theme.colors.text}; 
+  }
+
+  .ant-checkbox + span {
+    color: ${props => props.theme.colors.text}; 
+  }
+`;
+
+export const ForgotPassword = styled.div`
+  a {
+    display: flex;
+    color: ${props => props.theme.colors.text};
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;  /* Ajusta o tamanho da fonte para telas menores */
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
   margin-top: 1rem;
-  text-color: ${props => props.theme.colors.text};
+  text-align: center;
+  font-size: 0.9rem;  /* Ajusta o tamanho da fonte para melhorar a visibilidade */
 `;

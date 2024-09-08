@@ -4,7 +4,7 @@ export default {
         primary: "#012A4A",
         secundary: "#006DAA",
         tertiary: "#CCCCCC",
-        background: "#FAFAFA",
-        text: "#FFF",
+        background: "#F0F0F0",
+        text: "#CCCCCC",
     },  
 };

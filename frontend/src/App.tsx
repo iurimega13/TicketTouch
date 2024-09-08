@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
@@ -12,10 +13,9 @@ import Home from './pages/Home';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './authContext';
 
-function App() {
+const Layout: React.FC = () => {
+  const location = useLocation();
   const [theme, setTheme] = useState(light);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const toggleTheme = () => {
@@ -26,40 +26,30 @@ function App() {
     setIsAuthenticated(true);
   };
 
-  const location = useLocation();
+  // Determine se a Navbar deve ser visível com base na rota atual
+  const showNavbar = location.pathname !== '/login';
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <div className="App">
-          <GlobalStyle />
-          {/* Condicionalmente renderize a Navbar */}
-          {location.pathname !== '/login' && <Navbar toggleTheme={toggleTheme} isDarkMode={theme === dark} />}
-          <Header />
-          {data && <div>{JSON.stringify(data)}</div>}
-          {error && <div style={{ color: 'red' }}>{error}</div>}
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
-            <Route 
-              path="/home" 
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
-                  <Home />
-                </PrivateRoute>
-              } 
-            />
-          </Routes>
-        </div>
-      </AuthProvider>
+      <div className="App">
+        <GlobalStyle />
+        <Navbar isVisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} />
+        <Header />
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/home" element={<PrivateRoute element={<Home />} isAuthenticated={isAuthenticated} />} />
+          <Route path="*" element={<Navigate to="/login" replace={true} />} />
+        </Routes>
+      </div>
     </ThemeProvider>
   );
-}
+};
 
-const AppWrapper: React.FC = () => (
+const App: React.FC = () => (
   <Router>
-    <App />
+    <Layout />
   </Router>
 );
 
-export default AppWrapper;
+export default App;

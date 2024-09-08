@@ -1,13 +1,17 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 interface PrivateRouteProps {
-  children: React.ReactNode;
+  element: React.ReactNode;
   isAuthenticated: boolean;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ isAuthenticated, children }) => {
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ element, isAuthenticated }) => {
+  return isAuthenticated ? (
+    <>{element}</>
+  ) : (
+    <Navigate to="/login" replace />
+  );
 };
 
 export default PrivateRoute;
