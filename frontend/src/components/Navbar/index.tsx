@@ -22,9 +22,9 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Estado para controlar a abertura da sidebar
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Hook para obter o local atual
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleDropdownToggle = () => {
@@ -37,13 +37,11 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
   };
 
   const handleSidebarToggle = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Alterna o estado da sidebar
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // Verifica se a URL é diferente de "/login" para exibir o Sidebar
   const showSidebar = location.pathname !== '/login';
 
-  // Fechar o dropdown ao clicar fora
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -57,9 +55,26 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
     };
   }, []);
 
+  // Função para redirecionar
+  const handleMenuClick = (path: string) => {
+    if (path === '/chamados' || path === '/usuarios' || path === '/faq') {
+      navigate('/home');
+    } else {
+      navigate(path);
+    }
+  };
+
+  // Função para redirecionar no dropdown
+  const handleDropdownClick = (path: string) => {
+    if (path === '/profile' || path === '/settings') {
+      navigate('/home');
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <NavbarContainer isVisible={isVisible}>
-      {/* Botão de Menu Móvel */}
       <MobileMenuButton onClick={handleSidebarToggle}>
         {isSidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </MobileMenuButton>
@@ -73,23 +88,20 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
 
         <Avatar onClick={handleDropdownToggle} src={`${process.env.PUBLIC_URL}/assets/avatar.svg`} alt="User Avatar" />
 
-        {/* Dropdown */}
         <Dropdown ref={dropdownRef} data-visible={dropdownOpen}>
-          <DropdownItem>Profile</DropdownItem>
-          <DropdownItem>Settings</DropdownItem>
+          <DropdownItem onClick={() => handleDropdownClick('/profile')}>Profile</DropdownItem>
+          <DropdownItem onClick={() => handleDropdownClick('/settings')}>Settings</DropdownItem>
           <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
         </Dropdown>
       </ProfileSection>
 
-      {/* Sidebar */}
       {showSidebar && <Sidebar isOpen={isSidebarOpen} onClose={handleSidebarToggle} />}
 
-      {/* Menu Desktop */}
       <Menu>
-        <li>home</li>
-        <li>chamados</li>
-        <li>Usuários</li>
-        <li>faq</li>
+        <li onClick={() => handleMenuClick('/home')}>Home</li>
+        <li onClick={() => handleMenuClick('/chamados')}>Chamados</li>
+        <li onClick={() => handleMenuClick('/usuarios')}>Usuários</li>
+        <li onClick={() => handleMenuClick('/faq')}>FAQ</li>
       </Menu>
     </NavbarContainer>
   );

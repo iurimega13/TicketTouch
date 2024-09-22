@@ -3,8 +3,9 @@ import { Form as AntForm, Input as AntInput, Button as AntButton } from 'antd';
 import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Container, LogoContainer, Title, ButtonContainer, StyledCheckbox, ForgotPassword, ErrorMessage, OuterContainer } from './styles'; 
 import { useNavigate } from 'react-router-dom';
-import loginImage from '../../assets/logo.png'; // Caminho da imagem
+import loginImage from '../../assets/logo.png';
 import { CheckboxChangeEvent } from 'antd/es/checkbox/Checkbox';
+import Cookies from 'js-cookie';
 
 interface LoginProps {
   onLoginSuccess: () => void;
@@ -32,7 +33,17 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       }
 
       const data = await response.json();
-      localStorage.setItem('accessToken', data.accessToken);
+
+      if (rememberMe) {
+        // Armazenar o token em cookies com expiração de 7 dias
+        Cookies.set('accessToken', data.accessToken, { expires: 7 });
+      } else {
+        // Armazenar o token no sessionStorage e configurar expiração de 30 minutos
+        sessionStorage.setItem('accessToken', data.accessToken);
+        const expireTime = new Date().getTime() + 30 * 60 * 1000; // 30 minutos em milissegundos
+        sessionStorage.setItem('expireTime', expireTime.toString());
+      }
+
       onLoginSuccess();
       navigate('/home');
     } catch (error) {

@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'; // Importa o decorator Injectable e NotFoundException do NestJS
-import { UserEntity } from '../users/entities/user.entity'; // Importa a classe UserEntity
 import { LoginDto } from './dtos/login.dto'; // Importa o DTO para login
 import { UserService } from '../users/user.service'; // Importa o serviço UserService
 import { compare } from 'bcrypt'; // Importa a função compare do bcrypt para comparar senhas

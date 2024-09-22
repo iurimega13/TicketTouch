@@ -92,6 +92,7 @@ export const StyledTitle = styled.div`
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+  user-select: none;
 
   @media (max-width: 1175px) {
     font-size: 20px;
@@ -112,7 +113,8 @@ export const ProfileSection = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  margin-left: auto; /* Alinha a seção de perfil à direita */
+  margin-left: auto; 
+  user-select: none;
 `;
 
 export const Avatar = styled.img`
@@ -168,9 +170,10 @@ export const StyledMenu = styled.div<SidebarProps>`
     color: ${props => props.theme.colors.text};
     text-decoration: none;
     cursor: pointer;
-    
+
     &:hover {
       background-color: ${props => props.theme.colors.secundary};
+      color: ${props => props.theme.colors.textHover}; /* Opcional: Altera a cor do texto ao passar o mouse */
     }
   }
 `;
