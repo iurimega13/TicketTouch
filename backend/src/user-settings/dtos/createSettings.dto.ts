@@ -1,15 +1,16 @@
-import { IsNumber, IsString } from "class-validator";
+import {  IsBoolean, IsString } from "class-validator";
 
 
 export class CreateSettingsDto {
+    [x: string]: any;
 
-    @IsNumber()
+    @IsString()
     user_id: string;
 
     @IsString()
     theme: string;
 
-    @IsString()
-    notifications_settings: string;
+    @IsBoolean()
+    notifications_settings: boolean;
     
 }

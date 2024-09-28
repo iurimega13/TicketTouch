@@ -11,7 +11,7 @@ export class SettingsEntity {
     user: UserEntity;
 
     @Column({name: 'notifications_settings', nullable: false})
-    notifications_settings: string;
+    notifications_settings: boolean;
 
     @Column({name: 'theme', nullable: false})
     theme: string;
