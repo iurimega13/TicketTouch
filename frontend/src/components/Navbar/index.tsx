@@ -82,15 +82,15 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
       <StyledTitle>TICKETTOUCH</StyledTitle>
 
       <ProfileSection>
-        <ToggleButton onClick={toggleTheme}>
+        
+        {/* <ToggleButton onClick={toggleTheme}>
           {isDarkMode ? <FaSun size={24} color="#fff" /> : <FaMoon size={24} color="#fff" />}
-        </ToggleButton>
+        </ToggleButton> */}
 
         <Avatar onClick={handleDropdownToggle} src={`${process.env.PUBLIC_URL}/assets/avatar.svg`} alt="User Avatar" />
 
         <Dropdown ref={dropdownRef} data-visible={dropdownOpen}>
-          <DropdownItem onClick={() => handleDropdownClick('/profile')}>Profile</DropdownItem>
-          <DropdownItem onClick={() => handleDropdownClick('/settings')}>Settings</DropdownItem>
+          <DropdownItem onClick={() => handleDropdownClick('/profile-settings')}>Profile</DropdownItem>
           <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
         </Dropdown>
       </ProfileSection>
@@ -100,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
       <Menu>
         <li onClick={() => handleMenuClick('/home')}>Home</li>
         <li onClick={() => handleMenuClick('/chamados')}>Chamados</li>
-        <li onClick={() => handleMenuClick('/usuarios')}>Usuários</li>
+        <li onClick={() => handleMenuClick('/users')}>Usuários</li>
         <li onClick={() => handleMenuClick('/faq')}>FAQ</li>
       </Menu>
     </NavbarContainer>
