@@ -17,6 +17,7 @@ import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
 import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
 import { DepartamentsModule } from './departments/departments.module';
 import { UnitsModule } from './units/units.module';
+import { UserSettingsModule } from './user-settings/user-settings.module';
 
 @Module({
   imports: [
@@ -41,7 +42,7 @@ import { UnitsModule } from './units/units.module';
     }),
     
     // Importação dos módulos
-    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartamentsModule
+    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartamentsModule, UserSettingsModule
   ],
   controllers: [AppController], // Controladores fornecidos pelo módulo
   providers: [AppService,
