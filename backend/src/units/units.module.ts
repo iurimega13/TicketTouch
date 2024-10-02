@@ -5,10 +5,9 @@ import { UnitsService } from './units.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UnitEntity])   ],
-    controllers: [UnitsController],
+    imports: [TypeOrmModule.forFeature([UnitEntity])],
     providers: [UnitsService],
-    exports: [UnitsService]
-})
-export class UnitsModule {}
+    controllers: [UnitsController],
+    exports: [TypeOrmModule, UnitsService], // Exporta o TypeOrmModule para que outros módulos possam usar o UnitEntity
+  })
+  export class UnitsModule {}
