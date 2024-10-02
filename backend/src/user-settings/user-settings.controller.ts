@@ -1,6 +1,7 @@
-import { Controller, Get, Put, Body, Param, Request } from '@nestjs/common';
+import { Controller, Get, Put, Post, Body, Param, Request } from '@nestjs/common';
 import { UserSettingsService } from './user-settings.service';
 import { UpdateSettingsDto } from './dtos/updateSettings.dto';
+import { CreateSettingsDto } from './dtos/createSettings.dto';
 
 @Controller('user-settings')
 export class UserSettingsController {
@@ -11,8 +12,13 @@ export class UserSettingsController {
     return this.userSettingsService.findSettingsByUserId(userId);
   }
 
-  @Put(':userId') // Aceitando o ID do usuário como parâmetro
+  @Put(':userId')
   async updateSettings(@Param('userId') userId: string, @Body() updateSettingsDto: UpdateSettingsDto) {
     return this.userSettingsService.updateSettings(userId, updateSettingsDto);
+  }
+
+  @Post(':userId')
+  async createSettings(@Param('userId') userId: string, @Body() createSettingsDto: CreateSettingsDto) {
+    return this.userSettingsService.createSettings(userId, createSettingsDto);
   }
 }

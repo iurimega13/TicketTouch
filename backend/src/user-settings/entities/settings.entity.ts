@@ -10,15 +10,9 @@ export class SettingsEntity {
     @JoinColumn({name: 'user_id'})
     user: UserEntity;
 
-    @Column({name: 'notifications_settings', nullable: false})
+    @Column({name: 'notifications_settings', default: true})
     notifications_settings: boolean;
 
-    @Column({name: 'theme', nullable: false})
+    @Column({name: 'theme', default: 'light'})
     theme: string;
-    
-    @CreateDateColumn({name: 'created_at', nullable: false})
-    created_at: Date;
-
-    @UpdateDateColumn({name: 'updated_at', nullable: false})
-    updated_at: Date;
 }
