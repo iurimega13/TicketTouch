@@ -13,14 +13,16 @@ import {
   StyledTitle,
   MobileMenuButton
 } from './styles';
+import light from '../../styles/themes/light'; // Importa o tema light
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
   isVisible: boolean;
+  setTheme: (theme: any) => void; // Adiciona a função setTheme como prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) => {
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible, setTheme }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible }) =
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('userId'); // Remove o ID do usuário do localStorage
+    setTheme(light); // Define o tema como light ao fazer logout
     navigate('/login');
   };
 
