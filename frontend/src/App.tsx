@@ -71,11 +71,11 @@ const Layout: React.FC = () => {
     <ThemeProvider theme={theme}>
       <div className="App">
         <GlobalStyle />
-        <Navbar isVisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} />
+        <Navbar isVisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} setTheme={setTheme} />
         <Header />
         <Routes>
           <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
-          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} setTheme={setTheme} />} />
           {/* Verifica se o estado de isAuthenticated é true antes de renderizar o PrivateRoute */}
           {isAuthenticated !== null && (
             <>
