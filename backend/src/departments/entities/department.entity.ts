@@ -1,22 +1,21 @@
 import { UnitEntity } from "../../units/entities/unit.entity";
-import { PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, Entity } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
-@Entity({name: 'departments'})
-export class DepartmentEntity{
-
+@Entity('departments')
+export class DepartmentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({name: 'name', nullable: false})
+    @Column()
     name: string;
 
-    @ManyToOne(() => UnitEntity)
-    @JoinColumn({name: 'unit_name'})
+    @ManyToOne(() => UnitEntity, unit => unit.departments)
+    @JoinColumn({ name: 'unit_id' })
     unit: UnitEntity;
 
-    @CreateDateColumn({name: 'created_at', nullable: false})
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;
 
-    @UpdateDateColumn({name: 'updated_at', nullable: false})
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updated_at: Date;
-} 
+}

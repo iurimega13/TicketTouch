@@ -1,17 +1,11 @@
-import { IsNumber, IsNotEmpty, IsString } from "class-validator";
-
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateDepartmentDto {
+    @IsOptional()
+    @IsString()
+    name?: string;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
-    id: string;
-    
-    @IsString()
-    @IsNotEmpty()
-    name: string;
-
-    @IsString()
-    @IsNotEmpty()
-    description: string;
+    unit_id?: string;  // Adiciona o ID da unidade
 }
