@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Checkbox as AntCheckbox } from 'antd';
+import { Checkbox as AntCheckbox, Input as AntInput } from 'antd'; // Importando o Input do Ant Design
 
 export const OuterContainer = styled.div`
   display: flex;
@@ -107,4 +107,12 @@ export const ErrorMessage = styled.div`
   margin-top: 1rem;
   text-align: center;
   font-size: 0.9rem;  /* Ajusta o tamanho da fonte para melhorar a visibilidade */
+`;
+
+export const StyledInput = styled(AntInput)<{ hasError: boolean }>`
+  border-color: ${props => (props.hasError ? 'red' : '')};
+`;
+
+export const StyledPasswordInput = styled(AntInput.Password)<{ hasError: boolean }>`
+  border-color: ${props => (props.hasError ? 'red' : '')};
 `;
