@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DepartamentsController } from './departments.controller';
+import { DepartmentsController } from './departments.controller';
 import { DepartmentsService } from './departments.service';
 import { DepartmentEntity } from './entities/department.entity';
 
@@ -8,8 +8,8 @@ import { DepartmentEntity } from './entities/department.entity';
     imports: [
         TypeOrmModule.forFeature([DepartmentEntity])
     ],
-    controllers: [DepartamentsController],
+    controllers: [DepartmentsController],
     providers: [DepartmentsService],
-    exports: [DepartmentsService],
+    exports: [DepartmentsService, TypeOrmModule],
 })
-export class DepartamentsModule {}
+export class DepartmentsModule {}
