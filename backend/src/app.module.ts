@@ -15,7 +15,7 @@ import { AttachmentsModule } from './attachments/attachments.module'; // Importa
 import { TicketChangesModule } from './ticket-changes/ticket-changes.module'; // Importa o módulo TicketChangesModule
 import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
 import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
-import { DepartamentsModule } from './departments/departments.module';
+import { DepartmentsModule } from './departments/departments.module';
 import { UnitsModule } from './units/units.module';
 import { UserSettingsModule } from './user-settings/user-settings.module';
 
@@ -42,7 +42,7 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
     }),
     
     // Importação dos módulos
-    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartamentsModule, UserSettingsModule
+    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartmentsModule, UserSettingsModule
   ],
   controllers: [AppController], // Controladores fornecidos pelo módulo
   providers: [AppService,
