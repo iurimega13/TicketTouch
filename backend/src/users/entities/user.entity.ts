@@ -1,40 +1,41 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
-import { UnitEntity } from "../../units/entities/unit.entity";
-import { DepartmentEntity } from "../../departments/entities/department.entity";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { UnitEntity } from '../../units/entities/unit.entity';
+import { DepartmentEntity } from '../../departments/entities/department.entity';
 
-
-@Entity({name: 'users'})
+@Entity('users')
 export class UserEntity {
     @PrimaryGeneratedColumn('uuid')
-    id : string;
+    id: string;
 
-    @Column({name: 'username', nullable: false, unique: true})
+    @Column({unique: true})
     username: string;
 
-    @Column({name: 'name', nullable: false})
+    @Column()
     name: string;
 
-    @Column({name: 'email', nullable: false, unique: true})
+    @Column({unique: true})
     email: string;
 
-    @Column({name: 'password', nullable: false})
+    @Column()
     password: string;
 
-    @Column({name: 'role', nullable: false})
+    @Column()
     role: string;
 
-    @Column({name: 'phone_number'})
+    @Column({unique: true, nullable: true})
     phone_number: string;
 
+    @Column({nullable: true})
+    ramal: string;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created_at: Date;
 
     @ManyToOne(() => UnitEntity)
-    @JoinColumn({name: 'unit_name'})
+    @JoinColumn({name: 'unit_id'})
     unit: UnitEntity;
 
     @ManyToOne(() => DepartmentEntity)
-    @JoinColumn({name: 'department_name'})
+    @JoinColumn({name: 'department_id'})
     department: DepartmentEntity;
-
-    @CreateDateColumn({name: 'created_at', type: 'timestamp'})
-    created_at: Date;
 }

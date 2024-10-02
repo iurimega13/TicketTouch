@@ -9,6 +9,7 @@ export class ReturnUserDto {
     email: string;
     role: string;
     phone_number: string;
+    ramal: string;
     unit: UnitEntity;
     department: DepartmentEntity;
     created_at: Date;
@@ -20,6 +21,7 @@ export class ReturnUserDto {
         this.email = user.email;
         this.role = user.role;
         this.phone_number = user.phone_number;
+        this.ramal = user.ramal;
         this.unit = user.unit;
         this.department = user.department;
         this.created_at = user.created_at;
