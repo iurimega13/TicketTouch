@@ -1,4 +1,3 @@
-// user.controller.ts
 import {
   Body,
   Controller,
@@ -6,11 +5,13 @@ import {
   NotFoundException,
   Param,
   Post,
+  Put, // Importar o decorator Put
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
+import { UpdateUserDto } from './dtos/updateUser.dto'; // Importar o DTO de atualização
 import { UserService } from './user.service';
 import { ReturnUserDto } from './dtos/returnUser.dto';
 
@@ -67,5 +68,12 @@ export class UserController {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return new ReturnUserDto(user);
+  }
+
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<ReturnUserDto> {
+    const updatedUser = await this.userService.updateUser(id, updateUserDto);
+    return new ReturnUserDto(updatedUser);
   }
 }
