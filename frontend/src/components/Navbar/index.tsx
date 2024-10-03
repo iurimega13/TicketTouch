@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './sidebar';
 import {
   NavbarContainer,
   Menu,
-  ToggleButton,
   ProfileSection,
   Avatar,
   Dropdown,
@@ -86,10 +85,6 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible, set
       <StyledTitle>TICKETTOUCH</StyledTitle>
 
       <ProfileSection>
-        
-        {/* <ToggleButton onClick={toggleTheme}>
-          {isDarkMode ? <FaSun size={24} color="#fff" /> : <FaMoon size={24} color="#fff" />}
-        </ToggleButton> */}
 
         <Avatar onClick={handleDropdownToggle} src={`${process.env.PUBLIC_URL}/assets/avatar.svg`} alt="User Avatar" />
 
