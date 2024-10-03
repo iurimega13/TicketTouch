@@ -1,7 +1,17 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+// user.controller.ts
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Query,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateUserDto } from './dtos/createUser.dto';
 import { UserService } from './user.service';
-import { UserEntity } from './entities/user.entity';
 import { ReturnUserDto } from './dtos/returnUser.dto';
 
 @Controller('user')
@@ -10,19 +20,45 @@ export class UserController {
 
   @UsePipes(ValidationPipe)
   @Post()
-  async createUser(@Body() createUser: CreateUserDto): Promise<UserEntity> {
-    return this.userService.createUser(createUser);
+  async createUser(@Body() createUser: CreateUserDto): Promise<ReturnUserDto> {
+    const userEntity = await this.userService.createUser(createUser);
+    return new ReturnUserDto(userEntity);
   }
 
   @Get()
-async getAllUsers(
-  @Query('page') page: number = 1, // Defina um valor padrão para a página
-  @Query('field') field: string = '',
-  @Query('term') term: string = '',
-): Promise<ReturnUserDto[]> {
-  const users = await this.userService.getAllUsers(page, field, term);
-  return users.map((userEntity) => new ReturnUserDto(userEntity));
-}
+  async getAllUsers(
+    @Query('page') page: number = 1,
+    @Query('field') field: string = '',
+    @Query('term') term: string = '',
+    @Query('username') username?: string,
+    @Query('name') name?: string,
+    @Query('email') email?: string,
+    @Query('role') role?: string,
+    @Query('phone_number') phone_number?: string,
+    @Query('ramal') ramal?: string,
+    @Query('unit') unit?: string,
+    @Query('department') department?: string,
+    @Query('created_at') created_at?: string,
+  ): Promise<ReturnUserDto[]> {
+    const users = await this.userService.getAllUsers(
+      page,
+      field,
+      term,
+      username,
+      name,
+      email,
+      role,
+      phone_number,
+      ramal,
+      unit,
+      department,
+      created_at,
+    );
+    if (!users || users.length === 0) {
+      throw new NotFoundException('Nenhum usuário encontrado');
+    }
+    return users.map((userEntity) => new ReturnUserDto(userEntity));
+  }
 
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {

@@ -1,3 +1,4 @@
+// user.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,7 +8,7 @@ import { UnitEntity } from '../units/entities/unit.entity';
 import { DepartmentEntity } from '../departments/entities/department.entity';
 import { UserSettingsService } from '../user-settings/user-settings.service';
 import { CreateSettingsDto } from '../user-settings/dtos/createSettings.dto';
-import { hash } from 'bcrypt'; // Importa a função hash do bcrypt
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,7 @@ export class UserService {
     @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(UnitEntity) private readonly unitRepository: Repository<UnitEntity>,
     @InjectRepository(DepartmentEntity) private readonly departmentRepository: Repository<DepartmentEntity>,
-    private readonly userSettingsService: UserSettingsService, // Injeta o serviço de user settings
+    private readonly userSettingsService: UserSettingsService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -28,58 +29,100 @@ export class UserService {
       throw new Error('Invalid unit or department ID');
     }
 
-    // Criptografar a senha
     const hashedPassword = await hash(password, 10);
 
-    // Criar o usuário
     const user = this.userRepository.create({
       ...userData,
-      password: hashedPassword, // Salva a senha criptografada
+      password: hashedPassword,
       unit: unitEntity,
       department: departmentEntity,
     });
 
     const savedUser = await this.userRepository.save(user);
 
-    // Criar as configurações padrão do usuário
     const defaultSettings: CreateSettingsDto = {
-      user_id: savedUser.id,   // Usando o ID do usuário recém-criado
-      theme: 'dark',           // Exemplo de configuração padrão
-      notifications_settings: true, // Exemplo de configuração padrão
+      user_id: savedUser.id,
+      theme: 'dark',
+      notifications_settings: true,
     };
 
-    // Chamar o serviço para criar configurações
     await this.userSettingsService.createSettings(savedUser.id, defaultSettings);
 
     return savedUser;
   }
 
-  async getAllUsers(page: number, field: string, term: string): Promise<UserEntity[]> {
-    const take = 10; // Defina quantos usuários você quer por página
+  async getAllUsers(
+    page: number,
+    field: string,
+    term: string,
+    username?: string,
+    name?: string,
+    email?: string,
+    role?: string,
+    phone_number?: string,
+    ramal?: string,
+    unit?: string,
+    department?: string,
+    created_at?: string,
+  ): Promise<UserEntity[]> {
+    const take = 10;
     const skip = (page - 1) * take;
-  
+
     const queryBuilder = this.userRepository.createQueryBuilder('user');
-  
-    // Verifique se os campos estão definidos
+
     if (field && term) {
       queryBuilder.where(`user.${field} LIKE :term`, { term: `%${term}%` });
     }
-  
-    return await queryBuilder.take(take).skip(skip).getMany();
+
+    if (username) {
+      queryBuilder.andWhere('user.username LIKE :username', { username: `%${username}%` });
+    }
+
+    if (name) {
+      queryBuilder.andWhere('user.name LIKE :name', { name: `%${name}%` });
+    }
+
+    if (email) {
+      queryBuilder.andWhere('user.email LIKE :email', { email: `%${email}%` });
+    }
+
+    if (role) {
+      queryBuilder.andWhere('user.role LIKE :role', { role: `%${role}%` });
+    }
+
+    if (phone_number) {
+      queryBuilder.andWhere('user.phone_number LIKE :phone_number', { phone_number: `%${phone_number}%` });
+    }
+
+    if (ramal) {
+      queryBuilder.andWhere('user.ramal LIKE :ramal', { ramal: `%${ramal}%` });
+    }
+
+    if (unit) {
+      queryBuilder.andWhere('user.unit.id = :unit', { unit });
+    }
+
+    if (department) {
+      queryBuilder.andWhere('user.department.id = :department', { department });
+    }
+
+    if (created_at) {
+      queryBuilder.andWhere('user.created_at = :created_at', { created_at });
+    }
+
+    const users = await queryBuilder.take(take).skip(skip).getMany();
+
+    if (users.length === 0) {
+      throw new NotFoundException('Nenhum usuário encontrado');
+    }
+
+    return users;
   }
 
   async findById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException(`Usuário: ${id} não encontrado`);
-    }
-    return user;
-  }
-
-  async findByUsername(username: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) {
-      throw new NotFoundException(`Usuário: ${username} não encontrado`);
     }
     return user;
   }
