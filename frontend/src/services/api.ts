@@ -135,11 +135,12 @@ export const resetPassword = async (userId: string) => {
 // Função para atualizar informações do usuário
 export const updateUser = async (userId: string, data: any) => {
   try {
-    await api.put(`/user/${userId}`, data, {
+    const response = await api.put(`/user/${userId}`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
+    return response.data;
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);
     throw error;

@@ -139,3 +139,23 @@ export const AdvancedSearchForm = styled.div`
   border-radius: 8px; /* Cantos arredondados */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
 `;
+
+export const CardContainer = styled.div`
+  margin: 10px;
+`;
+
+export const CardButton = styled(AntButton)`
+  margin-top: 10px;
+  background-color: ${props => props.theme.colors.secundary};
+  color: ${props => props.theme.colors.textAlt};
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.theme.colors.primaryHover};
+  }
+`;

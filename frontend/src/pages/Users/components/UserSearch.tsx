@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
-import { Pagination, notification, Input, List, Empty } from 'antd';
+import { Pagination, notification, Input, Empty } from 'antd';
 import { ActionButton, PaginationContainer, AdvancedSearchForm } from './styles';
 import { getUsers } from '../../../services/api';
-import { AxiosError } from 'axios'; // Importar o tipo AxiosError
-
-
-interface User {
-  id: string;
-  username: string;
-  name: string;
-  email: string;
-  role: string;
-  phone_number: string;
-  ramal: string;
-  unit: string;
-  department: string;
-  created_at: string;
-}
+import { AxiosError } from 'axios';
+import UserCard from './UserCard';
+import UserPopup from './UserPopup';
+import { User } from './types'; // Importar a interface User
 
 interface UserSearchProps {
   onSearch: (users: User[], totalPages: number) => void;
@@ -40,8 +29,8 @@ const UserSearch: React.FC<UserSearchProps> = ({ onSearch }) => {
     department: '',
     created_at: '',
   });
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  // Função para buscar usuários com base nos filtros e na página atual
   const fetchUsers = async (page: number) => {
     try {
       const result = await getUsers(page, { searchTerm, searchField, ...filters });
@@ -84,17 +73,24 @@ const UserSearch: React.FC<UserSearchProps> = ({ onSearch }) => {
     }
   };
 
-  // Função para iniciar a busca de usuários
   const handleSearch = () => {
+    setIsAdvancedSearchVisible(false);
     fetchUsers(page);
   };
 
-  // Função para atualizar os filtros de busca
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({
       ...filters,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleDetailsClick = (userId: string) => {
+    setSelectedUserId(userId);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedUserId(null);
   };
 
   return (
@@ -173,17 +169,11 @@ const UserSearch: React.FC<UserSearchProps> = ({ onSearch }) => {
       <ActionButton onClick={handleSearch}>Listar Usuários</ActionButton>
 
       {users.length > 0 ? (
-        <List
-          dataSource={users}
-          renderItem={(user: User) => (
-            <List.Item key={user.id}>
-              <List.Item.Meta
-                title={user.name}
-                description={`Username: ${user.username} | Role: ${user.role}`}
-              />
-            </List.Item>
-          )}
-        />
+        <div>
+          {users.map((user) => (
+            <UserCard key={user.id} user={user} onDetailsClick={handleDetailsClick} />
+          ))}
+        </div>
       ) : (
         <Empty description="Nenhum usuário encontrado" />
       )}
@@ -198,6 +188,10 @@ const UserSearch: React.FC<UserSearchProps> = ({ onSearch }) => {
           }}
         />
       </PaginationContainer>
+
+      {selectedUserId && (
+        <UserPopup userId={selectedUserId} onClose={handleClosePopup} />
+      )}
     </div>
   );
 };
