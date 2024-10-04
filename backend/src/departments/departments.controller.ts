@@ -7,32 +7,32 @@ import { CreateDepartmentDto } from './dtos/createDepartment.dto';
 
 @Controller('departments')
 export class DepartmentsController {
-    private readonly logger = new Logger(DepartmentsController.name);
+  private readonly logger = new Logger(DepartmentsController.name);
 
-    constructor(private readonly departmentsService: DepartmentsService) {}
+  constructor(private readonly departmentsService: DepartmentsService) {}
 
-    @UsePipes(ValidationPipe)
-    @Post()
-    async createDepartment(@Body() createDepartmentDto: CreateDepartmentDto): Promise<DepartmentEntity> {
-        return this.departmentsService.createDepartment(createDepartmentDto);
-    }
+  @UsePipes(ValidationPipe)
+  @Post()
+  async createDepartment(@Body() createDepartmentDto: CreateDepartmentDto): Promise<DepartmentEntity> {
+    return this.departmentsService.createDepartment(createDepartmentDto);
+  }
 
-    @UsePipes(ValidationPipe)
-    @Put(':id')
-    async updateDepartment(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDto): Promise<DepartmentEntity> {
-        return this.departmentsService.updateDepartment(id, updateDepartmentDto);
-    }
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updateDepartment(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDto): Promise<DepartmentEntity> {
+    return this.departmentsService.updateDepartment(id, updateDepartmentDto);
+  }
 
-    @Delete(':id')
-    async deleteDepartment(@Param('id') id: string): Promise<void> {
-        return this.departmentsService.deleteDepartment(id);
-    }
+  @Delete(':id')
+  async deleteDepartment(@Param('id') id: string): Promise<void> {
+    return this.departmentsService.deleteDepartment(id);
+  }
 
-    @Get()
-    async getAllDepartments(): Promise<ReturnDepartmentDto[]> {
-        this.logger.log('Recebendo requisição para buscar todos os departamentos');
-        const departments = await this.departmentsService.getAllDepartments();
-        this.logger.log(`Departamentos retornados: ${departments.length}`);
-        return departments.map((department) => new ReturnDepartmentDto(department));
-    }
+  @Get()
+  async getAllDepartments(): Promise<ReturnDepartmentDto[]> {
+    this.logger.log('Recebendo requisição para buscar todos os departamentos');
+    const departments = await this.departmentsService.getAllDepartments();
+    this.logger.log(`Departamentos retornados: ${departments.length}`);
+    return departments.map((department) => new ReturnDepartmentDto(department));
+  }
 }
