@@ -11,6 +11,7 @@ comandos.txt
 /frontend/node_modules
 /frontend/build
 /frontend/dist
+pnpm-lock.yaml
 
 # Logs
 logs
