@@ -1,41 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, useLocation, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import Cookies from 'js-cookie'; // Importa a biblioteca js-cookie
+import Cookies from 'js-cookie';
 
 import light from './styles/themes/light';
 import dark from './styles/themes/dark';
 import GlobalStyle from './styles/global';
-import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import ProfileSettings from './pages/ProfileSettings'; // Importa o componente ProfileSettings
-import Users from './pages/Users'; // Importa o componente Users
+import ProfileSettings from './pages/ProfileSettings';
+import Registrations from './pages/Registrations';
+import NotFound from './pages/NotFound';
 import PrivateRoute from './components/PrivateRoute';
-import { getUserProfile, getUserSettings, updateUserSettings } from './services/api'; // Importa a função getUserProfile e updateUserSettings
+import { getUserSettings, updateUserSettings } from './services/api';
 
 const Layout: React.FC = () => {
   const location = useLocation();
   const [theme, setTheme] = useState(light);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null); // Inicializa como null para indicar carregamento
-  const [loading, setLoading] = useState(true); // Novo estado para controlar o carregamento
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserProfileAndSettings = async () => {
-      const token = Cookies.get('accessToken'); // Lê o token dos cookies
+      const token = Cookies.get('accessToken');
       if (token) {
-        setIsAuthenticated(true); // O usuário está autenticado
+        setIsAuthenticated(true);
         const userId = localStorage.getItem('userId');
         if (userId) {
-          const userProfile = await getUserProfile(userId);
-          const userSettings = await getUserSettings(); // Busca as configurações do usuário
-          setTheme(userSettings.theme === 'dark' ? dark : light); // Define o tema com base nas configurações do usuário
+          const userSettings = await getUserSettings();
+          setTheme(userSettings.theme === 'dark' ? dark : light);
         }
       } else {
-        setIsAuthenticated(false); // O usuário não está autenticado
+        setIsAuthenticated(false);
       }
-      setLoading(false); // Define o carregamento como concluído
+      setLoading(false);
     };
 
     fetchUserProfileAndSettings();
@@ -49,7 +48,6 @@ const Layout: React.FC = () => {
     const newTheme = theme === light ? dark : light;
     setTheme(newTheme);
 
-    // Atualiza as configurações do usuário no backend
     const userId = localStorage.getItem('userId');
     if (userId) {
       try {
@@ -62,7 +60,6 @@ const Layout: React.FC = () => {
 
   const showNavbar = location.pathname !== '/login';
 
-  // Se ainda está carregando (checando os cookies), exibe algo como uma tela de carregamento
   if (loading) {
     return <div>Carregando...</div>;
   }
@@ -72,11 +69,9 @@ const Layout: React.FC = () => {
       <div className="App">
         <GlobalStyle />
         <Navbar isVisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} setTheme={setTheme} />
-        <Header />
         <Routes>
           <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} setTheme={setTheme} />} />
-          {/* Verifica se o estado de isAuthenticated é true antes de renderizar o PrivateRoute */}
           {isAuthenticated !== null && (
             <>
               <Route
@@ -88,12 +83,15 @@ const Layout: React.FC = () => {
                 element={<PrivateRoute element={<ProfileSettings />} isAuthenticated={isAuthenticated!} />}
               />
               <Route
-                path="/users"
-                element={<PrivateRoute element={<Users />} isAuthenticated={isAuthenticated!} />}
+                path="/registrations"
+                element={<PrivateRoute element={<Registrations />} isAuthenticated={isAuthenticated!} />}
+              />
+              <Route
+                path="*"
+                element={isAuthenticated ? <NotFound /> : <Navigate to="/login" replace={true} />}
               />
             </>
           )}
-          <Route path="*" element={<Navigate to="/login" replace={true} />} />
         </Routes>
       </div>
     </ThemeProvider>
