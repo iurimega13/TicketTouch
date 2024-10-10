@@ -93,28 +93,13 @@ export const getUsers = async (
   }
 ) => {
   try {
-    const response = await api.get('/user', {
-      params: {
-        page,
-        term: filters.searchTerm, // Mantém 'term' para o controlador
-        field: filters.searchField, // Mantém 'field' para o controlador
-        username: filters.username,
-        name: filters.name,
-        email: filters.email,
-        role: filters.role,
-        phone_number: filters.phone_number,
-        ramal: filters.ramal,
-        unit: filters.unit,
-        department: filters.department,
-        created_at: filters.created_at,
-      },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
+    const response = await api.get('/users', {
+      params: { page, ...filters },
     });
-    return response.data; // Assegura que a estrutura de dados é a esperada
+    return response.data;
   } catch (error) {
-    
+    console.error('Erro ao buscar usuários:', error);
+    throw error;
   }
 };
 
@@ -172,25 +157,41 @@ export const createUser = async (userData: any) => {
   }
 };
 
-// Função para buscar unidades
-export const getUnits = async () => {
+// Função para criar uma nova unidade
+export const createUnit = async (unitData: any) => {
   try {
-    const response = await api.get('/units', {
+    const response = await api.post('/units', unitData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
     });
     return response.data;
   } catch (error) {
-    console.error('Erro ao buscar unidades:', error);
+    console.error('Erro ao criar unidade:', error);
     throw error;
   }
 };
 
-// Função para buscar departamentos
-export const getDepartments = async () => {
+// Função para criar um novo departamento
+export const createDepartment = async (departmentData: any) => {
   try {
-    const response = await api.get('/departments', {
+    const response = await api.post('/departments', departmentData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar departamento:', error);
+    throw error;
+  }
+};
+
+
+// Função para buscar departamentos
+export const getDepartments = async (page: number) => {
+  try {
+    const response = await api.get(`/departments?page=${page}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -201,6 +202,182 @@ export const getDepartments = async () => {
     throw error;
   }
 };
+
+
+// Função para buscar o perfil do departamento
+export const getDepartmentProfile = async (departmentId: string) => {
+  try {
+    const response = await api.get(`/departments/${departmentId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar perfil do departamento:', error);
+    throw error;
+  }
+};
+
+// Função para atualizar o departamento
+export const updateDepartment = async (departmentId: string, departmentData: any) => {
+  try {
+    const response = await api.put(`/departments/${departmentId}`, departmentData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar departamento:', error);
+    throw error;
+  }
+};
+
+// Função para deletar o departamento
+export const deleteDepartment = async (departmentId: string) => {
+  try {
+    await api.delete(`/departments/${departmentId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao deletar departamento:', error);
+    throw error;
+  }
+};
+
+
+// Função para buscar unidades
+export const getUnits = async (page: number) => {
+  try {
+    const response = await api.get('/units', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar unidades:', error);
+    throw error;
+  }
+};
+// Função para buscar o perfil da unidade
+export const getUnitProfile = async (unitId: string) => {
+  try {
+    const response = await api.get(`/units/${unitId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar perfil da unidade:', error);
+    throw error;
+  }
+};
+
+// Função para atualizar a unidade
+export const updateUnit = async (unitId: string, unitData: any) => {
+  try {
+    const response = await api.put(`/units/${unitId}`, unitData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar unidade:', error);
+    throw error;
+  }
+};
+
+// Função para deletar a unidade
+export const deleteUnit = async (unitId: string) => {
+  try {
+    await api.delete(`/units/${unitId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao deletar unidade:', error);
+    throw error;
+  }
+};
+
+
+// Função para criar um novo equipamento
+export const createEquipment = async (equipmentData: any) => {
+  try {
+    const response = await api.post('/equipments', equipmentData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar equipamento:', error);
+    throw error;
+  }
+};
+
+// Função para buscar equipamentos
+export const getEquipments = async (page: number) => {
+  try {
+    const response = await api.get('/equipments', {
+      params: { page },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar equipamentos:', error);
+    throw error;
+  }
+};
+
+// Função para buscar o perfil do equipamento
+export const getEquipmentProfile = async (equipmentId: string) => {
+  try {
+    const response = await api.get(`/equipments/${equipmentId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar perfil do equipamento:', error);
+    throw error;
+  }
+};
+
+// Função para atualizar o equipamento
+export const updateEquipment = async (equipmentId: string, equipmentData: any) => {
+  try {
+    const response = await api.put(`/equipments/${equipmentId}`, equipmentData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar equipamento:', error);
+    throw error;
+  }
+};
+
+// Função para deletar o equipamento
+export const deleteEquipment = async (equipmentId: string) => {
+  try {
+    await api.delete(`/equipments/${equipmentId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao deletar equipamento:', error);
+    throw error;
+  }
+};
+
 
 // Exportação dos serviços da API
 const apiService = {
@@ -214,8 +391,21 @@ const apiService = {
   updateUser,
   deleteUser,
   createUser,
+  createUnit,
+  createDepartment,
   getUnits,
   getDepartments,
+  createEquipment,
+  getEquipments,
+  getUnitProfile,
+  updateUnit,
+  deleteUnit,
+  getDepartmentProfile,
+  updateDepartment,
+  deleteDepartment,
+  getEquipmentProfile,
+  updateEquipment,
+  deleteEquipment,
 };
 
 export default apiService;
