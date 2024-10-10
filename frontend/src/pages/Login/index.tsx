@@ -51,7 +51,8 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, setTheme }) => {
         Cookies.set('accessToken', data.accessToken, { expires: 7 }); // Armazena o token em cookies por 7 dias
       } else {
         sessionStorage.setItem('accessToken', data.accessToken); // Armazena o token no sessionStorage
-        const expireTime = new Date().getTime() + 30 * 60 * 1000; // Define expiração para 30 minutos
+        const currentTime = new Date();
+        const expireTime = new Date(currentTime.getTime() + 30 * 60 * 1000).getTime();
         sessionStorage.setItem('expireTime', expireTime.toString()); // Armazena o tempo de expiração
       }
   
