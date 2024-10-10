@@ -1,5 +1,5 @@
 import { DepartmentsService } from './departments.service';
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe, Logger } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UsePipes, ValidationPipe, Logger } from '@nestjs/common';
 import { ReturnDepartmentDto } from './dtos/returnDepartment.dto';
 import { UpdateDepartmentDto } from './dtos/updateDepartment.dto';
 import { DepartmentEntity } from './entities/department.entity';
@@ -29,9 +29,11 @@ export class DepartmentsController {
   }
 
   @Get()
-  async getAllDepartments(): Promise<ReturnDepartmentDto[]> {
+  async getAllDepartments(@Query('unitId') unitId?: string): Promise<ReturnDepartmentDto[]> {
     this.logger.log('Recebendo requisição para buscar todos os departamentos');
-    const departments = await this.departmentsService.getAllDepartments();
+    const departments = unitId 
+      ? await this.departmentsService.findByUnit(unitId) 
+      : await this.departmentsService.getAllDepartments();
     this.logger.log(`Departamentos retornados: ${departments.length}`);
     return departments.map((department) => new ReturnDepartmentDto(department));
   }
