@@ -1,5 +1,9 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { Configuration } from 'webpack';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const config: Configuration = {
   entry: './src/index.ts',
@@ -9,6 +13,9 @@ const config: Configuration = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      '@': path.resolve(__dirname, 'dist'),
+    },
     fallback: {
       "http": require.resolve("stream-http"),
       "https": require.resolve("https-browserify"),
