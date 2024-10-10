@@ -98,8 +98,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible, set
 
       <Menu>
         <li onClick={() => handleMenuClick('/home')}>Home</li>
+        <li onClick={() => handleMenuClick('/registrations')}> Cadastros </li>
         <li onClick={() => handleMenuClick('/chamados')}>Chamados</li>
-        <li onClick={() => handleMenuClick('/users')}>Usuários</li>
         <li onClick={() => handleMenuClick('/faq')}>FAQ</li>
       </Menu>
     </NavbarContainer>

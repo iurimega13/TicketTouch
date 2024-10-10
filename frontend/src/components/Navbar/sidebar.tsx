@@ -40,8 +40,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return ( 
     <StyledMenu isOpen={isOpen} ref={sidebarRef}>
       <span className="menu-item" onClick={() => handleNavigation('/home')}>Home</span>
+      <span className="menu-item" onClick={() => handleNavigation('/registrations')}>Cadastros</span>
       <span className="menu-item" onClick={() => handleNavigation('/chamados')}>Chamados</span>
-      <span className="menu-item" onClick={() => handleNavigation('/users')}>Usuários</span>
       <span className="menu-item" onClick={() => handleNavigation('/faq')}>FAQ</span>
     </StyledMenu>
   );
