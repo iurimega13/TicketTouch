@@ -7,6 +7,10 @@ declare module 'style-components' {
       secondary: string;
       background: string;
       text: string;
+      textAlt: string;
+      textHover: string;
+      optionSelectedBg: string;
+      optionSelectedColor: string;
     };
   }
 }

@@ -8,6 +8,8 @@ const lightTheme = {
         text: "#F0F0F0",
         textAlt: "#000",
         textHover: "#FFF",
+        optionSelectedBg: "#006DAA",
+        optionSelectedColor: "#FFF",
     },  
 };
 

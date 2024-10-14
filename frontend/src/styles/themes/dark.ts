@@ -8,6 +8,8 @@ const darkTheme = {
     text: "#FFF",
     textAlt: "#000",
     textHover: "#000",
+    optionSelectedBg: "#495057",
+    optionSelectedColor: "#FFF",
   }
 };
 
