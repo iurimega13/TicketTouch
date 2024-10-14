@@ -7,7 +7,7 @@ export class UnitEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({name: 'name', nullable: false})
+    @Column({name: 'name', nullable: false, unique: true})
     name: string;
 
     @Column({name: 'address', nullable: false})
