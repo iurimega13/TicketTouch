@@ -37,4 +37,9 @@ export class DepartmentsController {
     this.logger.log(`Departamentos retornados: ${departments.length}`);
     return departments.map((department) => new ReturnDepartmentDto(department));
   }
+
+  @Get('unit/:unitId')
+  async findByUnit(@Param('unitId') unitId: string): Promise<DepartmentEntity[]> {
+    return this.departmentsService.findByUnit(unitId);
+  }
 }

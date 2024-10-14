@@ -15,7 +15,12 @@ export class DepartmentsService {
   ) {}
 
   async findByUnit(unitId: string): Promise<DepartmentEntity[]> {
-    return this.departmentRepository.find({ where: { unit: { id: unitId } } });
+    try {
+      return await this.departmentRepository.find({ where: { unit: { id: unitId } } });
+    } catch (error) {
+      this.logger.error('Erro ao buscar departamentos por unidade', error.stack);
+      throw new Error(`Erro ao buscar departamentos por unidade: ${error.message}`);
+    }
   }
 
   async createDepartment(createDepartmentDto: CreateDepartmentDto): Promise<DepartmentEntity> {
