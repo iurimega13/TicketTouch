@@ -2,48 +2,40 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { UnitEntity } from '../../units/entities/unit.entity';
 import { DepartmentEntity } from '../../departments/entities/department.entity';
 import { UserEntity } from '../../users/entities/user.entity';
-import { TicketEntity } from '../../tickets/entities/ticket.entity';
-
-
 
 @Entity('equipments')
 export class EquipmentEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
 
-    @Column({name: 'name', nullable: false})
+    @Column({ name: 'name', nullable: false, unique: true })
     name: string;
 
-    @Column({name: 'description', nullable: false})
+    @Column({ name: 'description', nullable: false })
     description: string;
 
-    @Column({name: 'serial_number', nullable: false})
-    serial_number: number;
+    @Column({ name: 'serial_number', nullable: false, unique: true })
+    serial_number: string;
 
     @ManyToOne(() => UnitEntity)
-    @JoinColumn({name: 'unit_id'})
+    @JoinColumn({ name: 'unit_id' })
     unit: UnitEntity;
 
     @ManyToOne(() => DepartmentEntity)
-    @JoinColumn({name: 'departament_id'})
-    departament: DepartmentEntity;
+    @JoinColumn({ name: 'department_id' })
+    department: DepartmentEntity;
 
-    @ManyToOne(() => UserEntity)
-    @JoinColumn({name: 'user_name'})
+    @ManyToOne(() => UserEntity, { nullable: true })
+    @JoinColumn({ name: 'user_id' })
     user: UserEntity;
 
-    @ManyToOne(() => TicketEntity)
-    @JoinColumn({name: 'ticket_id'})
-    ticket: TicketEntity;
+    @Column({ name: 'is_shared', nullable: false })
+    is_shared: boolean;
 
-    @Column({name: 'is_shared', nullable: false})
-    is_shared: boolean; 
-
-    @CreateDateColumn({name: 'created_at', nullable: false})
+    @CreateDateColumn({ name: 'created_at', nullable: false })
     created_at: Date;
 
-    @UpdateDateColumn({name: 'updated_at', nullable: false})
+    @UpdateDateColumn({ name: 'updated_at', nullable: false })
     updated_at: Date;
-
 }

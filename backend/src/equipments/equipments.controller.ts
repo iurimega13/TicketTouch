@@ -5,7 +5,7 @@ import { UpdateEquipmentDto } from './dtos/updateEquipment.dto';
 import { EquipmentEntity } from './entities/equipment.entity';
 import { EquipmentsService } from './equipments.service';
 
-@Controller('equipaments')
+@Controller('equipments')
 export class EquipmentsController {
     constructor(
         private readonly equipmentsService: EquipmentsService
@@ -21,15 +21,15 @@ export class EquipmentsController {
 
     // Atualizando um equipamento
     @UsePipes(ValidationPipe)
-    @Put(':id')
-    async update(@Body() updateEquipmentDto: UpdateEquipmentDto): Promise<EquipmentEntity> {
-        return await this.equipmentsService.updateEquipment(updateEquipmentDto);
+    @Put(':equipmentId')
+    async update(@Param('equipmentId') equipmentId: string, @Body() updateEquipmentDto: UpdateEquipmentDto): Promise<EquipmentEntity> {
+        return await this.equipmentsService.updateEquipment(equipmentId, updateEquipmentDto);
     }
 
     // Deletando um equipamento
-    @Delete(':id')
-    async delete(@Param('id') id: number): Promise<void>{
-        return await this.equipmentsService.deleteEquipment(id);
+    @Delete(':equipmentId')
+    async delete(@Param('equipmentId') equipmentId: string): Promise<void>{
+        return await this.equipmentsService.deleteEquipment(equipmentId);
     }
 
     // Buscando todos os equipamentos

@@ -5,10 +5,10 @@ import { UserEntity } from "../../users/entities/user.entity";
 import { EquipmentEntity } from "../entities/equipment.entity";
 
 export class ReturnEquipmentDto {
-    id: number;
+    id: string;
     name: string;
     description: string;
-    serial_number: number;
+    serial_number: string;
     user: UserEntity;
     unit: UnitEntity;
     department: DepartmentEntity;
@@ -22,8 +22,7 @@ export class ReturnEquipmentDto {
         this.serial_number = equipment.serial_number;
         this.user = equipment.user;
         this.unit = equipment.unit;
-        this.department = equipment.departament;
-        this.ticket = equipment.ticket;
+        this.department = equipment.department;
         this.is_shared = equipment.is_shared;
     }
 }

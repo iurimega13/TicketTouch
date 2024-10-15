@@ -1,44 +1,26 @@
-import { IsNumber, IsNotEmpty, IsString, IsOptional, IsBoolean } from "class-validator";
+import { IsNumber, IsString, IsOptional, IsBoolean } from "class-validator";
 
 
 export class UpdateEquipmentDto {
-
-    @IsNumber()
-    @IsNotEmpty()
-    id: number;
+    @IsString()
+    name?: string;
 
     @IsString()
-    @IsNotEmpty()
-    @IsOptional()
-    name: string;
+    description?: string;
 
     @IsString()
-    @IsNotEmpty()
-    @IsOptional()
-    description: string;
-    
+    serial_number?: string;
+
     @IsString()
-    @IsNotEmpty()
-    @IsOptional()
-    serial_number: number;
+    user_id?: string;
+
+    @IsString()
+    unit_id?: string;
+
+    @IsString()
+    department_id?: string;
 
     @IsBoolean()
-    @IsNotEmpty()
-    @IsOptional()
-    is_shared: boolean;
-
-    @IsNumber()
-    @IsNotEmpty()
-    @IsOptional()
-    user_id: number;
-
-    @IsNumber()
-    @IsNotEmpty()
-    @IsOptional()
-    unit_id: number;
-
-    @IsNumber()
-    @IsNotEmpty()
-    @IsOptional()
-    department_id: number;
+    is_shared?: boolean;
+    
 }
