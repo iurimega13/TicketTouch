@@ -51,74 +51,27 @@ export class UserService {
     return savedUser;
   }
 
-  async getAllUsers(
-    page: number,
-    field: string,
-    term: string,
-    username?: string,
-    name?: string,
-    email?: string,
-    role?: string,
-    phone_number?: string,
-    ramal?: string,
-    unit?: string,
-    department?: string,
-    created_at?: string,
-  ): Promise<UserEntity[]> {
+  async getAllUsers(page: number): Promise<UserEntity[]> {
     const take = 10;
     const skip = (page - 1) * take;
-
+  
     const queryBuilder = this.userRepository.createQueryBuilder('user');
-
-    if (field && term) {
-      queryBuilder.where(`user.${field} LIKE :term`, { term: `%${term}%` });
-    }
-
-    if (username) {
-      queryBuilder.andWhere('user.username LIKE :username', { username: `%${username}%` });
-    }
-
-    if (name) {
-      queryBuilder.andWhere('user.name LIKE :name', { name: `%${name}%` });
-    }
-
-    if (email) {
-      queryBuilder.andWhere('user.email LIKE :email', { email: `%${email}%` });
-    }
-
-    if (role) {
-      queryBuilder.andWhere('user.role LIKE :role', { role: `%${role}%` });
-    }
-
-    if (phone_number) {
-      queryBuilder.andWhere('user.phone_number LIKE :phone_number', { phone_number: `%${phone_number}%` });
-    }
-
-    if (ramal) {
-      queryBuilder.andWhere('user.ramal LIKE :ramal', { ramal: `%${ramal}%` });
-    }
-
-    if (unit) {
-      queryBuilder.andWhere('user.unit.id = :unit', { unit });
-    }
-
-    if (department) {
-      queryBuilder.andWhere('user.department.id = :department', { department });
-    }
-
-    if (created_at) {
-      queryBuilder.andWhere('user.created_at = :created_at', { created_at });
-    }
-
+  
     const users = await queryBuilder.take(take).skip(skip).getMany();
-
+  
     if (users.length === 0) {
       throw new NotFoundException('Nenhum usuário encontrado');
     }
-
+  
     return users;
   }
 
+  async deleteUser(id: string): Promise<void> {
+    const user = await this.findById(id);
+    await this.userRepository.remove(user);
+  }
+
+  
   async findById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {

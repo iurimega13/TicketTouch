@@ -27,38 +27,8 @@ export class UserController {
   }
 
   @Get()
-  async getAllUsers(
-    @Query('page') page: number = 1,
-    @Query('field') field: string = '',
-    @Query('term') term: string = '',
-    @Query('username') username?: string,
-    @Query('name') name?: string,
-    @Query('email') email?: string,
-    @Query('role') role?: string,
-    @Query('phone_number') phone_number?: string,
-    @Query('ramal') ramal?: string,
-    @Query('unit') unit?: string,
-    @Query('department') department?: string,
-    @Query('created_at') created_at?: string,
-  ): Promise<ReturnUserDto[]> {
-    const users = await this.userService.getAllUsers(
-      page,
-      field,
-      term,
-      username,
-      name,
-      email,
-      role,
-      phone_number,
-      ramal,
-      unit,
-      department,
-      created_at,
-    );
-    if (!users || users.length === 0) {
-      throw new NotFoundException('Nenhum usuário encontrado');
-    }
-    return users.map((userEntity) => new ReturnUserDto(userEntity));
+  async getUsers(@Query('page') page: number) {
+    return this.userService.getAllUsers(page);
   }
 
   @Get(':id')
