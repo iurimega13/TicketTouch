@@ -1,16 +1,6 @@
 // src/styles.ts
 import styled from 'styled-components';
 
-interface NavbarProps {
-  isVisible: boolean;
-}
-
-interface DropdownProps {
-  'data-visible': boolean;
-}
-
-
-
 export const NavbarContainer = styled.div.withConfig({
   shouldForwardProp: (prop) => prop !== 'isVisible' // Não envia isVisible para o DOM
 })<{ isVisible: boolean }>`
