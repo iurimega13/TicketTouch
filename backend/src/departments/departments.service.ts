@@ -55,17 +55,39 @@ export class DepartmentsService {
     }
   }
 
-  async getAllDepartments(): Promise<DepartmentEntity[]> {
+  async getAllDepartments(page: number, limit: number): Promise<{ data: DepartmentEntity[], total: number }> {
     try {
       this.logger.log('Buscando todos os departamentos');
-      const departments = await this.departmentRepository.find({ relations: ['unit'] });
+      const [departments, total] = await this.departmentRepository.findAndCount({
+        skip: (page - 1) * limit,
+        take: limit,
+        relations: ['unit'], // Certifique-se de carregar a relação 'unit'
+      });
       this.logger.log(`Departamentos encontrados: ${departments.length}`);
-      return departments;
+      return { data: departments, total };
     } catch (error) {
       this.logger.error('Erro ao buscar departamentos', error.stack);
       throw new Error(error);
     }
   }
+
+  async getDepartmentsByUnit(unitId: string, page: number, limit: number): Promise<{ data: DepartmentEntity[], total: number }> {
+    try {
+      this.logger.log(`Buscando departamentos pela unidade: ${unitId}`);
+      const [departments, total] = await this.departmentRepository.findAndCount({
+        where: { unit: { id: unitId } },
+        skip: (page - 1) * limit,
+        take: limit,
+        relations: ['unit'],
+      });
+      this.logger.log(`Departamentos encontrados: ${departments.length}`);
+      return { data: departments, total };
+    } catch (error) {
+      this.logger.error('Erro ao buscar departamentos pela unidade', error.stack);
+      throw new Error(error);
+    }
+  }
+
 
   async getDepartmentById(id: string): Promise<DepartmentEntity> {
     try {
