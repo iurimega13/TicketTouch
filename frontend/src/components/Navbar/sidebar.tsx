@@ -9,12 +9,12 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate(); // Hook para navegação programática
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        onClose(); 
+        onClose();
       }
     };
 
@@ -27,18 +27,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  // Função para lidar com a navegação e redirecionamento temporário
   const handleNavigation = (path: string) => {
-    if (path === '/chamados' || path === '/usuarios' || path === '/faq') {
-      navigate('/home'); // Redireciona para home se a rota não existir
-    } else {
-      navigate(path);
-    }
-    onClose(); // Fecha a sidebar após a navegação
+    navigate(path);
+    onClose();
   };
 
-  return ( 
-    <StyledMenu isOpen={isOpen} ref={sidebarRef}>
+  return (
+    <StyledMenu $isOpen={isOpen} ref={sidebarRef}> {/* Usando $ para a prop transient */}
       <span className="menu-item" onClick={() => handleNavigation('/home')}>Home</span>
       <span className="menu-item" onClick={() => handleNavigation('/registrations')}>Cadastros</span>
       <span className="menu-item" onClick={() => handleNavigation('/chamados')}>Chamados</span>

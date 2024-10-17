@@ -17,11 +17,11 @@ import light from '../../styles/themes/light'; // Importa o tema light
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
-  isVisible: boolean;
+  isvisible: boolean;
   setTheme: (theme: any) => void; // Adiciona a função setTheme como prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible, setTheme }) => {
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isvisible, setTheme }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, isVisible, set
   };
 
   return (
-    <NavbarContainer isVisible={isVisible}>
+    <NavbarContainer isVisible={isvisible}>
       <MobileMenuButton onClick={handleSidebarToggle}>
         {isSidebarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
       </MobileMenuButton>

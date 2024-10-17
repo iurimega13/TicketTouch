@@ -9,12 +9,11 @@ interface DropdownProps {
   'data-visible': boolean;
 }
 
-interface SidebarProps {
-  isOpen: boolean;
-}
 
 
-export const NavbarContainer = styled.div<NavbarProps>`
+export const NavbarContainer = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== 'isVisible' // Não envia isVisible para o DOM
+})<{ isVisible: boolean }>`
   width: 100%;
   display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
   justify-content: space-between;
@@ -37,6 +36,7 @@ export const NavbarContainer = styled.div<NavbarProps>`
     height: auto;
   }
 `;
+
 
 export const Menu = styled.ul`
   list-style: none;
@@ -126,7 +126,7 @@ export const Avatar = styled.img`
   fill: ${props => props.theme.colors.text};
 `;
 
-export const Dropdown = styled.div<DropdownProps>`
+export const Dropdown = styled.div<{ 'data-visible': boolean }>`
   position: fixed;
   top: 65px;
   right: 10px;
@@ -138,8 +138,9 @@ export const Dropdown = styled.div<DropdownProps>`
   display: ${({ 'data-visible': visible }) => (visible ? 'block' : 'none')};
   user-select: none;
   padding: 10px;
-  color: white; /* Torne o texto visível */
+  color: white;
 `;
+
 
 
 export const DropdownItem = styled.div`
@@ -152,8 +153,8 @@ export const DropdownItem = styled.div`
   }
 `;
 
-export const StyledMenu = styled.div<SidebarProps>`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+export const StyledMenu = styled.div<{ $isOpen: boolean }>` // Usando $ para uma transient prop
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   background-color: ${props => props.theme.colors.primary};
   width: 300px;
   height: 100%;
@@ -173,7 +174,7 @@ export const StyledMenu = styled.div<SidebarProps>`
 
     &:hover {
       background-color: ${props => props.theme.colors.secundary};
-      color: ${props => props.theme.colors.textHover}; /* Opcional: Altera a cor do texto ao passar o mouse */
+      color: ${props => props.theme.colors.textHover};
     }
   }
 `;
