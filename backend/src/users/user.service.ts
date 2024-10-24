@@ -1,14 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial, QueryFailedError } from 'typeorm'; 
+import { hash } from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
-import { CreateUserDto } from './dtos/createUser.dto';
-import { UpdateUserDto } from './dtos/updateUser.dto'; // Importar o DTO de atualização
 import { UnitEntity } from '../units/entities/unit.entity';
 import { DepartmentEntity } from '../departments/entities/department.entity';
+import { CreateUserDto } from './dtos/createUser.dto';
+import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UserSettingsService } from '../user-settings/user-settings.service';
 import { CreateSettingsDto } from '../user-settings/dtos/createSettings.dto';
-import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -20,60 +20,89 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const { unit, department, password, ...userData } = createUserDto;
+    try {
+      const { unit, department, password, ...userData } = createUserDto;
 
-    const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
-    const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
+      const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
+      const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
 
-    if (!unitEntity || !departmentEntity) {
-      throw new Error('Invalid unit or department ID');
+      if (!unitEntity || !departmentEntity) {
+        throw new NotFoundException('Unidade ou departamento inválido');
+      }
+
+      const hashedPassword = await hash(password, 10);
+
+      const user = this.userRepository.create({
+        ...userData,
+        password: hashedPassword,
+        unit: unitEntity,
+        department: departmentEntity,
+      } as DeepPartial<UserEntity>);
+
+      const savedUser = await this.userRepository.save(user);
+
+      const defaultSettings: CreateSettingsDto = {
+        user_id: savedUser.id,
+        theme: 'dark',
+        notifications_settings: true,
+      };
+
+      await this.userSettingsService.createSettings(savedUser.id, defaultSettings);
+
+      return savedUser;
+    } catch (error) {
+      throw new BadRequestException('Erro ao criar usuário');
     }
-
-    const hashedPassword = await hash(password, 10);
-
-    const user = this.userRepository.create({
-      ...userData,
-      password: hashedPassword,
-      unit: unitEntity,
-      department: departmentEntity,
-    });
-
-    const savedUser = await this.userRepository.save(user);
-
-    const defaultSettings: CreateSettingsDto = {
-      user_id: savedUser.id,
-      theme: 'dark',
-      notifications_settings: true,
-    };
-
-    await this.userSettingsService.createSettings(savedUser.id, defaultSettings);
-
-    return savedUser;
   }
 
-  async getAllUsers(page: number): Promise<UserEntity[]> {
-    const take = 10;
-    const skip = (page - 1) * take;
-  
-    const queryBuilder = this.userRepository.createQueryBuilder('user');
-  
-    const users = await queryBuilder.take(take).skip(skip).getMany();
-  
-    if (users.length === 0) {
-      throw new NotFoundException('Nenhum usuário encontrado');
+  async getAllUsersWithPagination(
+    page: number,
+    limit: number,
+    filter: string,
+    sortBy: string,
+    sortOrder: 'ASC' | 'DESC',
+  ): Promise<{ data: UserEntity[]; total: number }> {
+    try {
+      const skip = (page - 1) * limit;
+
+      const queryBuilder = this.userRepository.createQueryBuilder('user');
+
+      if (filter) {
+        queryBuilder.where('user.name LIKE :filter', { filter: `%${filter}%` });
+      }
+
+      queryBuilder.orderBy(`user.${sortBy}`, sortOrder).skip(skip).take(limit);
+
+      const [users, total] = await queryBuilder.getManyAndCount();
+      return { data: users, total };
+    } catch (error) {
+      throw new Error(`Erro ao buscar usuários com paginação: ${error.message}`);
     }
-  
-    return users;
+  }
+
+  async getAllUsersWithoutPagination(): Promise<UserEntity[]> {
+    try {
+      const users = await this.userRepository.find();
+      return users;
+    } catch (error) {
+      throw new Error('Erro ao buscar todos os usuários');
+    }
   }
 
   async deleteUser(id: string): Promise<void> {
-    const user = await this.findById(id);
-    await this.userRepository.remove(user);
+    try {
+      const user = await this.findById(id);
+      await this.userRepository.remove(user);
+    } catch (error) {
+      throw new BadRequestException('Erro ao deletar usuário');
+    }
   }
 
-  
   async findById(id: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['unit', 'department'], // Carregar os relacionamentos
+    });
     if (!user) {
       throw new NotFoundException(`Usuário: ${id} não encontrado`);
     }
@@ -81,44 +110,50 @@ export class UserService {
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
-    const user = await this.findById(id);
-    if (!user) {
-      throw new NotFoundException(`Usuário: ${id} não encontrado`);
-    }
-
-    const { unit, department, ...updateData } = updateUserDto;
-
-    if (unit) {
-      const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
-      if (!unitEntity) {
-        throw new NotFoundException(`Unidade: ${unit} não encontrada`);
+    try {
+      const user = await this.findById(id);
+      if (!user) {
+        throw new NotFoundException(`Usuário: ${id} não encontrado`);
       }
-      user.unit = unitEntity;
-    }
 
-    if (department) {
-      const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
-      if (!departmentEntity) {
-        throw new NotFoundException(`Departamento: ${department} não encontrado`);
+      const { unit, department, password, ...updateData } = updateUserDto;
+
+      if (unit) {
+        const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
+        if (!unitEntity) {
+          throw new NotFoundException(`Unidade: ${unit} não encontrada`);
+        }
+        user.unit = unitEntity;
       }
-      user.department = departmentEntity;
+
+      if (department) {
+        const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
+        if (!departmentEntity) {
+          throw new NotFoundException(`Departamento: ${department} não encontrado`);
+        }
+        user.department = departmentEntity;
+      }
+
+      if (password) {
+        user.password = await hash(password, 10);
+      }
+
+      Object.assign(user, updateData);
+
+      return this.userRepository.save(user);
+    } catch (error) {
+      throw new BadRequestException('Erro ao atualizar usuário');
     }
-
-    Object.assign(user, updateData);
-
-    return this.userRepository.save(user);
   }
 
   async findByUsername(username: string): Promise<UserEntity> {
-    // Encontra um usuário pelo seu registro no banco de dados
-    const user = await this.userRepository.findOne({ where: { username } });
-
-    // Se o usuário não for encontrado, lança NotFoundException
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations: ['unit', 'department'], // Carregar os relacionamentos
+    });
     if (!user) {
-        throw new NotFoundException(`Usuário: ${username} não encontrado`);
+      throw new NotFoundException(`Usuário: ${username} não encontrado`);
     }
-
-    // Retorna o usuário encontrado
     return user;
   }
 }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
   Param,
   Post,
-  Put, // Importar o decorator Put
+  Put,
   Query,
   UsePipes,
   ValidationPipe,
@@ -26,9 +26,29 @@ export class UserController {
     return new ReturnUserDto(userEntity);
   }
 
+  @Get('all')
+  async getAllUsersWithoutPagination(): Promise<ReturnUserDto[]> {
+    const users = await this.userService.getAllUsersWithoutPagination();
+    return users.map(user => new ReturnUserDto(user));
+  }
+
   @Get()
-  async getUsers(@Query('page') page: number) {
-    return this.userService.getAllUsers(page);
+  async getAllUsersWithPagination(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+    @Query('filter') filter: string = '',
+    @Query('sortBy') sortBy: string = 'name',
+    @Query('sortOrder') sortOrder: 'ASC' | 'DESC' = 'ASC',
+  ): Promise<{ data: ReturnUserDto[]; total: number }> {
+    const { data, total } = await this.userService.getAllUsersWithPagination(
+      page,
+      limit,
+      filter,
+      sortBy,
+      sortOrder,
+    );
+    const result = data.map(user => new ReturnUserDto(user));
+    return { data: result, total };
   }
 
   @Get(':id')
