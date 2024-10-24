@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Form, Select } from 'antd';
+import { Button, Form, Select, Pagination as AntPagination } from 'antd';
 
 /* Estilos principais do container */
 export const MainContainer = styled.div`
@@ -97,8 +97,6 @@ export const StyledSelect = styled(Select)`
   .ant-select-arrow {
     color: ${(props) => props.theme.colors.text} !important;
   }
-
-
 
 `;
 

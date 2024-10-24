@@ -17,15 +17,15 @@ const Registrations: React.FC = () => {
   const [view, setView] = useState<'create' | 'list' | null>(null);
   const [entity, setEntity] = useState<'user' | 'unit' | 'equipment' | 'department' | null>(null);
   const [loading, setLoading] = useState(false);
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonLoading] = useState(false);
   const theme = useTheme();
 
   const handleViewChange = (view: 'create' | 'list') => {
-    setButtonLoading(true);
+    setLoading(true);
     setTimeout(() => {
       setView(view);
       setEntity(null);
-      setButtonLoading(false);
+      setLoading(false);
     }, 500);
   };
 
@@ -37,6 +37,8 @@ const Registrations: React.FC = () => {
       setLoading(false);
     }, 500);
   };
+
+
 
   return (
     <MainContainer>
@@ -52,7 +54,6 @@ const Registrations: React.FC = () => {
       {view && (
         <StyledSelect
           dropdownStyle={{
-            // backgroundColor: theme.colors.primary,
             color: theme.colors.text,
           }}
           
@@ -76,7 +77,7 @@ const Registrations: React.FC = () => {
       {view && entity && !loading && (
         <>
           {view === 'create' && entity === 'user' && <UserCreate />}
-          {view === 'list' && entity === 'user' && <UserSearch />}
+          {view === 'list' && entity === 'user' && <UserSearch/>}
           {view === 'create' && entity === 'unit' && <UnitCreate />}
           {view === 'list' && entity === 'unit' && <UnitSearch />}
           {view === 'create' && entity === 'equipment' && <EquipmentCreate />}
