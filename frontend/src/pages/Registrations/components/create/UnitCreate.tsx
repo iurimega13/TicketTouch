@@ -6,7 +6,7 @@ import { createUnit } from '../../../../services/api';
 const UnitCreate: React.FC = () => {
   const initialUnitState = {
     name: '',
-    address: ''
+    description: ''
   };
 
   const [newUnit, setNewUnit] = useState(initialUnitState);
@@ -20,7 +20,7 @@ const UnitCreate: React.FC = () => {
   };
 
   const validateForm = () => {
-    return newUnit.name !== '' && newUnit.address !== '';
+    return newUnit.name !== '' && newUnit.description !== '';
   };
 
   const handleCreateUnit = async () => {
@@ -40,7 +40,7 @@ const UnitCreate: React.FC = () => {
         description: 'Unidade criada com sucesso',
         placement: 'top',
       });
-      setNewUnit(initialUnitState); // Limpa o formulário
+      setNewUnit(initialUnitState); 
     } catch (error) {
       console.error('Erro ao criar unidade:', error);
       notification.error({
@@ -63,14 +63,14 @@ const UnitCreate: React.FC = () => {
           title="Nome"
           placeholder="Digite o nome da unidade"
         />
-        <StyledLabel>Endereço</StyledLabel>
+        <StyledLabel>Descrição</StyledLabel>
         <input
           type="text"
-          name="address"
-          value={newUnit.address}
+          name="description"
+          value={newUnit.description}
           onChange={handleInputChange}
-          title="Endereço"
-          placeholder="Digite o endereço da unidade"
+          title="Descrição"
+          placeholder="Digite a Descrição da unidade"
         />
         <ActionButton onClick={handleCreateUnit}>
           Criar Nova Unidade

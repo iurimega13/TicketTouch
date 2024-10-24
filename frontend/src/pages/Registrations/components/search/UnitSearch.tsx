@@ -55,7 +55,6 @@ const UnitSearch: React.FC = () => {
   // Efeito para buscar unidades quando a página ou busca inicia
   useEffect(() => {
     if (searchInitiated) {
-      console.log('Mudando para a página:', page);
       fetchUnits(page, itemsPerPage, filter, sortBy, sortOrder);
     }
   }, [
