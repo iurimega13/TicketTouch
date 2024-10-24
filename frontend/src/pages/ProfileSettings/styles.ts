@@ -1,3 +1,4 @@
+import { Modal } from 'antd';
 import styled from 'styled-components';
 
 export const OuterContainer = styled.div`
@@ -8,16 +9,20 @@ export const OuterContainer = styled.div`
   background-color: ${props => props.theme.colors.background};
   color: ${props => props.theme.colors.text};
   user-select: none;
+  position: relative;
+  margin: 60px auto 0px;
 `;
 
 export const Container = styled.div`
   background-color: ${props => props.theme.colors.primary};
   padding: 30px; /* Aumentei o padding */
-  border-radius: 10px; /* Aumentei o border-radius para suavizar mais os cantos */
+  border-radius: 4px; /* Aumentei o border-radius para suavizar mais os cantos */
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15); /* Aumentei o box-shadow para mais destaque */
+  height: 100%;
   width: 100%;
   max-width: 550px; /* Aumentei a largura máxima */
   user-select: none;
+  
 `;
 
 export const Title = styled.h1`
@@ -67,4 +72,48 @@ export const Info = styled.p`
 
 export const ButtonContainer = styled.div`
   margin-top: 10px; /* Aumentei o espaço superior */
+`;
+
+export const StyledModal = styled(Modal)`
+  .ant-modal-content {
+    background-color: ${(props) => props.theme.colors.secundary};
+    color: ${(props) => props.theme.colors.textAlt};
+  }
+
+  .ant-modal-header {
+    background-color: ${(props) => props.theme.colors.secondary};
+    color: ${(props) => props.theme.colors.textAlt};
+  }
+
+  .ant-modal-footer {
+    background-color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.textAlt};
+  }
+
+  .ant-modal-title {
+    color: ${(props) => props.theme.colors.textAlt};
+  }
+
+  .ant-btn-primary {
+    background-color: ${(props) => props.theme.colors.primary};
+    border-color: ${(props) => props.theme.colors.primary};
+
+    &:hover {
+      background-color: ${(props) => props.theme.colors.secundary} !important;
+    }
+
+    &.active {
+      background-color: ${(props) => props.theme.colors.tertiary} !important;
+    }
+  }
+
+  .ant-btn-danger {
+    background-color: ${(props) => props.theme.colors.danger};
+    border-color: ${(props) => props.theme.colors.danger};
+  }
+
+  .ant-input {
+    background-color: ${(props) => props.theme.colors.inputBackground};
+    color: ${(props) => props.theme.colors.textAlt};
+  }
 `;
