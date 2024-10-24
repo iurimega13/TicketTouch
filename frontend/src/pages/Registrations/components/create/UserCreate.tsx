@@ -36,7 +36,8 @@ const UserCreate: React.FC = () => {
       setLoadingUnits(true);
       try {
         const response = await getUnits();
-        setUnits(Array.isArray(response.data) ? response.data : []);
+        const unitsData = Array.isArray(response) ? response : [];
+        setUnits(unitsData);
       } catch (error) {
         console.error('Erro ao buscar unidades:', error);
         setUnits([]);
