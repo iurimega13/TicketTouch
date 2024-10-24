@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { notification } from 'antd'; 
-import { CreateForm, FormContainer, ActionButton } from './styles';
+import { CreateForm, FormContainer, ActionButton, StyledLabel } from './styles';
 import { createUnit } from '../../../../services/api';
 
 const UnitCreate: React.FC = () => {
@@ -54,9 +54,27 @@ const UnitCreate: React.FC = () => {
   return (
     <FormContainer>
       <CreateForm>
-        <input type="text" name="name" placeholder="Nome" value={newUnit.name} onChange={handleInputChange} />
-        <input type="text" name="address" placeholder="Endereço" value={newUnit.address} onChange={handleInputChange} />
-        <ActionButton onClick={handleCreateUnit}>Criar Nova Unidade</ActionButton>
+        <StyledLabel>Nome</StyledLabel>
+        <input
+          type="text"
+          name="name"
+          value={newUnit.name}
+          onChange={handleInputChange}
+          title="Nome"
+          placeholder="Digite o nome da unidade"
+        />
+        <StyledLabel>Endereço</StyledLabel>
+        <input
+          type="text"
+          name="address"
+          value={newUnit.address}
+          onChange={handleInputChange}
+          title="Endereço"
+          placeholder="Digite o endereço da unidade"
+        />
+        <ActionButton onClick={handleCreateUnit}>
+          Criar Nova Unidade
+        </ActionButton>
       </CreateForm>
     </FormContainer>
   );
