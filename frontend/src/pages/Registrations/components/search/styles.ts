@@ -33,7 +33,7 @@ export const ModalContent = styled.div`
 `;
 
 export const SortLabel = styled.span<{ color?: string }>`
-  color: ${(props) => props.theme.colors.text}};
+  color: ${(props) => props.theme.colors.textAlt} !important;};
   font-weight: bold;
   margin-right: 10px;
 `;
