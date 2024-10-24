@@ -65,7 +65,6 @@ const UserSearch: React.FC = () => {
   // Efeito para buscar usuários quando a página ou busca inicia
   useEffect(() => {
     if (searchInitiated) {
-      console.log('Mudando para a página:', page);
       fetchUsers(page, itemsPerPage, filter, sortBy, sortOrder);
     }
   }, [

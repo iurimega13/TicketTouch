@@ -6,6 +6,7 @@ import {
   deleteUser,
   getUnits,
   getDepartmentsByUnit,
+  resetPasswordAuto,
 } from '../../../../services/api';
 import { User, Unit, Department } from '../types';
 import { StyledModal } from './styles';
@@ -27,6 +28,8 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
   const [loadingUnits, setLoadingUnits] = useState(false);
   const [loadingDepartments, setLoadingDepartments] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [newPassword, setNewPassword] = useState<string | null>(null);
+  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
   const fetchDepartments = async (unitId: string) => {
     setLoadingDepartments(true);
@@ -94,7 +97,12 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
       const originalValue = originalUser[key as keyof User];
 
       if (userValue !== originalValue && userValue !== null) {
-        if (typeof userValue === 'object' && userValue !== null && 'id' in userValue && 'name' in userValue) {
+        if (
+          typeof userValue === 'object' &&
+          userValue !== null &&
+          'id' in userValue &&
+          'name' in userValue
+        ) {
           updateData[key as keyof User] = userValue.id as any;
         } else {
           updateData[key as keyof User] = userValue as any;
@@ -124,7 +132,8 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
       if (error instanceof Error) {
         notification.error({
           message: 'Erro!',
-          description: error.message || 'Ocorreu um erro ao atualizar o usuário.',
+          description:
+            error.message || 'Ocorreu um erro ao atualizar o usuário.',
         });
       } else {
         notification.error({
@@ -150,7 +159,8 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
     } catch (error) {
       console.error('Erro ao deletar usuário:', error);
       if (error instanceof AxiosError && error.response) {
-        const errorMessage = error.response.data.message || 'Erro ao deletar usuário';
+        const errorMessage =
+          error.response.data.message || 'Erro ao deletar usuário';
         notification.error({
           message: 'Erro!',
           description: errorMessage,
@@ -166,6 +176,29 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
           description: 'Erro desconhecido ao deletar o usuário.',
         });
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Função para resetar a senha do usuário
+  const handleResetPassword = async () => {
+    setLoading(true);
+    try {
+      const response = await resetPasswordAuto(userId);
+      const { newPassword } = response;
+      setNewPassword(newPassword);
+      setPasswordModalVisible(true);
+      notification.success({
+        message: 'Sucesso!',
+        description: 'Senha resetada com sucesso.',
+      });
+    } catch (error) {
+      console.error('Erro ao resetar senha:', error);
+      notification.error({
+        message: 'Erro!',
+        description: 'Não foi possível resetar a senha.',
+      });
     } finally {
       setLoading(false);
     }
@@ -204,7 +237,9 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
   };
 
   const handleDepartmentChange = (departmentId: string) => {
-    const selectedDepartment = departments.find((department) => department.id === departmentId);
+    const selectedDepartment = departments.find(
+      (department) => department.id === departmentId,
+    );
 
     if (!user || !selectedDepartment) return;
 
@@ -222,7 +257,11 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
             <Input name="name" value={user.name} onChange={handleChange} />
           </Form.Item>
           <Form.Item label="Username">
-            <Input name="username" value={user.username} onChange={handleChange} />
+            <Input
+              name="username"
+              value={user.username}
+              onChange={handleChange}
+            />
           </Form.Item>
           <Form.Item label="Email">
             <Input name="email" value={user.email} onChange={handleChange} />
@@ -241,7 +280,11 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
             </Select>
           </Form.Item>
           <Form.Item label="Telefone">
-            <Input name="phone_number" value={user.phone_number} onChange={handleChange} />
+            <Input
+              name="phone_number"
+              value={user.phone_number}
+              onChange={handleChange}
+            />
           </Form.Item>
           <Form.Item label="Ramal">
             <Input name="ramal" value={user.ramal} onChange={handleChange} />
@@ -283,13 +326,23 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
                 value: department.id,
                 label: department.name,
               }))}
-              notFoundContent={loadingDepartments ? <Spin size="small" /> : null}
+              notFoundContent={
+                loadingDepartments ? <Spin size="small" /> : null
+              }
               disabled={!user.unit}
             />
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={handleUpdate} loading={loading}>
               Atualizar
+            </Button>
+            <Button
+              type="primary"
+              onClick={handleResetPassword}
+              style={{ marginLeft: '10px' }}
+              loading={loading}
+            >
+              Resetar Senha
             </Button>
             <Button
               danger
@@ -299,6 +352,30 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
             >
               Deletar
             </Button>
+            <StyledModal
+              open={passwordModalVisible}
+              cancelButtonProps={{ style: { display: 'none' } }}
+              okButtonProps={{ style: { display: 'none' } }}
+              closeIcon={null}
+            >
+              <Form layout="vertical">
+                <Form.Item label="Nome">
+                  <Input value={user?.name} readOnly />
+                </Form.Item>
+                <Form.Item label="Nova Senha">
+                  <Input.Password value={newPassword ?? ''} readOnly />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    onClick={() => setPasswordModalVisible(false)}
+                    style={{ width: '100%' }}
+                  >
+                    OK
+                  </Button>
+                </Form.Item>
+              </Form>
+            </StyledModal>
           </Form.Item>
         </Form>
       ) : (
