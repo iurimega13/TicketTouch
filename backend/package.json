@@ -20,7 +20,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:run": "npx typeorm-ts-node-commonjs migration:run -d src/ormconfig.ts",
-    "typeorm:generate": "npx typeorm-ts-node-commonjs migration:generate -d src/ormconfig.ts"
+    "typeorm:generate": "npx typeorm-ts-node-commonjs migration:generate -d src/ormconfig.ts",
+    "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/ormconfig.ts",
+    "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/ormconfig.ts -p src/migrations"
   },
   "proxy": "http://localhost:3001",
   "dependencies": {
@@ -31,6 +33,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
