@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { notification, Select, Spin } from 'antd'; 
-import { CreateForm, FormContainer, ActionButton, SelectContainer } from './styles';
+import { CreateForm, FormContainer, ActionButton, SelectContainer, StyledLabel } from './styles';
 import { createDepartment, getUnits } from '../../../../services/api';
 
 const { Option } = Select;
@@ -22,8 +22,8 @@ const DepartmentCreate: React.FC = () => {
   const fetchUnits = async () => {
     setLoadingUnits(true);
     try {
-      const response = await getUnits(1);
-      setUnits(response || []);
+      const response = await getUnits();
+      setUnits(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Erro ao buscar unidades:', error);
       setUnits([]);
@@ -43,7 +43,7 @@ const DepartmentCreate: React.FC = () => {
   const handleSelectChange = (value: string) => {
     setNewDepartment(prevState => ({
       ...prevState,
-      unit_id: value // Certifique-se de que o campo corresponde ao DTO
+      unit_id: value
     }));
   };
 
@@ -60,7 +60,6 @@ const DepartmentCreate: React.FC = () => {
       });
       return;
     }
-
 
     try {
       const createdDepartment = await createDepartment(newDepartment);
@@ -83,8 +82,17 @@ const DepartmentCreate: React.FC = () => {
   return (
     <FormContainer>
       <CreateForm>
-        <input type="text" name="name" placeholder="Nome" value={newDepartment.name} onChange={handleInputChange} />
+        <StyledLabel>Nome</StyledLabel>
+        <input
+          type="text"
+          name="name"
+          value={newDepartment.name}
+          onChange={handleInputChange}
+          title="Nome"
+          placeholder="Digite o nome do departamento"
+        />
         <SelectContainer>
+          <StyledLabel>Unidade</StyledLabel>
           <Select
             showSearch
             style={{ width: '100%' }}
@@ -98,10 +106,10 @@ const DepartmentCreate: React.FC = () => {
             value={newDepartment.unit_id}
             onChange={handleSelectChange}
             tokenSeparators={[',']}
-            options={units.map((unit: any) => ({
+            options={Array.isArray(units) ? units.map((unit: any) => ({
               value: unit.id,
               label: unit.name,
-            }))}
+            })) : []}
             notFoundContent={loadingUnits ? <Spin size="small" /> : null}
           />
         </SelectContainer>
