@@ -3,7 +3,6 @@ import { notification, Select, Spin } from 'antd';
 import { CreateForm, FormContainer, ActionButton, SelectContainer, StyledLabel } from './styles';
 import { createDepartment, getUnits } from '../../../../services/api';
 
-const { Option } = Select;
 
 const DepartmentCreate: React.FC = () => {
   const initialDepartmentState = {
@@ -23,7 +22,8 @@ const DepartmentCreate: React.FC = () => {
     setLoadingUnits(true);
     try {
       const response = await getUnits();
-      setUnits(Array.isArray(response.data) ? response.data : []);
+      const unitsData = Array.isArray(response) ? response : [];
+      setUnits(unitsData);
     } catch (error) {
       console.error('Erro ao buscar unidades:', error);
       setUnits([]);

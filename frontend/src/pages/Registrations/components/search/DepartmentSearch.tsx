@@ -25,7 +25,6 @@ const DepartmentSearch: React.FC = () => {
     setLoading(true);
     try {
       const result = await getDepartmentsWithPagination(page, limit, filter, sortBy, sortOrder); 
-      console.log('Resultado da API:', result);
       setDepartments(result.data);  
       setTotalDepartments(result.total);  
     } catch (error) {
@@ -41,7 +40,6 @@ const DepartmentSearch: React.FC = () => {
   // Efeito para buscar departamentos quando a página ou filtros/ordenadores mudam
   useEffect(() => {
     if (searchInitiated) {
-      console.log('Mudando para a página:', page);
       fetchDepartments(page, itemsPerPage, filter, sortBy, sortOrder); 
     }
   }, [page, fetchDepartments, itemsPerPage, searchInitiated, filter, sortBy, sortOrder]);
