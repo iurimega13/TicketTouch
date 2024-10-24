@@ -5,8 +5,9 @@ import {
   FormContainer,
   ActionButton,
   SelectContainer,
+  StyledLabel,
 } from './styles';
-import { createUser, getUnits, getDepartments } from '../../../../services/api';
+import { createUser, getUnits, getDepartmentsByUnit } from '../../../../services/api';
 
 const { Option } = Select;
 
@@ -34,8 +35,8 @@ const UserCreate: React.FC = () => {
     const fetchUnits = async () => {
       setLoadingUnits(true);
       try {
-        const response = await getUnits(1); // Página 1, ajuste conforme necessário
-        setUnits(response || []);
+        const response = await getUnits();
+        setUnits(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Erro ao buscar unidades:', error);
         setUnits([]);
@@ -66,13 +67,13 @@ const UserCreate: React.FC = () => {
     setNewUser((prevState) => ({
       ...prevState,
       unit: value,
-      department: '', // Limpa o departamento ao mudar a unidade
+      department: '', 
     }));
 
     setLoadingDepartments(true);
     try {
-      const response = await getDepartments(value); // Passa o unitId para buscar os departamentos
-      setDepartments(response || []);
+      const response = await getDepartmentsByUnit(value);
+      setDepartments(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Erro ao buscar departamentos:', error);
       setDepartments([]);
@@ -113,7 +114,8 @@ const UserCreate: React.FC = () => {
       newUser.role !== '' &&
       newUser.unit !== '' &&
       newUser.department !== '' &&
-      validatePassword(newUser.password)
+      validatePassword(newUser.password) &&
+      (newUser.phone_number !== '' || newUser.ramal !== '')
     );
   };
 
@@ -121,20 +123,21 @@ const UserCreate: React.FC = () => {
     if (!validateForm()) {
       notification.error({
         message: 'Erro',
-        description: 'Por favor, preencha todos os campos obrigatórios e verifique se a senha atende aos critérios',
+        description: 'Por favor, preencha todos os campos obrigatórios e verifique se a senha atende aos critérios. Pelo menos um dos campos "Número de Telefone" ou "Ramal" deve estar preenchido.',
         placement: 'top',
       });
       return;
     }
 
     try {
-      const createdUser = await createUser(newUser);
+      await createUser(newUser);
+      
       notification.success({
         message: 'Sucesso',
         description: 'Usuário criado com sucesso',
         placement: 'top',
       });
-      setNewUser(initialUserState); // Limpa o formulário
+      setNewUser(initialUserState); 
     } catch (error) {
       console.error('Erro ao criar usuário:', error);
       notification.error({
@@ -148,68 +151,82 @@ const UserCreate: React.FC = () => {
   return (
     <FormContainer>
       <CreateForm>
+        <StyledLabel>Nome de Usuário</StyledLabel>
         <input
           type="text"
           name="username"
-          placeholder="Nome de Usuário"
           value={newUser.username}
           onChange={handleInputChange}
+          title="Nome de Usuário"
+          placeholder="Digite o nome de usuário"
         />
+        <StyledLabel>Nome</StyledLabel>
         <input
           type="text"
           name="name"
-          placeholder="Nome"
           value={newUser.name}
           onChange={handleInputChange}
+          title="Nome"
+          placeholder="Digite o nome"
         />
+        <StyledLabel>Email</StyledLabel>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={newUser.email}
           onChange={handleInputChange}
+          title="Email"
+          placeholder="Digite o email"
         />
+        <StyledLabel>Senha</StyledLabel>
         <input
           type="password"
           name="password"
-          placeholder="Senha"
           value={newUser.password}
           onChange={handleInputChange}
+          title="Senha"
+          placeholder="Digite a senha"
         />
         
         <SelectContainer>
+          <StyledLabel>Tipo de Usuário</StyledLabel>
           <Select
             style={{ width: '100%' }}
-            placeholder="Selecione o Tipo de Usuário"
             value={newUser.role}
             onChange={(value) => handleSelectChange('role', value)}
+            title="Tipo de Usuário"
+            placeholder="Selecione o tipo de usuário"
           >
             <Option value="admin">Admin</Option>
-            <Option value="analyst">Analyst</Option>
-            <Option value="user">User</Option>
+            <Option value="analyst">Analista</Option>
+            <Option value="user">Usuário</Option>
           </Select>
         </SelectContainer>
 
+        <StyledLabel>Número de Telefone</StyledLabel>
         <input
           type="text"
           name="phone_number"
-          placeholder="Número de Telefone"
           value={newUser.phone_number}
           onChange={handleInputChange}
+          title="Número de Telefone"
+          placeholder="Digite o número de telefone"
         />
+        <StyledLabel>Ramal</StyledLabel>
         <input
           type="text"
           name="ramal"
-          placeholder="Ramal"
           value={newUser.ramal}
           onChange={handleInputChange}
+          title="Ramal"
+          placeholder="Digite o ramal"
         />
 
         <SelectContainer>
+          <StyledLabel>Unidade</StyledLabel>
           <Select
             showSearch
             style={{ width: '100%' }}
-            placeholder="Selecione uma Unidade"
             optionFilterProp="label"
             filterSort={(optionA, optionB) =>
               (optionA?.label ?? '')
@@ -219,19 +236,21 @@ const UserCreate: React.FC = () => {
             value={newUser.unit}
             onChange={handleUnitChange}
             tokenSeparators={[',']}
-            options={units.map((unit: any) => ({
+            options={Array.isArray(units) ? units.map((unit: any) => ({
               value: unit.id,
               label: unit.name,
-            }))}
+            })) : []}
             notFoundContent={loadingUnits ? <Spin size="small" /> : null}
+            title="Unidade"
+            placeholder="Selecione a unidade"
           />
         </SelectContainer>
 
         <SelectContainer>
+          <StyledLabel>Departamento</StyledLabel>
           <Select
             showSearch
             style={{ width: '100%' }}
-            placeholder="Selecione um Departamento"
             optionFilterProp="label"
             filterSort={(optionA, optionB) =>
               (optionA?.label ?? '')
@@ -241,16 +260,18 @@ const UserCreate: React.FC = () => {
             value={newUser.department}
             onChange={handleDepartmentChange}
             tokenSeparators={[',']}
-            options={departments.map((department: any) => ({
+            options={Array.isArray(departments) ? departments.map((department: any) => ({
               value: department.id,
               label: department.name,
-            }))}
+            })) : []}
             notFoundContent={loadingDepartments ? <Spin size="small" /> : null}
             disabled={!newUser.unit}
+            title="Departamento"
+            placeholder="Selecione o departamento"
           />
         </SelectContainer>
 
-        <ActionButton onClick={handleCreateUser}>
+        <ActionButton onClick={handleCreateUser} >
           Criar Novo Usuário
         </ActionButton>
       </CreateForm>
