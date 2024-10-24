@@ -9,7 +9,7 @@ async function bootstrap() {
 
   // Configuração do CORS
   app.enableCors({
-    origin: 'http://localhost:3000', // Substitua com a URL do seu frontend
+    origin: 'http://127.0.0.1:3000', // Substitua com a URL do seu frontend
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
     credentials: true, // Permitir envio de cookies ou outros headers de autenticação
   });
