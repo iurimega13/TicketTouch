@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -19,6 +20,7 @@ import { ReturnUserDto } from './dtos/returnUser.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  // Rota para criar um usuário
   @UsePipes(ValidationPipe)
   @Post()
   async createUser(@Body() createUser: CreateUserDto): Promise<ReturnUserDto> {
@@ -26,12 +28,14 @@ export class UserController {
     return new ReturnUserDto(userEntity);
   }
 
+  // Rota para buscar todos os usuários sem paginação
   @Get('all')
   async getAllUsersWithoutPagination(): Promise<ReturnUserDto[]> {
     const users = await this.userService.getAllUsersWithoutPagination();
     return users.map(user => new ReturnUserDto(user));
   }
 
+  // Rota para buscar todos os usuários com paginação
   @Get()
   async getAllUsersWithPagination(
     @Query('page') page: number = 1,
@@ -51,6 +55,7 @@ export class UserController {
     return { data: result, total };
   }
 
+  // Rota para buscar um usuário por ID
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     const user = await this.userService.findById(id);
@@ -60,10 +65,33 @@ export class UserController {
     return new ReturnUserDto(user);
   }
 
+  // Rota para atualizar um usuário
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<ReturnUserDto> {
     const updatedUser = await this.userService.updateUser(id, updateUserDto);
     return new ReturnUserDto(updatedUser);
+  }
+
+  // Rota para deletar um usuário
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string): Promise<{ message: string }> {
+    await this.userService.deleteUser(id);
+    return { message: 'User deleted successfully' };
+  }
+
+  // Rota para resetar a senha do usuário
+  @Post(':id/reset-password')
+  async resetPassword(@Param('id') userId: string): Promise<{ newPassword: string }> {
+    return this.userService.resetPassword(userId);
+  }
+
+  // Rota para mudar a senha do usuário
+  @Post('change-password')
+  async changePassword(
+    @Body() body: { username: string; currentPassword: string; newPassword: string }
+  ): Promise<void> {
+    const { username, currentPassword, newPassword } = body;
+    await this.userService.changePassword(username, currentPassword, newPassword);
   }
 }

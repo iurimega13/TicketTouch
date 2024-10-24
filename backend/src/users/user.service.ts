@@ -1,7 +1,11 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeepPartial, QueryFailedError } from 'typeorm'; 
-import { hash } from 'bcrypt';
+import { Repository, DeepPartial, QueryFailedError } from 'typeorm';
+import { compare, hash } from 'bcrypt';
 import { UserEntity } from './entities/user.entity';
 import { UnitEntity } from '../units/entities/unit.entity';
 import { DepartmentEntity } from '../departments/entities/department.entity';
@@ -9,13 +13,17 @@ import { CreateUserDto } from './dtos/createUser.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { UserSettingsService } from '../user-settings/user-settings.service';
 import { CreateSettingsDto } from '../user-settings/dtos/createSettings.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(UnitEntity) private readonly unitRepository: Repository<UnitEntity>,
-    @InjectRepository(DepartmentEntity) private readonly departmentRepository: Repository<DepartmentEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(UnitEntity)
+    private readonly unitRepository: Repository<UnitEntity>,
+    @InjectRepository(DepartmentEntity)
+    private readonly departmentRepository: Repository<DepartmentEntity>,
     private readonly userSettingsService: UserSettingsService,
   ) {}
 
@@ -23,8 +31,12 @@ export class UserService {
     try {
       const { unit, department, password, ...userData } = createUserDto;
 
-      const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
-      const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
+      const unitEntity = await this.unitRepository.findOne({
+        where: { id: unit },
+      });
+      const departmentEntity = await this.departmentRepository.findOne({
+        where: { id: department },
+      });
 
       if (!unitEntity || !departmentEntity) {
         throw new NotFoundException('Unidade ou departamento inválido');
@@ -47,7 +59,10 @@ export class UserService {
         notifications_settings: true,
       };
 
-      await this.userSettingsService.createSettings(savedUser.id, defaultSettings);
+      await this.userSettingsService.createSettings(
+        savedUser.id,
+        defaultSettings,
+      );
 
       return savedUser;
     } catch (error) {
@@ -76,7 +91,9 @@ export class UserService {
       const [users, total] = await queryBuilder.getManyAndCount();
       return { data: users, total };
     } catch (error) {
-      throw new Error(`Erro ao buscar usuários com paginação: ${error.message}`);
+      throw new Error(
+        `Erro ao buscar usuários com paginação: ${error.message}`,
+      );
     }
   }
 
@@ -101,7 +118,7 @@ export class UserService {
   async findById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['unit', 'department'], // Carregar os relacionamentos
+      relations: ['unit', 'department'],
     });
     if (!user) {
       throw new NotFoundException(`Usuário: ${id} não encontrado`);
@@ -109,7 +126,10 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity> {
+  async updateUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
     try {
       const user = await this.findById(id);
       if (!user) {
@@ -119,7 +139,9 @@ export class UserService {
       const { unit, department, password, ...updateData } = updateUserDto;
 
       if (unit) {
-        const unitEntity = await this.unitRepository.findOne({ where: { id: unit } });
+        const unitEntity = await this.unitRepository.findOne({
+          where: { id: unit },
+        });
         if (!unitEntity) {
           throw new NotFoundException(`Unidade: ${unit} não encontrada`);
         }
@@ -127,9 +149,13 @@ export class UserService {
       }
 
       if (department) {
-        const departmentEntity = await this.departmentRepository.findOne({ where: { id: department } });
+        const departmentEntity = await this.departmentRepository.findOne({
+          where: { id: department },
+        });
         if (!departmentEntity) {
-          throw new NotFoundException(`Departamento: ${department} não encontrado`);
+          throw new NotFoundException(
+            `Departamento: ${department} não encontrado`,
+          );
         }
         user.department = departmentEntity;
       }
@@ -149,11 +175,45 @@ export class UserService {
   async findByUsername(username: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { username },
-      relations: ['unit', 'department'], // Carregar os relacionamentos
+      relations: ['unit', 'department'],
     });
     if (!user) {
       throw new NotFoundException(`Usuário: ${username} não encontrado`);
     }
     return user;
+  }
+
+  async resetPassword(userId: string): Promise<{ newPassword: string }> {
+    const user = await this.findById(userId);
+    if (!user) {
+      throw new NotFoundException(`Usuário com ID ${userId} não encontrado`);
+    }
+
+    const newPassword = uuidv4().slice(0, 8); 
+    const hashedPassword = await hash(newPassword, 10); 
+
+    user.password = hashedPassword; 
+    await this.userRepository.save(user);
+
+    return { newPassword }; 
+  }
+
+  // Função para alterar a senha do usuário
+  async changePassword(
+    username: string,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.findByUsername(username);
+
+    // Verificar se a senha atual está correta
+    const isPasswordValid = await compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('Senha atual incorreta.');
+    }
+
+    // Criptografar e salvar a nova senha
+    user.password = await hash(newPassword, 10);
+    await this.userRepository.save(user);
   }
 }
