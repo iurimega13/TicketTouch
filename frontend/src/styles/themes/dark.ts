@@ -10,6 +10,8 @@ const darkTheme = {
     textHover: "#000",
     optionSelectedBg: "#495057",
     optionSelectedColor: "#FFF",
+    paginationArrow: "#FFF",
+    paginationArrowHover: "#40a9ff",
   }
 };
 

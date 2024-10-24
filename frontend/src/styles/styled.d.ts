@@ -11,6 +11,8 @@ declare module 'style-components' {
       textHover: string;
       optionSelectedBg: string;
       optionSelectedColor: string;
+      paginationArrow: string;
+      paginationArrowHover: string;
     };
   }
 }

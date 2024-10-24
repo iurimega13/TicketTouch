@@ -10,6 +10,8 @@ const lightTheme = {
         textHover: "#FFF",
         optionSelectedBg: "#006DAA",
         optionSelectedColor: "#FFF",
+        paginationArrow: "#000",
+        paginationArrowHover: "#1890ff",
     },  
 };
 
