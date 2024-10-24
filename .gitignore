@@ -2,15 +2,17 @@
 /backend/node_modules
 /backend/build
 /backend/dist
+/backend_old
 
 # comandos 
 
 comandos.txt
-
+bdcreate.txt
 
 /frontend/node_modules
 /frontend/build
 /frontend/dist
+/frontend_old
 pnpm-lock.yaml
 
 # Logs
