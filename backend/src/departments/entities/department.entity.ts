@@ -1,15 +1,16 @@
+import { UserEntity } from "src/users/entities/user.entity";
 import { UnitEntity } from "../../units/entities/unit.entity";
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('departments')
 export class DepartmentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({unique: true, nullable: false})
+    @Column({ nullable: false})
     name: string;
 
-    @ManyToOne(() => UnitEntity, unit => unit.departments)
+    @ManyToOne(() => UnitEntity, unit => unit.departments, { nullable: false })
     @JoinColumn({ name: 'unit_id'})
     unit: UnitEntity;
 
@@ -18,4 +19,7 @@ export class DepartmentEntity {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     updated_at: Date;
+
+    @OneToMany(() => UserEntity, user => user.department)
+    users: UserEntity[];
 }

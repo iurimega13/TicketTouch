@@ -28,43 +28,53 @@ export class DepartmentsController {
     return this.departmentsService.deleteDepartment(id);
   }
 
-  @Get()
-  async getAllDepartments(@Query('page') page = 1, @Query('limit') limit = 10): Promise<{ data: ReturnDepartmentDto[], total: number }> {
-    this.logger.log('Recebendo requisição para buscar todos os departamentos');
-    const { data, total } = await this.departmentsService.getAllDepartments(page, limit);
-    this.logger.log(`Departamentos retornados: ${data.length}`);
-    
-    const validDepartments = data.filter(department => department && department.id && department.unit);
-    if (validDepartments.length !== data.length) {
-      this.logger.warn(`Alguns departamentos retornados são inválidos. Válidos: ${validDepartments.length}, Inválidos: ${data.length - validDepartments.length}`);
-    }
+  @Get('all')
+  async getAllDepartmentsWithoutPagination(): Promise<ReturnDepartmentDto[]> {
+    const departments = await this.departmentsService.getAllDepartmentsWithoutPagination();
+    return departments.map(department => new ReturnDepartmentDto(department));
+  }
 
-    return { data: validDepartments.map((department) => new ReturnDepartmentDto(department)), total };
+  @Get()
+  async getAllDepartmentsWithPagination(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+    @Query('filter') filter: string = '',
+    @Query('sortBy') sortBy: string = 'name',
+    @Query('sortOrder') sortOrder: 'ASC' | 'DESC' = 'ASC',
+  ): Promise<{ data: ReturnDepartmentDto[]; total: number }> {
+    const { data, total } = await this.departmentsService.getAllDepartmentsWithPagination(
+      page,
+      limit,
+      filter,
+      sortBy,
+      sortOrder,
+    );
+    const result = data.map(department => new ReturnDepartmentDto(department));
+    return { data: result, total };
   }
 
   @Get('unit/:unitId')
-  async getDepartmentsByUnit(@Query('unitId') unitId: string, @Query('page') page = 1, @Query('limit') limit = 10): Promise<{ data: ReturnDepartmentDto[], total: number }> {
+  async getDepartmentsByUnit(
+    @Param('unitId') unitId: string, 
+  ): Promise<{ data: ReturnDepartmentDto[]}> {
     this.logger.log(`Recebendo requisição para buscar departamentos pela unidade: ${unitId}`);
-    const { data, total } = await this.departmentsService.getDepartmentsByUnit(unitId, page, limit);
+
+    const { data } = await this.departmentsService.getDepartmentsByUnit(unitId);
     this.logger.log(`Departamentos retornados: ${data.length}`);
     
-    const validDepartments = data.filter(department => department && department.id && department.unit);
-    if (validDepartments.length !== data.length) {
-      this.logger.warn(`Alguns departamentos retornados são inválidos. Válidos: ${validDepartments.length}, Inválidos: ${data.length - validDepartments.length}`);
-    }
-
-    return { data: validDepartments.map((department) => new ReturnDepartmentDto(department)), total };
+    return { data: data.map((department) => new ReturnDepartmentDto(department)) };
   }
 
   @Get(':id')
-  async getDepartmentById(@Param('id') id: string): Promise<DepartmentEntity> {
+  async getDepartmentById(@Param('id') id: string): Promise<ReturnDepartmentDto> {
     try {
       const department = await this.departmentsService.getDepartmentById(id);
       if (!department) {
         throw new NotFoundException('Department not found');
       }
-      return department;
+      return new ReturnDepartmentDto(department);
     } catch (error) {
+      this.logger.error(`Erro ao buscar departamento por ID: ${id}`, error.stack);
       throw new NotFoundException('Department not found');
     }
   }
