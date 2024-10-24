@@ -6,5 +6,5 @@ export class CreateUnitDto {
     name: string;
 
     @IsString()
-    address: string;
+    description: string;
 }
