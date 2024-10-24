@@ -68,7 +68,7 @@ const Layout: React.FC = () => {
     <ThemeProvider theme={theme}>
       <div className="App">
         <GlobalStyle />
-        <Navbar isVisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} setTheme={setTheme} />
+        <Navbar isvisible={showNavbar} toggleTheme={toggleTheme} isDarkMode={theme === dark} setTheme={setTheme} />
         <Routes>
           <Route path="/" element={<Navigate to={isAuthenticated ? "/home" : "/login"} />} />
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess} setTheme={setTheme} />} />
