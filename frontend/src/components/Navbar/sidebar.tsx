@@ -11,9 +11,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  const userRole = localStorage.getItem('userRole');
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -33,11 +38,60 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <StyledMenu $isOpen={isOpen} ref={sidebarRef}> {/* Usando $ para a prop transient */}
-      <span className="menu-item" onClick={() => handleNavigation('/home')}>Home</span>
-      <span className="menu-item" onClick={() => handleNavigation('/registrations')}>Cadastros</span>
-      <span className="menu-item" onClick={() => handleNavigation('/chamados')}>Chamados</span>
-      <span className="menu-item" onClick={() => handleNavigation('/faq')}>FAQ</span>
+    <StyledMenu $isOpen={isOpen} ref={sidebarRef}>
+      {' '}
+      <span className="menu-item" onClick={() => handleNavigation('/home')}>
+        Home
+      </span>
+      {userRole === 'admin' && (
+        <>
+          <span
+            className="menu-item"
+            onClick={() => handleNavigation('/registrations')}
+          >
+            Cadastros
+          </span>
+          <span
+            className="menu-item"
+            onClick={() => handleNavigation('/tickets')}
+          >
+            Chamados
+          </span>
+          <span
+            className="menu-item"
+            onClick={() => handleNavigation('/support')}
+          >
+            atendimento
+          </span>
+        </>
+      )}
+      {userRole === 'analyst' && (
+        <>
+          <span
+            className="menu-item"
+            onClick={() => handleNavigation('/tickets')}
+          >
+            Chamados
+          </span>
+          <span
+            className="menu-item"
+            onClick={() => handleNavigation('/support')}
+          >
+            atendimento
+          </span>
+        </>
+      )}
+      {userRole === 'user' && (
+        <span
+          className="menu-item"
+          onClick={() => handleNavigation('/tickets')}
+        >
+          Chamados
+        </span>
+      )}
+      <span className="menu-item" onClick={() => handleNavigation('/faqs')}>
+        FAQ
+      </span>
     </StyledMenu>
   );
 };
