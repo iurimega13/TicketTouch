@@ -16,7 +16,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = (username: string, password: string) => {
-    // Simulação de autenticação
     if (username === 'admin' && password === 'admin') {
       setIsAuthenticated(true);
       return true;
