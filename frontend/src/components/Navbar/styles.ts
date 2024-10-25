@@ -21,7 +21,7 @@ export const NavbarContainer = styled.div.withConfig({
   height: 60px;
   flex-wrap: wrap;
 
-  @media (max-width: 1175px) {
+  @media (max-width: 1250px) {
     padding: 10px 15px;
     height: auto;
   }
@@ -42,7 +42,7 @@ export const Menu = styled.ul`
 
   li {
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 4px;
 
     &:hover {
@@ -51,7 +51,7 @@ export const Menu = styled.ul`
     }
   }
 
-  @media (max-width: 1175px) {
+  @media (max-width: 1250px) {
     display: none; /* Esconde o menu padrão em telas menores */
   }
 `;
@@ -68,7 +68,7 @@ export const MobileMenuButton = styled.button`
   top: 50%;
   transform: translateY(-50%);
 
-  @media (min-width: 1175px) {
+  @media (min-width: 1251px) {
     display: none; /* Esconde o botão de menu hamburguer em telas maiores */
   }
 `;
