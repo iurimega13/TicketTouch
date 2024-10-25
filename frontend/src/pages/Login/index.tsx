@@ -42,6 +42,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, setTheme }) => {
       // Verifica se a resposta inclui o ID do usuário
       if (data.user && data.user.id) {
         localStorage.setItem('userId', data.user.id); // Armazena o ID do usuário
+        localStorage.setItem('userRole', data.user.role); // Armazena o nome de usuário
       } else {
         throw new Error('ID do usuário não encontrado na resposta'); // Lança erro se o ID não estiver presente
       }
