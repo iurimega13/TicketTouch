@@ -37,7 +37,7 @@ Desenvolver um sistema de gerenciamento de tickets de suporte para melhorar a ef
 #### 4.1 Escopo do Produto
 O escopo do produto consiste em desenvolver um sistema de gerenciamento de tickets de suporte, que permita aos usuários solicitar assistência, técnicos fornecer suporte e administradores monitorar e analisar o desempenho da equipe de suporte.
 #### 4.2 Funcionalidades do Produto
-- [ ] Cadastro de Administrador, Usuário e Técnico
+- [x] Cadastro de Administrador, Usuário e Técnico
 - [ ] Visualização de Tickets
 - [ ] Atribuição de Prioridades
 - [ ] Lista de Tickets em Aberto
