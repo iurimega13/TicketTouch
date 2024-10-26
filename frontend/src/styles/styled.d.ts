@@ -8,6 +8,7 @@ declare module 'style-components' {
       background: string;
       text: string;
       textAlt: string;
+      textbackground: string;
       textHover: string;
       optionSelectedBg: string;
       optionSelectedColor: string;

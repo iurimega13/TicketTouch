@@ -7,6 +7,7 @@ const darkTheme = {
     background: "#121212",
     text: "#FFF",
     textAlt: "#000",
+    textbackground: "#FFF",
     textHover: "#000",
     optionSelectedBg: "#495057",
     optionSelectedColor: "#FFF",
