@@ -32,8 +32,8 @@ export const ModalContent = styled.div`
   padding: 20px;
 `;
 
-export const SortLabel = styled.span<{ color?: string }>`
-  color: ${(props) => props.theme.colors.textAlt} !important;};
+export const SortLabel = styled.span`
+  color: ${(props) => props.theme.colors.textbackground} !important;};
   font-weight: bold;
   margin-right: 10px;
 `;
