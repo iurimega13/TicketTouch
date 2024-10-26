@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { notification, Input, Button, Form, Select, Spin } from 'antd';
+import { notification, Input, Button, Form, Select, Spin, Modal } from 'antd';
 import { getDepartmentProfile, updateDepartment, deleteDepartment, getUnits } from '../../../../services/api';
 import { StyledModal } from './styles';
 import { Department, Unit } from '../types';
@@ -81,41 +81,47 @@ const DepartmentPopup: React.FC<DepartmentPopupProps> = ({ departmentId, onClose
   };
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      await deleteDepartment(departmentId);
-      notification.success({
-        message: 'Sucesso',
-        description: 'Departamento deletado com sucesso',
-        placement: 'top',
-      });
-      onUpdate();
-      onClose();
-    } catch (error) {
-      console.error('Erro ao deletar departamento:', error);
-      if (error instanceof AxiosError && error.response) {
-        const errorMessage = error.response.data.message || 'Erro ao deletar departamento';
-        notification.error({
-          message: 'Erro',
-          description: errorMessage,
-          placement: 'top',
-        });
-      } else if (error instanceof Error) {
-        notification.error({
-          message: 'Erro',
-          description: error.message,
-          placement: 'top',
-        });
-      } else {
-        notification.error({
-          message: 'Erro',
-          description: 'Erro desconhecido ao deletar departamento',
-          placement: 'top',
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
+    StyledModal.confirm({
+      title: 'Confirmar Exclusão',
+      content: 'Tem certeza de que deseja excluir este departamento?',
+      onOk: async () => {
+        setLoading(true);
+        try {
+          await deleteDepartment(departmentId);
+          notification.success({
+            message: 'Sucesso',
+            description: 'Departamento deletado com sucesso',
+            placement: 'top',
+          });
+          onUpdate();
+          onClose();
+        } catch (error) {
+          console.error('Erro ao deletar departamento:', error);
+          if (error instanceof AxiosError && error.response) {
+            const errorMessage = error.response.data.message || 'Erro ao deletar departamento';
+            notification.error({
+              message: 'Erro',
+              description: errorMessage,
+              placement: 'top',
+            });
+          } else if (error instanceof Error) {
+            notification.error({
+              message: 'Erro',
+              description: error.message,
+              placement: 'top',
+            });
+          } else {
+            notification.error({
+              message: 'Erro',
+              description: 'Erro desconhecido ao deletar departamento',
+              placement: 'top',
+            });
+          }
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

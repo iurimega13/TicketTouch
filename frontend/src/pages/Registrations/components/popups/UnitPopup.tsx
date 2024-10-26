@@ -56,38 +56,44 @@ const UnitPopup: React.FC<UnitPopupProps> = ({ unitId, onClose, onUpdate }) => {
   };
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      await deleteUnit(unitId);
-      notification.success({
-        message: 'Unidade Deletada',
-        description: `A unidade ${unit?.name} foi deletada com sucesso.`,
-      });
-      onUpdate();
-      onClose();
-    } catch (error) {
-      if (error instanceof AxiosError && error.response) {
-        console.error('Erro ao deletar unidade:', error.response.data.message);
-        notification.error({
-          message: 'Erro',
-          description: error.response.data.message,
-        });
-      } else if (error instanceof Error) {
-        console.error('Erro ao deletar unidade:', error.message);
-        notification.error({
-          message: 'Erro',
-          description: error.message,
-        });
-      } else {
-        console.error('Erro ao deletar unidade:', error);
-        notification.error({
-          message: 'Erro',
-          description: 'Erro desconhecido ao deletar unidade',
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
+    StyledModal.confirm({
+      title: 'Confirmar Exclusão',
+      content: 'Tem certeza de que deseja excluir esta unidade?',
+      onOk: async () => {
+        setLoading(true);
+        try {
+          await deleteUnit(unitId);
+          notification.success({
+            message: 'Unidade Deletada',
+            description: `A unidade ${unit?.name} foi deletada com sucesso.`,
+          });
+          onUpdate();
+          onClose();
+        } catch (error) {
+          if (error instanceof AxiosError && error.response) {
+            console.error('Erro ao deletar unidade:', error.response.data.message);
+            notification.error({
+              message: 'Erro',
+              description: error.response.data.message,
+            });
+          } else if (error instanceof Error) {
+            console.error('Erro ao deletar unidade:', error.message);
+            notification.error({
+              message: 'Erro',
+              description: error.message,
+            });
+          } else {
+            console.error('Erro ao deletar unidade:', error);
+            notification.error({
+              message: 'Erro',
+              description: 'Erro desconhecido ao deletar unidade',
+            });
+          }
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

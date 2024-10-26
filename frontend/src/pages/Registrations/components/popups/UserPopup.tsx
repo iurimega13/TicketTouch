@@ -147,61 +147,73 @@ const UserPopup: React.FC<UserPopupProps> = ({ userId, onClose, onUpdate }) => {
   };
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      await deleteUser(userId);
-      notification.success({
-        message: 'Sucesso!',
-        description: 'Usuário deletado com sucesso.',
-      });
-      onUpdate();
-      onClose();
-    } catch (error) {
-      console.error('Erro ao deletar usuário:', error);
-      if (error instanceof AxiosError && error.response) {
-        const errorMessage =
-          error.response.data.message || 'Erro ao deletar usuário';
-        notification.error({
-          message: 'Erro!',
-          description: errorMessage,
-        });
-      } else if (error instanceof Error) {
-        notification.error({
-          message: 'Erro!',
-          description: error.message,
-        });
-      } else {
-        notification.error({
-          message: 'Erro!',
-          description: 'Erro desconhecido ao deletar o usuário.',
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
+    StyledModal.confirm({
+      title: 'Confirmar Exclusão',
+      content: 'Tem certeza de que deseja excluir este usuário?',
+      onOk: async () => {
+        setLoading(true);
+        try {
+          await deleteUser(userId);
+          notification.success({
+            message: 'Sucesso!',
+            description: 'Usuário deletado com sucesso.',
+          });
+          onUpdate();
+          onClose();
+        } catch (error) {
+          console.error('Erro ao deletar usuário:', error);
+          if (error instanceof AxiosError && error.response) {
+            const errorMessage =
+              error.response.data.message || 'Erro ao deletar usuário';
+            notification.error({
+              message: 'Erro!',
+              description: errorMessage,
+            });
+          } else if (error instanceof Error) {
+            notification.error({
+              message: 'Erro!',
+              description: error.message,
+            });
+          } else {
+            notification.error({
+              message: 'Erro!',
+              description: 'Erro desconhecido ao deletar o usuário.',
+            });
+          }
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   // Função para resetar a senha do usuário
   const handleResetPassword = async () => {
-    setLoading(true);
-    try {
-      const response = await resetPasswordAuto(userId);
-      const { newPassword } = response;
-      setNewPassword(newPassword);
-      setPasswordModalVisible(true);
-      notification.success({
-        message: 'Sucesso!',
-        description: 'Senha resetada com sucesso.',
-      });
-    } catch (error) {
-      console.error('Erro ao resetar senha:', error);
-      notification.error({
-        message: 'Erro!',
-        description: 'Não foi possível resetar a senha.',
-      });
-    } finally {
-      setLoading(false);
-    }
+    StyledModal.confirm({
+      title: 'Confirmar Reset de Senha',
+      content: 'Tem certeza de que deseja resetar a senha deste usuário?',
+      onOk: async () => {
+        setLoading(true);
+        try {
+          const response = await resetPasswordAuto(userId);
+          const { newPassword } = response;
+          setNewPassword(newPassword);
+          setPasswordModalVisible(true);
+          notification.success({
+            message: 'Sucesso!',
+            description: 'Senha resetada com sucesso.',
+          });
+        } catch (error) {
+          console.error('Erro ao resetar senha:', error);
+          notification.error({
+            message: 'Erro!',
+            description: 'Não foi possível resetar a senha.',
+          });
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

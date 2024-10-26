@@ -212,38 +212,44 @@ const EquipmentPopup: React.FC<EquipmentPopupProps> = ({
   
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      await deleteEquipment(equipmentId);
-      notification.success({
-        message: 'Sucesso',
-        description: 'Equipamento deletado com sucesso',
-      });
-      onUpdate();
-      onClose();
-    } catch (error) {
-      console.error('Erro ao deletar equipamento:', error);
-      if (error instanceof AxiosError && error.response) {
-        const errorMessage =
-          error.response.data.message || 'Erro ao deletar equipamento';
-        notification.error({
-          message: 'Erro',
-          description: errorMessage,
-        });
-      } else if (error instanceof Error) {
-        notification.error({
-          message: 'Erro',
-          description: error.message,
-        });
-      } else {
-        notification.error({
-          message: 'Erro',
-          description: 'Erro desconhecido ao deletar equipamento',
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
+    StyledModal.confirm({
+      title: 'Confirmar Exclusão',
+      content: 'Tem certeza de que deseja excluir este equipamento?',
+      onOk: async () => {
+        setLoading(true);
+        try {
+          await deleteEquipment(equipmentId);
+          notification.success({
+            message: 'Sucesso',
+            description: 'Equipamento deletado com sucesso',
+          });
+          onUpdate();
+          onClose();
+        } catch (error) {
+          console.error('Erro ao deletar equipamento:', error);
+          if (error instanceof AxiosError && error.response) {
+            const errorMessage =
+              error.response.data.message || 'Erro ao deletar equipamento';
+            notification.error({
+              message: 'Erro',
+              description: errorMessage,
+            });
+          } else if (error instanceof Error) {
+            notification.error({
+              message: 'Erro',
+              description: error.message,
+            });
+          } else {
+            notification.error({
+              message: 'Erro',
+              description: 'Erro desconhecido ao deletar equipamento',
+            });
+          }
+        } finally {
+          setLoading(false);
+        }
+      },
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
