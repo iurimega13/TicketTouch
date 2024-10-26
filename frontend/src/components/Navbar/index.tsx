@@ -78,18 +78,18 @@ const Navbar: React.FC<NavbarProps> = ({
       <StyledTitle>TICKETTOUCH</StyledTitle>
 
       <ProfileSection>
-      <Avatar
-        onClick={handleDropdownToggle}
-        src={`${process.env.PUBLIC_URL}/assets/avatar.svg`}
-        alt="User Avatar"
-      />
-      <Dropdown ref={dropdownRef} data-visible={dropdownOpen}>
-        <DropdownItem onClick={() => handleMenuClick('/profile-settings')}>
-          Profile
-        </DropdownItem>
-        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-      </Dropdown>
-    </ProfileSection>
+        <Avatar
+          onClick={handleDropdownToggle}
+          src={`${process.env.PUBLIC_URL}/assets/avatar.svg`}
+          alt="User Avatar"
+        />
+        <Dropdown ref={dropdownRef} data-visible={dropdownOpen}>
+          <DropdownItem onClick={() => handleMenuClick('/profile-settings')}>
+            Profile
+          </DropdownItem>
+          <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+        </Dropdown>
+      </ProfileSection>
 
       <Menu>
         <li onClick={() => handleMenuClick('/home')}>Home</li>
