@@ -51,7 +51,10 @@ export const createUserSettings = async (userId: string, settings: any) => {
 export const getUserSettings = async () => {
   const userId = localStorage.getItem('userId');
   try {
-    const response = await api.get(`/user-settings/${userId}`, getAuthHeaders());
+    const response = await api.get(
+      `/user-settings/${userId}`,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar as configurações do usuário:', error);
@@ -63,7 +66,11 @@ export const getUserSettings = async () => {
 export const updateUserSettings = async (settings: any) => {
   const userId = localStorage.getItem('userId');
   try {
-    const response = await api.put(`/user-settings/${userId}`, settings, getAuthHeaders());
+    const response = await api.put(
+      `/user-settings/${userId}`,
+      settings,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar as configurações do usuário:', error);
@@ -72,12 +79,18 @@ export const updateUserSettings = async (settings: any) => {
 };
 
 // Função para buscar usuários com paginação, filtro e ordenação
-export const getUsersWithPagination = async (page: number, limit: number, filter: string, sortBy: string, sortOrder: 'ASC' | 'DESC') => {
+export const getUsersWithPagination = async (
+  page: number,
+  limit: number,
+  filter: string,
+  sortBy: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
   try {
     const response = await api.get(`/user`, {
       params: { page, limit, filter, sortBy, sortOrder },
     });
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
     throw error;
@@ -88,7 +101,7 @@ export const getUsersWithPagination = async (page: number, limit: number, filter
 export const getUsers = async () => {
   try {
     const response = await api.get(`/user/all`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Erro ao buscar todos os usuários:', error);
     throw error;
@@ -98,7 +111,11 @@ export const getUsers = async () => {
 // Função para resetar a senha do usuário e retornar a nova senha
 export const resetPasswordAuto = async (userId: string) => {
   try {
-    const response = await api.post(`/user/${userId}/reset-password`, null, getAuthHeaders());
+    const response = await api.post(
+      `/user/${userId}/reset-password`,
+      null,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao resetar senha:', error);
@@ -107,8 +124,16 @@ export const resetPasswordAuto = async (userId: string) => {
 };
 
 // Função para alterar a senha do usuário
-export const changePassword = async (username: string, currentPassword: string, newPassword: string) => {
-  return api.post('/user/change-password', { username, currentPassword, newPassword }, getAuthHeaders());
+export const changePassword = async (
+  username: string,
+  currentPassword: string,
+  newPassword: string,
+) => {
+  return api.post(
+    '/user/change-password',
+    { username, currentPassword, newPassword },
+    getAuthHeaders(),
+  );
 };
 
 // Função para atualizar informações do usuário
@@ -119,7 +144,7 @@ export const updateUser = async (userId: string, data: any) => {
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);
     if (axios.isAxiosError(error) && error.response) {
-      console.error('Dados da resposta de erro:', error.response.data); 
+      console.error('Dados da resposta de erro:', error.response.data);
     }
     throw error;
   }
@@ -151,7 +176,11 @@ export const createUser = async (userData: any) => {
 // Função para criar um novo departamento
 export const createDepartment = async (departmentData: any) => {
   try {
-    const response = await api.post('/departments', departmentData, getAuthHeaders());
+    const response = await api.post(
+      '/departments',
+      departmentData,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao criar departamento:', error);
@@ -171,7 +200,13 @@ export const getAllDepartments = async () => {
 };
 
 // Função para buscar todos os departamentos com paginação
-export const getDepartmentsWithPagination = async (page: number, limit: number, filter: string, sortBy: string, sortOrder: 'ASC' | 'DESC') => {
+export const getDepartmentsWithPagination = async (
+  page: number,
+  limit: number,
+  filter: string,
+  sortBy: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
   try {
     const response = await api.get('/departments', {
       params: { page, limit, filter, sortBy, sortOrder },
@@ -182,7 +217,6 @@ export const getDepartmentsWithPagination = async (page: number, limit: number, 
     throw error;
   }
 };
-
 
 // Função para buscar departamentos
 export const getDepartmentsByUnit = async (unitId: string) => {
@@ -200,7 +234,10 @@ export const getDepartmentsByUnit = async (unitId: string) => {
 // Função para buscar o perfil do departamento
 export const getDepartmentProfile = async (departmentId: string) => {
   try {
-    const response = await api.get(`/departments/${departmentId}`, getAuthHeaders());
+    const response = await api.get(
+      `/departments/${departmentId}`,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar perfil do departamento:', error);
@@ -209,9 +246,16 @@ export const getDepartmentProfile = async (departmentId: string) => {
 };
 
 // Função para atualizar o departamento
-export const updateDepartment = async (departmentId: string, departmentData: any) => {
+export const updateDepartment = async (
+  departmentId: string,
+  departmentData: any,
+) => {
   try {
-    const response = await api.put(`/departments/${departmentId}`, departmentData, getAuthHeaders());
+    const response = await api.put(
+      `/departments/${departmentId}`,
+      departmentData,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar departamento:', error);
@@ -254,7 +298,13 @@ export const getUnits = async () => {
 };
 
 // Função para buscar unidades com paginação
-export const getUnitsWithPagination = async (page: number, limit: number, filter: string, sortBy: string, sortOrder: 'ASC' | 'DESC') => {
+export const getUnitsWithPagination = async (
+  page: number,
+  limit: number,
+  filter: string,
+  sortBy: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
   try {
     const response = await api.get('/units', {
       params: { page, limit, filter, sortBy, sortOrder },
@@ -280,7 +330,11 @@ export const getUnitProfile = async (unitId: string) => {
 // Função para atualizar a unidade
 export const updateUnit = async (unitId: string, unitData: any) => {
   try {
-    const response = await api.put(`/units/${unitId}`, unitData, getAuthHeaders());
+    const response = await api.put(
+      `/units/${unitId}`,
+      unitData,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar unidade:', error);
@@ -303,7 +357,11 @@ export const deleteUnit = async (unitId: string) => {
 // Função para criar um novo equipamento
 export const createEquipment = async (equipmentData: any) => {
   try {
-    const response = await api.post('/equipments', equipmentData, getAuthHeaders());
+    const response = await api.post(
+      '/equipments',
+      equipmentData,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao criar equipamento:', error);
@@ -312,7 +370,13 @@ export const createEquipment = async (equipmentData: any) => {
 };
 
 // Função para buscar equipamentos com paginação, filtro e ordenação
-export const getEquipmentsWithPagination = async (page: number, limit: number, filter: string, sortBy: string, sortOrder: 'ASC' | 'DESC') => {
+export const getEquipmentsWithPagination = async (
+  page: number,
+  limit: number,
+  filter: string,
+  sortBy: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
   try {
     const response = await api.get('/equipments', {
       params: { page, limit, filter, sortBy, sortOrder },
@@ -338,7 +402,10 @@ export const getEquipments = async () => {
 // Função para buscar o perfil do equipamento
 export const getEquipmentProfile = async (equipmentId: string) => {
   try {
-    const response = await api.get(`/equipments/${equipmentId}`, getAuthHeaders());
+    const response = await api.get(
+      `/equipments/${equipmentId}`,
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar perfil do equipamento:', error);
@@ -347,11 +414,18 @@ export const getEquipmentProfile = async (equipmentId: string) => {
 };
 
 // Função para atualizar o equipamento
-export const updateEquipment = async (equipmentId: string, equipmentData: any) => {
+export const updateEquipment = async (
+  equipmentId: string,
+  equipmentData: any,
+) => {
   try {
-    const response = await api.put(`/equipments/${equipmentId}`, equipmentData, getAuthHeaders());
+    const response = await api.put(
+      `/equipments/${equipmentId}`,
+      equipmentData,
+      getAuthHeaders(),
+    );
     console.log('response', response);
-    
+
     return response.data;
   } catch (error) {
     console.error('Erro ao atualizar equipamento:', error);
@@ -367,6 +441,60 @@ export const deleteEquipment = async (equipmentId: string) => {
     console.error('Erro ao deletar equipamento:', error);
     throw error;
   }
+};
+
+// ==================== FAQ ====================
+
+// Função para criar uma FAQ
+export const createFAQ = async (question: string, answer: string) => {
+  return api.post('/faqs', { question, answer });
+};
+
+// Função para buscar todas as FAQs sem paginação
+export const getFAQs = async () => {
+  try {
+    const response = await api.get('/faqs/all');
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar todas as FAQs:', error);
+    throw error;
+  }
+};
+
+// Função para buscar FAQs com paginação
+export const getFAQsWithPagination = async (
+  page: number,
+  limit: number,
+  filter: string,
+  sortBy: string,
+  sortOrder: 'ASC' | 'DESC',
+) => {
+  try {
+    const response = await api.get('/faqs', {
+      params: { page, limit, filter, sortBy, sortOrder },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar FAQs:', error);
+    throw error;
+  }
+};
+
+// Função para buscar uma FAQ pelo ID
+export const getFAQById = async (faqId: string) => {
+  const response = await api.get(`/faqs/${faqId}`);
+  return response.data;
+};
+
+// Função para atualizar uma FAQ
+export const updateFAQ = async (faqId: string, data: { question: string; answer: string }) => {
+  return api.put(`/faqs/${faqId}`, data);
+};
+
+
+// Função para deletar uma FAQ
+export const deleteFAQ = async (faqId: string) => {
+  return api.delete(`/faqs/${faqId}`);
 };
 
 // Exportação dos serviços da API
@@ -399,6 +527,12 @@ const apiService = {
   getEquipmentProfile,
   updateEquipment,
   deleteEquipment,
+  createFAQ,
+  getFAQs,
+  getFAQsWithPagination,
+  getFAQById,
+  updateFAQ,
+  deleteFAQ,
 };
 
 export default apiService;
