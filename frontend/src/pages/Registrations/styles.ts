@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Form, Select, Pagination as AntPagination } from 'antd';
+import { Button, Form, Select } from 'antd';
 
 /* Estilos principais do container */
 export const MainContainer = styled.div`
