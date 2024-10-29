@@ -1,3 +1,4 @@
+import { TicketData } from '@/types/types';
 import axios from 'axios';
 
 // Criação da instância axios
@@ -497,6 +498,90 @@ export const deleteFAQ = async (faqId: string) => {
   return api.delete(`/faqs/${faqId}`);
 };
 
+// ==================== TICKETS ====================
+
+// Função para criar um ticket
+export const createTicket = async (ticketData: any) => {
+  try {
+    const response = await api.post(`/tickets`, ticketData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar ticket:', error);
+    throw error;
+  }
+};
+
+// Função para buscar tickets
+export const fetchTickets = async () => {
+  const response = await api.get('/tickets');
+  return response.data;
+};
+
+
+// Função para buscar o último ticket por tipo
+export const fetchLastTicketByType = async (type: 'incident' | 'serviceRequest') => {
+  const response = await api.get(`/tickets/type/last?type=${type}`);
+  return response.data;
+};
+
+// Função para cancelar um ticket
+export const cancelTicket = async (ticketId: string) => {
+  await api.patch(`/tickets/${ticketId}/cancel`);
+};
+
+
+// Função para adicionar um comentário ao ticket
+export const addCommentToTicket = async (ticketId: string, comment: string) => {
+  await api.post(`/tickets/${ticketId}/comments`, { comment });
+};
+
+// Função para adicionar um anexo ao ticket
+export const addAttachmentToTicket = async (ticketId: string, formData: FormData) => {
+  await axios.post(`/attachments/${ticketId}/upload`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+};
+
+
+// Função para criar SLA
+export const createSla = async (slaData: any) => {
+  try {
+    const response = await api.post(`/slas`, slaData);
+    return response.data;
+  } catch (error: any) {
+    console.error('Erro ao criar SLA:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// Função para buscar SLAs
+export const getSlas = async () => {
+  try {
+    const response = await api.get(`/slas`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar SLAs:', error);
+    throw error;
+  }
+};
+
+
+// Função para buscar SLA por ticket
+export const getSlaByTicket = async (ticketId: string) => {
+  try {
+    const response = await api.get(`/slas/ticket/${ticketId}`);
+    return response.data;
+  } catch (error: any) {
+    console.error('Erro ao buscar SLA por ticket:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// ==================== FEEDBACK ====================
+export const submitFeedback = async (ticketId: string, rating: number, comment: string) => {
+  await api.post(`/tickets/${ticketId}/feedback`, { rating, comment });
+};
+
 // Exportação dos serviços da API
 const apiService = {
   loginUser,
@@ -533,6 +618,15 @@ const apiService = {
   getFAQById,
   updateFAQ,
   deleteFAQ,
+  createTicket,
+  fetchTickets,
+  fetchLastTicketByType,
+  cancelTicket,
+  addCommentToTicket,
+  addAttachmentToTicket,
+  submitFeedback,
+  getSlas,
+  createSla,
 };
 
 export default apiService;
