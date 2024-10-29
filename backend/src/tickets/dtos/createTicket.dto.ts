@@ -1,34 +1,41 @@
-import { IsString, IsDate, IsNumber } from "class-validator";
+import { IsString, IsNotEmpty, IsUUID } from "class-validator";
 
 export class CreateTicketDto {
-
     @IsString()
+    @IsNotEmpty()
     title: string;
 
     @IsString()
+    @IsNotEmpty()
     description: string;
 
     @IsString()
     priority: string;
 
     @IsString()
+    @IsNotEmpty()
     status: string;
 
-    @IsNumber()
-    category_id: string;
+    @IsString() 
+    category_name: string;
 
-    @IsNumber()
+    @IsString()
+    @IsNotEmpty()
+    @IsUUID()
     user_id: string;
 
-    @IsNumber()
-    technician_id: string;
-
-    @IsNumber()
+    @IsString()
+    @IsNotEmpty()
+    @IsUUID()
     unit_id: string;
 
-    @IsDate()
-    due_date: Date;
+    @IsString()
+    @IsNotEmpty()
+    @IsUUID()
+    department_id: string;
 
-    @IsNumber()
-    sla_id: number;
+    @IsString()
+    @IsNotEmpty()
+    @IsUUID() 
+    sla_id: string;
 }

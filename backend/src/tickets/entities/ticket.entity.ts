@@ -1,30 +1,28 @@
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { DepartmentEntity } from "src/departments/entities/department.entity";
 import { SlaEntity } from "../../slas/entities/sla.entity";
-import { TicketCategoryEntity } from "../../ticket-categories/entities/ticketCategory.entity";
 import { UnitEntity } from "../../units/entities/unit.entity";
 import { UserEntity } from "../../users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-
-@Entity({name: 'tickets'}) // Define o nome da tabela no banco de dados
+@Entity({name: 'tickets'}) 
 export class TicketEntity {
-    @PrimaryGeneratedColumn('uuid') // Define a coluna como chave primária e auto incrementável
-    id: string; // Define o tipo da coluna como número
+    @PrimaryGeneratedColumn('uuid')
+    id: string; 
 
     @Column({name: 'title', nullable: false})
-    title: string; // Define o tipo da coluna como string
+    title: string; 
 
     @Column({name: 'description', nullable: false})
-    description: string; // Define o tipo da coluna como string
+    description: string; 
     
     @Column({name: 'priority', nullable: false})
-    priority: string; // Define o tipo da coluna como string
+    priority: string; 
 
     @Column({name: 'status', nullable: false})
-    status: string; // Define o tipo da coluna como string
+    status: string; 
 
-    @ManyToOne(() => TicketCategoryEntity)
-    @JoinColumn({name: 'category_id'})
-    category: TicketCategoryEntity;
+    @Column({name: 'category_name', nullable: true})
+    category_name: string; 
     
     @ManyToOne(() => UserEntity)
     @JoinColumn({name: 'user_id'})
@@ -37,17 +35,18 @@ export class TicketEntity {
     @ManyToOne(() => UnitEntity)
     @JoinColumn({name: 'unit_id'})
     unit: UnitEntity;
+
+    @ManyToOne(() => DepartmentEntity)
+    @JoinColumn({name: 'department_id'})
+    department: DepartmentEntity;
     
-    @ManyToOne(() => SlaEntity)
+    @OneToOne(() => SlaEntity)
     @JoinColumn({name: 'sla_id'})
     sla: SlaEntity;
 
-    @Column({name: 'due_date', nullable: false})
-    due_date: Date; // Define o tipo da coluna como data
-
     @CreateDateColumn({name: 'created_at', nullable: false})
-    created_at: Date; // Define o tipo da coluna como data
+    created_at: Date; 
 
     @UpdateDateColumn({name: 'updated_at', nullable: false})
-    updated_at: Date; // Define o tipo da coluna como data
+    updated_at: Date; 
 }

@@ -1,8 +1,8 @@
 import { TicketEntity } from "../entities/ticket.entity";
-import { TicketCategoryEntity } from "../../ticket-categories/entities/ticketCategory.entity";
 import { UnitEntity } from "src/units/entities/unit.entity";
 import { UserEntity } from "src/users/entities/user.entity";
 import { SlaEntity } from "src/slas/entities/sla.entity";
+import { DepartmentEntity } from "src/departments/entities/department.entity";
 
 export class ReturnTicketDto {
     id: string;
@@ -10,12 +10,12 @@ export class ReturnTicketDto {
     description: string;
     priority: string;
     status: string;
-    category: TicketCategoryEntity;
+    category_name: string;
     user: UserEntity;
     technician: UserEntity;
     unit: UnitEntity;
+    Department: DepartmentEntity;
     sla: SlaEntity;
-    due_date: Date;
     created_at: Date;
     updated_at: Date;
 
@@ -25,12 +25,12 @@ export class ReturnTicketDto {
         this.description = ticket.description;
         this.priority = ticket.priority;
         this.status = ticket.status;
-        this.category = ticket.category;
+        this.category_name = ticket.category_name;
         this.user = ticket.user;
         this.technician = ticket.technician;
         this.unit = ticket.unit;
+        this.Department = ticket.department;
         this.sla = ticket.sla;
-        this.due_date = ticket.due_date;
         this.created_at = ticket.created_at;
         this.updated_at = ticket.updated_at;
     }
