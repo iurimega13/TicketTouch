@@ -1,20 +1,21 @@
-import { Module } from '@nestjs/common'; // Importa o decorator Module do NestJS
-import { AppController } from './app.controller'; // Importa o controlador AppController
-import { AppService } from './app.service'; // Importa o serviço AppService
-import { UserModule } from './users/user.module'; // Importa o módulo UserModule
-import { TicketsModule } from './tickets/tickets.module'; // Importa o módulo TicketsModule
-import { NotificationsModule } from './notifications/notifications.module'; // Importa o módulo NotificationsModule
-import { ConfigModule, ConfigService } from '@nestjs/config'; // Importa o módulo ConfigModule do NestJS
-import { TypeOrmModule } from '@nestjs/typeorm'; // Importa o módulo TypeOrmModule do NestJS
-import { EquipmentsModule } from './equipments/equipments.module'; // Importa o módulo EquipmentsModule
-import { AuthModule } from './auth/auth.module'; // Importa o módulo AuthModule
-import { APP_GUARD } from '@nestjs/core';  // Importa o APP_GUARD do NestJS
-// import { RolesGuard } from './guards/roles.guards'; // Importa o guard RolesGuard
-import { TicketCategoriesModule } from './ticket-categories/ticket-categories.module'; // Importa o módulo TicketCategoriesModule
-import { AttachmentsModule } from './attachments/attachments.module'; // Importa o módulo AttachmentsModule
-import { TicketChangesModule } from './ticket-changes/ticket-changes.module'; // Importa o módulo TicketChangesModule
-import { SlasModule } from './slas/slas.module'; // Importa o módulo SlasModule
-import { FaqsModule } from './faqs/faqs.module'; // Importa o módulo FaqsModule
+import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static'; // Importa o ServeStaticModule para servir arquivos estáticos
+import { join } from 'path'; // Importa join para configurar caminhos
+import * as fs from 'fs'; // Importa o fs para manipular o sistema de arquivos
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UserModule } from './users/user.module';
+import { TicketsModule } from './tickets/tickets.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EquipmentsModule } from './equipments/equipments.module';
+import { AuthModule } from './auth/auth.module';
+import { AttachmentsModule } from './attachments/attachments.module';
+import { TicketChangesModule } from './ticket-changes/ticket-changes.module';
+import { SlasModule } from './slas/slas.module';
+import { FaqsModule } from './faqs/faqs.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { UnitsModule } from './units/units.module';
 import { UserSettingsModule } from './user-settings/user-settings.module';
@@ -23,34 +24,54 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
   imports: [
     // Configuração do ambiente e banco de dados
     ConfigModule.forRoot({
-      isGlobal: true, // Define que o módulo é global
-      envFilePath: ['../.env'], // Define o arquivo de ambiente a ser carregado
+      isGlobal: true,
+      envFilePath: ['../.env'],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        database: configService.get('DATABASE_NAME'), // Nome do banco de dados
-        host: configService.get('DATABASE_HOST'), // Host do banco de dados
-        password: configService.get('DATABASE_PASSWORD'), // Senha do banco de dados
-        port: Number(configService.get('DATABASE_PORT')), // Porta do banco de dados
-        username: configService.get('DATABASE_USER'), // Nome de usuário do banco de dados
-        synchronize: false, // Sincroniza automaticamente o esquema do banco de dados com as entidades
-        entities: ['dist/**/*.entity{.ts,.js}'], // Localização das entidades
+        database: configService.get('DATABASE_NAME'),
+        host: configService.get('DATABASE_HOST'),
+        password: configService.get('DATABASE_PASSWORD'),
+        port: Number(configService.get('DATABASE_PORT')),
+        username: configService.get('DATABASE_USER'),
+        synchronize: false,
+        entities: ['dist/**/*.entity{.ts,.js}'],
       }),
     }),
-    
+
+    // Configuração para servir arquivos estáticos a partir da pasta de uploads
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads/tickets'), // Serve os arquivos da pasta `uploads/tickets`
+      serveRoot: '/uploads/tickets', // URL pública para acessar os arquivos
+    }),
+
     // Importação dos módulos
-    UserModule, TicketsModule, NotificationsModule, AuthModule, TicketCategoriesModule, AttachmentsModule, TicketChangesModule, SlasModule, FaqsModule, EquipmentsModule, UnitsModule, DepartmentsModule, UserSettingsModule
+    UserModule,
+    TicketsModule,
+    NotificationsModule,
+    AuthModule,
+    AttachmentsModule,
+    TicketChangesModule,
+    SlasModule,
+    FaqsModule,
+    EquipmentsModule,
+    UnitsModule,
+    DepartmentsModule,
+    UserSettingsModule,
   ],
-  controllers: [AppController], // Controladores fornecidos pelo módulo
-  providers: [AppService,
-    /* {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    }, */
-  ], 
+  controllers: [AppController],
+  providers: [AppService],
 })
 
-export class AppModule { } // Define a classe AppModule como módulo principal da aplicação
+export class AppModule {
+  constructor() {
+    // Verifica e cria o diretório `uploads/tickets` se ele não existir
+    const uploadDir = join(__dirname, '..', 'uploads/tickets');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+  }
+}
