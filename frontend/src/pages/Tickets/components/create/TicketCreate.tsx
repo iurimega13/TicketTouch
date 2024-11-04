@@ -26,7 +26,7 @@ const TicketCreate: React.FC = () => {
     category_name: '',
     user_id: '',
     unit_id: '',
-    department_id: '', 
+    department_id: '',
     sla_id: '',
   };
 
@@ -46,7 +46,7 @@ const TicketCreate: React.FC = () => {
       console.error('Erro: userId não encontrado no localStorage');
       return;
     }
-  
+
     try {
       const userProfile = await getUserProfile(userId);
       setUsername(userProfile.name);
@@ -110,7 +110,6 @@ const TicketCreate: React.FC = () => {
     }
   };
 
-
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewTicket((prevState) => ({
@@ -160,7 +159,8 @@ const TicketCreate: React.FC = () => {
     return (
       newTicket.titleType !== initialTicketState.titleType &&
       newTicket.description !== initialTicketState.description &&
-      (newTicket.titleType === 'incident' || newTicket.category_name !== initialTicketState.category_name) &&
+      (newTicket.titleType === 'incident' ||
+        newTicket.category_name !== initialTicketState.category_name) &&
       newTicket.user_id !== initialTicketState.user_id &&
       newTicket.unit_id !== initialTicketState.unit_id &&
       newTicket.department_id !== initialTicketState.department_id
@@ -169,96 +169,98 @@ const TicketCreate: React.FC = () => {
 
   const handleCreateTicket = async () => {
     if (!validateForm()) {
-        notification.error({
-            message: 'Erro',
-            description: 'Por favor, preencha todos os campos obrigatórios',
-            placement: 'top',
-        });
-        return;
+      notification.error({
+        message: 'Erro',
+        description: 'Por favor, preencha todos os campos obrigatórios',
+        placement: 'top',
+      });
+      return;
     }
 
     const { titleType, ...ticketData } = newTicket;
     const now = new Date();
-    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000); 
+    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000);
 
     try {
-        const lastTicket = await fetchLastTicketByType(titleType);
+      const lastTicket = await fetchLastTicketByType(titleType);
 
-        const nextNumber = lastTicket ? 
-            (parseInt(lastTicket.title.split('-')[1], 10) + 1) : 1; 
+      const nextNumber = lastTicket
+        ? parseInt(lastTicket.title.split('-')[1], 10) + 1
+        : 1;
 
-        const titlePrefix = titleType === 'incident' ? 'INC' : 'SOL';
-        const title = `${titlePrefix}-${String(nextNumber).padStart(4, '0')}`;
+      const titlePrefix = titleType === 'incident' ? 'INC' : 'SOL';
+      const title = `${titlePrefix}-${String(nextNumber).padStart(4, '0')}`;
 
-        let slaData;
-        if (titleType === 'incident') {
-            slaData = {
-                name: `SLA para ${title}`,
-                description: `SLA do chamado: ${title}`,
-                time: '12h', 
-                response_time: 2, 
-                resolution_time: 12, 
-            };
-        } else if (titleType === 'serviceRequest') {
-            slaData = {
-                name: `SLA para ${title}`,
-                description: `SLA do chamado: ${title}`,
-                time: '72h', 
-                response_time: 8, 
-                resolution_time: 72, 
-            };
-        }
-
-        const createdSla = await createSla(slaData);
-
-        const createdTicket = await createTicket({
-            title,
-            ...ticketData,
-            priority: 'Média',
-            status: 'Aberto',
-            sla_id: createdSla.id,
-            type: titleType
-        });
-
-        if (!username) {
-          console.error('Erro: username não carregado');
-          notification.error({
-              message: 'Erro',
-              description: 'Erro ao carregar o nome do usuário',
-              placement: 'top',
-          });
-          return;
-        }
-
-        const changeData = {
-            userId: newTicket.user_id,
-            ticketId: createdTicket.id,
-            changes: [
-              {
-                field: `Abertura`,
-                value: `Chamado aberto por: ${username}`,
-                date: roundedDate.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
-              },
-            ],
+      let slaData;
+      if (titleType === 'incident') {
+        slaData = {
+          name: `SLA para ${title}`,
+          description: `SLA do chamado: ${title}`,
+          time: '12h',
+          response_time: 2,
+          resolution_time: 12,
         };
-        await createChange(changeData);
+      } else if (titleType === 'serviceRequest') {
+        slaData = {
+          name: `SLA para ${title}`,
+          description: `SLA do chamado: ${title}`,
+          time: '72h',
+          response_time: 8,
+          resolution_time: 72,
+        };
+      }
 
-        notification.success({
-            message: 'Sucesso',
-            description: 'Ticket criado com sucesso',
-            placement: 'top',
-        });
-        setNewTicket(initialTicketState);
-    } catch (error) {
-        console.error('Erro ao criar ticket:', error);
+      const createdSla = await createSla(slaData);
+
+      const createdTicket = await createTicket({
+        title,
+        ...ticketData,
+        priority: 'Média',
+        status: 'Aberto',
+        sla_id: createdSla.id,
+        type: titleType,
+      });
+
+      if (!username) {
+        console.error('Erro: username não carregado');
         notification.error({
-            message: 'Erro',
-            description: 'Erro ao criar ticket',
-            placement: 'top',
+          message: 'Erro',
+          description: 'Erro ao carregar o nome do usuário',
+          placement: 'top',
         });
-    }
-};
+        return;
+      }
 
+      const changeData = {
+        userId: newTicket.user_id,
+        ticketId: createdTicket.id,
+        changes: [
+          {
+            field: `Abertura`,
+            value: `Chamado aberto por: ${username}`,
+            date: roundedDate.toLocaleString('pt-BR', {
+              timeZone: 'America/Sao_Paulo',
+            }),
+          },
+        ],
+      };
+      await createChange(changeData);
+
+      notification.success({
+        message: 'Sucesso',
+        description: 'Ticket criado com sucesso',
+        placement: 'top',
+      });
+      setNewTicket(initialTicketState);
+    } catch (error) {
+      console.error('Erro ao criar ticket:', error);
+      notification.error({
+        message: 'Erro',
+        description: 'Erro ao criar ticket',
+        placement: 'top',
+      });
+    }
+  };
 
   return (
     <FormContainer>
@@ -279,16 +281,16 @@ const TicketCreate: React.FC = () => {
         {newTicket.titleType !== 'incident' && (
           <SelectContainer>
             <StyledLabel>Categoria</StyledLabel>
-          <Select
-            style={{ width: '100%' }}
-            value={newTicket.category_name}
-            onChange={(value) => handleSelectChange('category_name', value)}
-            options={[
-              { value: 'acesso', label: 'Acesso' },
-              { value: 'equipamento', label: 'Equipamento' },
-            ]}
-            placeholder="Selecione a categoria"
-          />
+            <Select
+              style={{ width: '100%' }}
+              value={newTicket.category_name}
+              onChange={(value) => handleSelectChange('category_name', value)}
+              options={[
+                { value: 'acesso', label: 'Acesso' },
+                { value: 'equipamento', label: 'Equipamento' },
+              ]}
+              placeholder="Selecione a categoria"
+            />
           </SelectContainer>
         )}
 
@@ -306,10 +308,14 @@ const TicketCreate: React.FC = () => {
             }
             value={newTicket.user_id}
             onChange={(value) => handleSelectChange('user_id', value)}
-            options={Array.isArray(users) ? users.map((user: any) => ({
-              value: user.id,
-              label: user.name,
-            })) : []}
+            options={
+              Array.isArray(users)
+                ? users.map((user: any) => ({
+                    value: user.id,
+                    label: user.name,
+                  }))
+                : []
+            }
             notFoundContent={loadingUsers ? <Spin size="small" /> : null}
           />
         </SelectContainer>
@@ -328,10 +334,14 @@ const TicketCreate: React.FC = () => {
             value={newTicket.unit_id}
             onChange={handleUnitChange}
             tokenSeparators={[',']}
-            options={Array.isArray(units) ? units.map((unit: any) => ({
-              value: unit.id,
-              label: unit.name,
-            })) : []}
+            options={
+              Array.isArray(units)
+                ? units.map((unit: any) => ({
+                    value: unit.id,
+                    label: unit.name,
+                  }))
+                : []
+            }
             notFoundContent={loadingUnits ? <Spin size="small" /> : null}
             title="Unidade"
             placeholder="Selecione a unidade"
@@ -352,10 +362,14 @@ const TicketCreate: React.FC = () => {
             value={newTicket.department_id}
             onChange={handleDepartmentChange}
             tokenSeparators={[',']}
-            options={Array.isArray(departments) ? departments.map((department: any) => ({
-              value: department.id,
-              label: department.name,
-            })) : []}
+            options={
+              Array.isArray(departments)
+                ? departments.map((department: any) => ({
+                    value: department.id,
+                    label: department.name,
+                  }))
+                : []
+            }
             notFoundContent={loadingDepartments ? <Spin size="small" /> : null}
             disabled={!newTicket.unit_id}
             title="Departamento"
@@ -367,7 +381,7 @@ const TicketCreate: React.FC = () => {
         <Textarea
           name="description"
           value={newTicket.description}
-          onChange={handleTextAreaChange} 
+          onChange={handleTextAreaChange}
           title="Descrição"
           placeholder="Digite a descrição do ticket"
         />
