@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Input, Form, notification, List, Progress, Tooltip } from 'antd';
+import {
+  Button,
+  Input,
+  Form,
+  notification,
+  List,
+  Progress,
+  Tooltip,
+} from 'antd';
 import {
   cancelTicket,
   addCommentToTicket,
@@ -8,7 +16,12 @@ import {
   getTicketById,
   getUserProfile,
 } from '../../../../services/api';
-import { ChangesContainer, SlaContainer, StyledModal, StyledSpan } from './styles';
+import {
+  ChangesContainer,
+  SlaContainer,
+  StyledModal,
+  StyledSpan,
+} from './styles';
 
 interface TicketPopupProps {
   visible: boolean;
@@ -36,7 +49,7 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
   const [slaDetails, setSlaDetails] = useState<any>(null);
   const [username, setUsername] = useState<string>('');
   const [extraResponseTime, setExtraResponseTime] = useState<number>(0);
-  const [closingDate, setClosingDate] = useState<Date | null>(null); 
+  const [closingDate, setClosingDate] = useState<Date | null>(null);
 
   const userId = localStorage.getItem('userId');
 
@@ -74,28 +87,29 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     try {
       const changesData = await getChangesByTicketId(ticketId);
       setChanges(changesData);
-  
+
       let additionalTime = 0;
       let foundClosingDate: Date | null = null;
-  
+
       if (Array.isArray(changesData)) {
         changesData.forEach((changeItem) => {
           if (Array.isArray(changeItem.changes)) {
             changeItem.changes.forEach((change: Change) => {
               if (
                 change.field === 'comentário' &&
-                (change.value.includes('admin') || change.value.includes('analista'))
+                (change.value.includes('admin') ||
+                  change.value.includes('analista'))
               ) {
                 if (ticket && ticket.type === 'incidente') {
-                  additionalTime += 1 * 60 * 60 * 1000; 
+                  additionalTime += 1 * 60 * 60 * 1000;
                 } else if (ticket && ticket.type === 'solicitacao') {
                   additionalTime += 4 * 60 * 60 * 1000;
                 }
               }
-  
-              
+
               if (
-                (change.field === 'cancelamento' || change.field === 'fechamento') &&
+                (change.field === 'cancelamento' ||
+                  change.field === 'fechamento') &&
                 change.date
               ) {
                 foundClosingDate = new Date(change.date);
@@ -104,20 +118,19 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
           }
         });
       } else {
-        console.error("Erro: changesData não é um array");
+        console.error('Erro: changesData não é um array');
       }
-  
+
       setExtraResponseTime(additionalTime);
-      setClosingDate(foundClosingDate); 
+      setClosingDate(foundClosingDate);
     } catch (error) {
       notification.error({
         message: 'Erro',
         description: 'Erro ao buscar histórico de atualizações',
       });
-      console.error("Erro ao buscar histórico de mudanças:", error);
+      console.error('Erro ao buscar histórico de mudanças:', error);
     }
   }, [ticketId, ticket]);
-  
 
   useEffect(() => {
     if (visible) {
@@ -135,15 +148,16 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     const effectiveEndDate = closingDate || currentTime;
 
     const responseDeadline = new Date(
-      createdAt.getTime() + slaDetails.response_time * 60 * 60 * 1000 + extraResponseTime
+      createdAt.getTime() +
+        slaDetails.response_time * 60 * 60 * 1000 +
+        extraResponseTime,
     );
     const resolutionDeadline = new Date(
-      createdAt.getTime() + slaDetails.resolution_time * 60 * 60 * 1000
+      createdAt.getTime() + slaDetails.resolution_time * 60 * 60 * 1000,
     );
 
     // 1. Verifica se o ticket está fechado
     if (closingDate) return ' Fechado';
-    
 
     // 2. Verifica se o prazo de resolução foi ultrapassado
     if (effectiveEndDate > resolutionDeadline) return 'Atrasado para resolução';
@@ -174,7 +188,12 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     setLoading(true);
     try {
       const lastChange = changes[changes.length - 1];
-      await addCommentToTicket(lastChange.id, `Cancelou o ticket.`, username, 'cancelamento');
+      await addCommentToTicket(
+        lastChange.id,
+        `Cancelou o ticket.`,
+        username,
+        'cancelamento',
+      );
       await cancelTicket(ticket.id);
       notification.success({
         message: 'Sucesso',
@@ -268,7 +287,9 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
             <p>Status: {calculateSlaStatus()}</p>
             <SlaContainer>
               {responseDeadline && (
-                <Tooltip title={`Prazo de Resposta: ${responseDeadline.toLocaleString()}`}>
+                <Tooltip
+                  title={`Prazo de Resposta: ${responseDeadline.toLocaleString()}`}
+                >
                   <div style={{ marginBottom: '10px' }}>
                     <StyledSpan>Progresso de Resposta:</StyledSpan>
                     <Progress
@@ -280,7 +301,9 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
                 </Tooltip>
               )}
               {resolutionDeadline && (
-                <Tooltip title={`Prazo de Resolução: ${resolutionDeadline.toLocaleString()}`}>
+                <Tooltip
+                  title={`Prazo de Resolução: ${resolutionDeadline.toLocaleString()}`}
+                >
                   <div>
                     <StyledSpan>Progresso de Resolução:</StyledSpan>
                     <Progress
@@ -307,7 +330,9 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
                     <div>
                       {item.changes.map((change: Change, index: number) => (
                         <p key={index}>
-                          {change.date ? `${new Date(change.date).toLocaleString()} - ` : ''}
+                          {change.date
+                            ? `${new Date(change.date).toLocaleString()} - `
+                            : ''}
                           {`${change.value}`}
                         </p>
                       ))}
