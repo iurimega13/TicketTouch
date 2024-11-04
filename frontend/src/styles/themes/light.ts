@@ -5,7 +5,7 @@ const lightTheme = {
     secundary: '#006DAA',
     tertiary: '#CCCCCC',
     background: '#e5f6ff',
-    text: '#F0F0F0',
+    text: '#FFF',
     textAlt: '#000',
     textbackground: '#000',
     textHover: '#FFF',
