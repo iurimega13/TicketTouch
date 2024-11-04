@@ -1,4 +1,3 @@
-import { TicketData } from '@/types/types';
 import axios from 'axios';
 
 // Criação da instância axios
@@ -425,7 +424,6 @@ export const updateEquipment = async (
       equipmentData,
       getAuthHeaders(),
     );
-    console.log('response', response);
 
     return response.data;
   } catch (error) {
@@ -488,10 +486,12 @@ export const getFAQById = async (faqId: string) => {
 };
 
 // Função para atualizar uma FAQ
-export const updateFAQ = async (faqId: string, data: { question: string; answer: string }) => {
+export const updateFAQ = async (
+  faqId: string,
+  data: { question: string; answer: string },
+) => {
   return api.put(`/faqs/${faqId}`, data);
 };
-
 
 // Função para deletar uma FAQ
 export const deleteFAQ = async (faqId: string) => {
@@ -511,37 +511,96 @@ export const createTicket = async (ticketData: any) => {
   }
 };
 
-// Função para buscar tickets
-export const fetchTickets = async () => {
-  const response = await api.get('/tickets');
-  return response.data;
+export const getTicketById = async (ticketId: string) => {
+  try {
+    const response = await api.get(`/tickets/${ticketId}`);
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      'Erro ao buscar ticket:',
+      error.response?.data || error.message,
+    );
+    throw error;
+  }
 };
 
+// Função para buscar tickets com filtro
+export const fetchTickets = async (filter: string) => {
+  try {
+    const response = await api.get('/tickets', {
+      params: { filter },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar tickets:', error);
+    throw error;
+  }
+};
 
 // Função para buscar o último ticket por tipo
-export const fetchLastTicketByType = async (type: 'incident' | 'serviceRequest') => {
+export const fetchLastTicketByType = async (
+  type: 'incident' | 'serviceRequest',
+) => {
   const response = await api.get(`/tickets/type/last?type=${type}`);
   return response.data;
 };
 
 // Função para cancelar um ticket
 export const cancelTicket = async (ticketId: string) => {
-  await api.patch(`/tickets/${ticketId}/cancel`);
+  try {
+    await api.patch(`/tickets/${ticketId}/cancel`);
+  } catch (error) {
+    console.error('Erro ao cancelar o ticket:', error);
+    throw error;
+  }
 };
-
 
 // Função para adicionar um comentário ao ticket
-export const addCommentToTicket = async (ticketId: string, comment: string) => {
-  await api.post(`/tickets/${ticketId}/comments`, { comment });
+export const addCommentToTicket = async (ticketChangeId: string, comment: string, username: string, field: string = 'comentário') => {
+  try {
+    const now = new Date();
+    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000); // Arredonda para o minuto mais próximo
+    const response = await api.put(`/ticket-changes/${ticketChangeId}`, {
+      id: ticketChangeId,
+      changes: [
+        {
+          field,
+          value: `${username}: ${comment}`,
+          date: roundedDate.toISOString(),
+        },
+      ],
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao adicionar comentário ao ticket:', error);
+    throw error;
+  }
 };
 
-// Função para adicionar um anexo ao ticket
-export const addAttachmentToTicket = async (ticketId: string, formData: FormData) => {
-  await axios.post(`/attachments/${ticketId}/upload`, formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  });
+
+// Função para buscar histórico de atualizações por ticket
+export const getChangesByTicketId = async (ticketId: string) => {
+  try {
+    const response = await api.get(`/ticket-changes/${ticketId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar histórico de atualizações:', error);
+    throw error;
+  }
 };
 
+// Função para criar uma mudança (change)
+export const createChange = async (changeData: any) => {
+  try {
+    const response = await api.post('/ticket-changes', changeData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar mudança:', error);
+    throw error;
+  }
+};
+
+// ==================== SLA ====================
 
 // Função para criar SLA
 export const createSla = async (slaData: any) => {
@@ -554,31 +613,28 @@ export const createSla = async (slaData: any) => {
   }
 };
 
-// Função para buscar SLAs
-export const getSlas = async () => {
+// Função para buscar SLA pelo ID do SLA
+export const getSlaByTicket = async (slaId: string) => {
   try {
-    const response = await api.get(`/slas`);
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao buscar SLAs:', error);
-    throw error;
-  }
-};
 
-
-// Função para buscar SLA por ticket
-export const getSlaByTicket = async (ticketId: string) => {
-  try {
-    const response = await api.get(`/slas/ticket/${ticketId}`);
+    const response = await api.get(`/slas/${slaId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
     return response.data;
   } catch (error: any) {
-    console.error('Erro ao buscar SLA por ticket:', error.response?.data || error.message);
+    console.error('Erro ao buscar SLA:', error.response?.data || error.message);
     throw error;
   }
 };
 
 // ==================== FEEDBACK ====================
-export const submitFeedback = async (ticketId: string, rating: number, comment: string) => {
+export const submitFeedback = async (
+  ticketId: string,
+  rating: number,
+  comment: string,
+) => {
   await api.post(`/tickets/${ticketId}/feedback`, { rating, comment });
 };
 
@@ -619,14 +675,15 @@ const apiService = {
   updateFAQ,
   deleteFAQ,
   createTicket,
+  getTicketById,
   fetchTickets,
   fetchLastTicketByType,
   cancelTicket,
   addCommentToTicket,
-  addAttachmentToTicket,
   submitFeedback,
-  getSlas,
   createSla,
+  getSlaByTicket,
+  getChangesByTicketId,
 };
 
 export default apiService;
