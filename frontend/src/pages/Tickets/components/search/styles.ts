@@ -74,3 +74,15 @@ export const CreateForm = styled(Form)`
     margin-bottom: 10px;
   }
 `;
+
+export const SortButton = styled(Button)`
+  color: ${(props) => props.theme.colors.textAlt} !important;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.secundary} !important;
+  }
+
+  &.active {
+    background-color: ${(props) => props.theme.colors.tertiary} !important;
+  }
+`;
