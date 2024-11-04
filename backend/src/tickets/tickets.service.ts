@@ -50,6 +50,11 @@ export class TicketsService {
     return await this.ticketRepository.save(ticket);
   }
 
+  async getAllTickets(filter: string): Promise<TicketEntity[]> {
+    const whereCondition = filter === 'closed' ? { status: 'Fechado' } : { status: 'Aberto' };
+    return await this.ticketRepository.find({ where: whereCondition });
+  }
+
   async getLastTicketByType(type: 'incident' | 'serviceRequest'): Promise<TicketEntity | null> {
     const prefix = type === 'incident' ? 'INC' : 'SOL';
 
@@ -70,19 +75,18 @@ export class TicketsService {
     return await this.ticketRepository.save(ticket);
   }
 
-  async deleteTicket(id: string) {
-    const ticket = await this.ticketRepository.findOneBy({ id });
-    if (!ticket) throw new NotFoundException('Ticket not found');
-    await this.ticketRepository.remove(ticket);
+  async getTicketById(id: string): Promise<TicketEntity> {
+    return await this.ticketRepository.findOne({
+      where: { id },
+      relations: ['user', 'technician', 'unit', 'department', 'sla'],
+    });
   }
 
-  async getAllTickets() {
-    return await this.ticketRepository.find();
-  }
-
-  async getTicketById(id: string) {
+  async cancelTicket(id: string) {
     const ticket = await this.ticketRepository.findOneBy({ id });
     if (!ticket) throw new NotFoundException('Ticket not found');
-    return ticket;
+    ticket.status = 'Fechado';
+    await this.ticketRepository.save(ticket);
   }
+  
 }

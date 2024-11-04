@@ -1,7 +1,21 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query, UsePipes, ValidationPipe, ParseUUIDPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  Query,
+  UsePipes,
+  ValidationPipe,
+  ParseUUIDPipe,
+  Patch,
+} from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dtos/createTicket.dto';
 import { UpdateTicketDto } from './dtos/updateTicket.dto';
+import { ReturnTicketDto } from './dtos/returnTicket.dto';
 
 @Controller('tickets')
 export class TicketsController {
@@ -14,17 +28,20 @@ export class TicketsController {
   }
 
   @Get()
-  async getAllTickets() {
-    return this.ticketsService.getAllTickets();
+  async getAllTickets(@Query('filter') filter: string) {
+    return this.ticketsService.getAllTickets(filter);
   }
 
   @Get(':id')
-  async getTicketById(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.ticketsService.getTicketById(id);
+  async getTicketById(@Param('id') id: string): Promise<ReturnTicketDto> {
+    const ticket = await this.ticketsService.getTicketById(id);
+    return new ReturnTicketDto(ticket);
   }
 
-  @Get('type/last')
-  async getLastTicketByType(@Query('type') type: 'incident' | 'serviceRequest') {
+    @Get('type/last')
+  async getLastTicketByType(
+    @Query('type') type: 'incident' | 'serviceRequest',
+  ) {
     return this.ticketsService.getLastTicketByType(type);
   }
 
@@ -36,8 +53,8 @@ export class TicketsController {
     return this.ticketsService.updateTicket(id, updateTicketDto);
   }
 
-  @Delete(':id')
-  async deleteTicket(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.ticketsService.deleteTicket(id);
+  @Patch(':id/cancel')
+  async cancelTicket(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.ticketsService.cancelTicket(id);
   }
 }
