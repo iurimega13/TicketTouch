@@ -1,6 +1,5 @@
 import { CreateChangeDto } from './dtos/createChange.dto';
-import { ReturnChangeDto } from './dtos/returnChange.dto';
-import { TicketChangeEntity } from './entities/ticketChanges.entity';
+import { UpdateChangeDto } from './dtos/updateChange.dto';
 import { TicketChangesService } from './ticket-changes.service';
 import {
   Body,
@@ -8,6 +7,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -25,5 +25,17 @@ export class TicketChangesController {
   @Get(':ticketId')
   async getChangesByTicketId(@Param('ticketId') ticketId: string) {
     return this.ticketChangesService.getChangesByTicketId(ticketId);
+  }
+
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updateChange(
+    @Param('id') id: string,
+    @Body() updateChangeDto: UpdateChangeDto,
+  ) {
+    console.log('Request received in updateChange with id:', id);
+    console.log('Request body:', updateChangeDto);
+    updateChangeDto.id = id;
+    return this.ticketChangesService.updateChange(updateChangeDto);
   }
 }

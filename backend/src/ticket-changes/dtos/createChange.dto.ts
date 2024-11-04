@@ -1,30 +1,14 @@
-import { IsNotEmpty, IsNumber, IsString, IsSurrogatePair } from "class-validator";
-import { CreateDateColumn } from "typeorm";
-
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateChangeDto {
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    userId: string;
+  @IsNotEmpty()
+  @IsString()
+  ticketId: string;
 
-    @IsNotEmpty()
-    @IsString()
-    ticketId: string;
-
-    @IsNotEmpty()
-    @IsString()
-    change_type: string;
-
-    @IsNotEmpty()
-    @IsString()
-    old_value: string;
-
-    @IsNotEmpty()
-    @IsString()
-    new_value: string;
-
-    @IsNotEmpty()
-    @CreateDateColumn()
-    created_at: Date;
+  @IsNotEmpty()
+  changes: any[];
 }
