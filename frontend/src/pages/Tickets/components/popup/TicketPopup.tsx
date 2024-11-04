@@ -249,6 +249,12 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
           <p>{ticket.title}</p>
         </Form.Item>
 
+        {ticket.category_name && (
+          <Form.Item label="Categoria do Ticket">
+            <p>{ticket.category_name}</p>
+          </Form.Item>
+        )}
+
         <Form.Item label="Descrição do Ticket">
           <p>{ticket.description}</p>
         </Form.Item>
