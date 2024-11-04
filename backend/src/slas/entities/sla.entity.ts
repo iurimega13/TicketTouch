@@ -1,5 +1,5 @@
 import { TicketEntity } from 'src/tickets/entities/ticket.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 
 @Entity('slas')
 export class SlaEntity {
@@ -21,4 +21,7 @@ export class SlaEntity {
 
     @Column({name: 'resolution_time', nullable: false})
     resolution_time: number;
+
+    @CreateDateColumn({name: 'created_at'})
+    created_at: Date;
 }

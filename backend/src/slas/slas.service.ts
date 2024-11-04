@@ -35,5 +35,4 @@ export class SlasService {
   async getSlaById(id: string) {
     return await this.slaRepository.findOneBy({ id });
   }
-  
 }
