@@ -12,7 +12,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EquipmentsModule } from './equipments/equipments.module';
 import { AuthModule } from './auth/auth.module';
-import { AttachmentsModule } from './attachments/attachments.module';
 import { TicketChangesModule } from './ticket-changes/ticket-changes.module';
 import { SlasModule } from './slas/slas.module';
 import { FaqsModule } from './faqs/faqs.module';
@@ -53,7 +52,6 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
     TicketsModule,
     NotificationsModule,
     AuthModule,
-    AttachmentsModule,
     TicketChangesModule,
     SlasModule,
     FaqsModule,
