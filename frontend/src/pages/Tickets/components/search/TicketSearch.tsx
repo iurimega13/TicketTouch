@@ -20,11 +20,19 @@ const TicketSearch: React.FC = () => {
     // Ordenar os tickets
     const sortedTickets = ticketsData.sort((a: any, b: any) => {
       if (filter === 'open') {
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
       } else if (filter === 'closed') {
-        const lastChangeA = a.changes?.find((change: any) => change.field === 'cancelamento')?.date || a.updated_at;
-        const lastChangeB = b.changes?.find((change: any) => change.field === 'cancelamento')?.date || b.updated_at;
-        return new Date(lastChangeB).getTime() - new Date(lastChangeA).getTime();
+        const lastChangeA =
+          a.changes?.find((change: any) => change.field === 'cancelamento')
+            ?.date || a.updated_at;
+        const lastChangeB =
+          b.changes?.find((change: any) => change.field === 'cancelamento')
+            ?.date || b.updated_at;
+        return (
+          new Date(lastChangeB).getTime() - new Date(lastChangeA).getTime()
+        );
       }
       return 0;
     });
@@ -60,7 +68,11 @@ const TicketSearch: React.FC = () => {
 
   return (
     <>
-      <Select defaultValue="open" onChange={handleFilterChange} style={{ marginBottom: '16px' }}>
+      <Select
+        defaultValue="open"
+        onChange={handleFilterChange}
+        style={{ marginBottom: '16px' }}
+      >
         <Option value="open">Tickets Abertos</Option>
         <Option value="closed">Tickets Fechados</Option>
       </Select>
