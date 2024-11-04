@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Select, Button } from 'antd';
+import { Select } from 'antd';
 import { fetchTickets } from '../../../../services/api';
 import TicketPopup from '../popup/TicketPopup';
 import TicketCard from '../card/TicketCard';
