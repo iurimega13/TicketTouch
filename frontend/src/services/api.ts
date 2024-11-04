@@ -556,7 +556,12 @@ export const cancelTicket = async (ticketId: string) => {
 };
 
 // Função para adicionar um comentário ao ticket
-export const addCommentToTicket = async (ticketChangeId: string, comment: string, username: string, field: string = 'comentário') => {
+export const addCommentToTicket = async (
+  ticketChangeId: string,
+  comment: string,
+  username: string,
+  field: string = 'comentário',
+) => {
   try {
     const now = new Date();
     const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000); // Arredonda para o minuto mais próximo
@@ -576,7 +581,6 @@ export const addCommentToTicket = async (ticketChangeId: string, comment: string
     throw error;
   }
 };
-
 
 // Função para buscar histórico de atualizações por ticket
 export const getChangesByTicketId = async (ticketId: string) => {
@@ -616,7 +620,6 @@ export const createSla = async (slaData: any) => {
 // Função para buscar SLA pelo ID do SLA
 export const getSlaByTicket = async (slaId: string) => {
   try {
-
     const response = await api.get(`/slas/${slaId}`, {
       headers: {
         'Content-Type': 'application/json',
