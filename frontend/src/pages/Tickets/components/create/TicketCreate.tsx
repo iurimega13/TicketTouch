@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { notification, Select, Spin, Input } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
+import { notification, Select, Spin } from 'antd';
 import {
   CreateForm,
   FormContainer,
@@ -15,6 +15,8 @@ import {
   getUnits,
   getDepartmentsByUnit,
   createSla,
+  createChange,
+  getUserProfile,
 } from '../../../../services/api';
 
 const TicketCreate: React.FC = () => {
@@ -35,6 +37,27 @@ const TicketCreate: React.FC = () => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingUnits, setLoadingUnits] = useState(false);
   const [loadingDepartments, setLoadingDepartments] = useState(false);
+  const [username, setUsername] = useState<string>('');
+
+  const userId = localStorage.getItem('userId') || '';
+
+  const fetchUserProfile = useCallback(async () => {
+    if (!userId) {
+      console.error('Erro: userId não encontrado no localStorage');
+      return;
+    }
+  
+    try {
+      const userProfile = await getUserProfile(userId);
+      setUsername(userProfile.name);
+    } catch (error) {
+      console.error('Erro ao buscar perfil do usuário:', error);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
   useEffect(() => {
     fetchUsers();
@@ -87,13 +110,6 @@ const TicketCreate: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewTicket((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -162,36 +178,40 @@ const TicketCreate: React.FC = () => {
     }
 
     const { titleType, ...ticketData } = newTicket;
+    const now = new Date();
+    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000); 
 
     try {
-        // Obter o último ticket criado com base no tipo de solicitação
         const lastTicket = await fetchLastTicketByType(titleType);
-        
-        // Log para verificar o título do último ticket
-        console.log('Último ticket recuperado:', lastTicket);
 
-        // Verifica se o último ticket existe e extrai o número
         const nextNumber = lastTicket ? 
-            (parseInt(lastTicket.title.split('-')[1], 10) + 1) : 1; // Adicione a base para parseInt
+            (parseInt(lastTicket.title.split('-')[1], 10) + 1) : 1; 
 
         const titlePrefix = titleType === 'incident' ? 'INC' : 'SOL';
         const title = `${titlePrefix}-${String(nextNumber).padStart(4, '0')}`;
 
-        // Log dos dados do SLA antes de criar
-        const slaData = {
-            name: `SLA para ${title}`,
-            description: `SLA do chamado: ${title}`,
-            time: '24h',
-            response_time: 4,
-            resolution_time: 24,
-        };
-        console.log('Dados do SLA:', slaData);
+        let slaData;
+        if (titleType === 'incident') {
+            slaData = {
+                name: `SLA para ${title}`,
+                description: `SLA do chamado: ${title}`,
+                time: '12h', 
+                response_time: 2, 
+                resolution_time: 12, 
+            };
+        } else if (titleType === 'serviceRequest') {
+            slaData = {
+                name: `SLA para ${title}`,
+                description: `SLA do chamado: ${title}`,
+                time: '72h', 
+                response_time: 8, 
+                resolution_time: 72, 
+            };
+        }
 
-        // Criar SLA primeiro
         const createdSla = await createSla(slaData);
 
-        // Log dos dados do ticket antes de criar
-        console.log('Dados do Ticket:', {
+        const createdTicket = await createTicket({
             title,
             ...ticketData,
             priority: 'Média',
@@ -200,15 +220,28 @@ const TicketCreate: React.FC = () => {
             type: titleType
         });
 
-        // Criar o ticket com o sla_id retornado
-        await createTicket({
-            title,
-            ...ticketData,
-            priority: 'Média',
-            status: 'Aberto',
-            sla_id: createdSla.id,
-            type: titleType
-        });
+        if (!username) {
+          console.error('Erro: username não carregado');
+          notification.error({
+              message: 'Erro',
+              description: 'Erro ao carregar o nome do usuário',
+              placement: 'top',
+          });
+          return;
+        }
+
+        const changeData = {
+            userId: newTicket.user_id,
+            ticketId: createdTicket.id,
+            changes: [
+              {
+                field: `Abertura`,
+                value: `Chamado aberto por: ${username}`,
+                date: roundedDate.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+              },
+            ],
+        };
+        await createChange(changeData);
 
         notification.success({
             message: 'Sucesso',
@@ -245,15 +278,17 @@ const TicketCreate: React.FC = () => {
 
         {newTicket.titleType !== 'incident' && (
           <SelectContainer>
-            <StyledLabel>Nome da Categoria</StyledLabel>
-            <Input
-              type="text"
-              name="category_name"
-              value={newTicket.category_name}
-              onChange={handleInputChange}
-              title="Nome da Categoria"
-              placeholder="Digite o nome da categoria"
-            />
+            <StyledLabel>Categoria</StyledLabel>
+          <Select
+            style={{ width: '100%' }}
+            value={newTicket.category_name}
+            onChange={(value) => handleSelectChange('category_name', value)}
+            options={[
+              { value: 'acesso', label: 'Acesso' },
+              { value: 'equipamento', label: 'Equipamento' },
+            ]}
+            placeholder="Selecione a categoria"
+          />
           </SelectContainer>
         )}
 
