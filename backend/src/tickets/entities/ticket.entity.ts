@@ -3,6 +3,7 @@ import { DepartmentEntity } from "src/departments/entities/department.entity";
 import { SlaEntity } from "../../slas/entities/sla.entity";
 import { UnitEntity } from "../../units/entities/unit.entity";
 import { UserEntity } from "../../users/entities/user.entity";
+import { FeedbackEntity } from "src/user-feedback/entities/feedback.entity";
 
 @Entity({name: 'tickets'}) 
 export class TicketEntity {
@@ -28,7 +29,7 @@ export class TicketEntity {
     @JoinColumn({name: 'user_id'})
     user: UserEntity;
     
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, { nullable: true })
     @JoinColumn({name: 'technician_id'})
     technician: UserEntity;
     
@@ -44,9 +45,13 @@ export class TicketEntity {
     @JoinColumn({name: 'sla_id'})
     sla: SlaEntity;
 
+    @OneToOne(() => FeedbackEntity)
+    @JoinColumn({name: 'feedback_id'})
+    user_feedback: FeedbackEntity;
+
     @CreateDateColumn({name: 'created_at', nullable: false})
     created_at: Date; 
 
-    @UpdateDateColumn({name: 'updated_at', nullable: false})
-    updated_at: Date; 
+    @Column({name: 'closed_at', nullable: true})
+    closed_at: Date;  
 }

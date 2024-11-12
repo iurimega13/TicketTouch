@@ -17,7 +17,7 @@ export class ReturnTicketDto {
   department: DepartmentEntity;
   sla: SlaEntity;
   created_at: Date;
-  updated_at: Date;
+  closed_at: Date;
 
   constructor(ticket: TicketEntity) {
     this.id = ticket.id;
@@ -32,6 +32,6 @@ export class ReturnTicketDto {
     this.department = ticket.department;
     this.sla = ticket.sla;
     this.created_at = ticket.created_at;
-    this.updated_at = ticket.updated_at;
+    this.closed_at = ticket.closed_at;
   }
 }

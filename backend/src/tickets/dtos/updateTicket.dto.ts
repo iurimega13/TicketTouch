@@ -1,36 +1,35 @@
-import { IsString, IsDate, IsNumber, IsOptional } from "class-validator";
+import { IsString, IsDate, IsOptional, IsUUID } from 'class-validator';
 
 export class UpdateTicketDto {
+  @IsString()
+  @IsOptional()
+  priority?: string;
 
-    @IsString()
-    @IsOptional()
-    description?: string;
+  @IsString()
+  @IsOptional()
+  status?: string;
 
-    @IsString()
-    @IsOptional()
-    priority?: string;
+  @IsString()
+  @IsOptional()
+  category_name?: string;
 
-    @IsString()
-    @IsOptional()
-    status?: string;
+  @IsUUID()
+  @IsOptional()
+  technician_id?: string;
 
-    @IsString()
-    @IsOptional()
-    category_name?: string;
+  @IsUUID()
+  @IsOptional()
+  unit_id?: string;
 
-    @IsNumber()
-    @IsOptional()
-    user_id?: string;
+  @IsUUID()
+  @IsOptional()
+  department_id?: string;
 
-    @IsNumber()
-    @IsOptional()
-    technician_id?: string;
+  @IsDate()
+  @IsOptional()
+  closed_at?: Date;
 
-    @IsNumber()
-    @IsOptional()
-    unit_id?: string;
-
-    @IsNumber()
-    @IsOptional()
-    sla_id?: number;
+  @IsUUID()
+  @IsOptional()
+  feedback_id?: string;
 }
