@@ -7,6 +7,7 @@ import { DepartmentEntity } from 'src/departments/entities/department.entity';
 import { UnitEntity } from 'src/units/entities/unit.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { SlaEntity } from 'src/slas/entities/sla.entity';
+import { FeedbackEntity } from 'src/user-feedback/entities/feedback.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SlaEntity } from 'src/slas/entities/sla.entity';
       UnitEntity,
       UserEntity,
       SlaEntity,
+      FeedbackEntity,
     ]),
   ],
   controllers: [TicketsController],
