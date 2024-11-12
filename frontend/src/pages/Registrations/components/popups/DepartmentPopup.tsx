@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { notification, Input, Button, Form, Select, Spin, Modal } from 'antd';
+import { notification, Input, Button, Form, Select, Spin } from 'antd';
 import { getDepartmentProfile, updateDepartment, deleteDepartment, getUnits } from '../../../../services/api';
 import { StyledModal } from './styles';
 import { Department, Unit } from '../types';
