@@ -178,8 +178,6 @@ const TicketCreate: React.FC = () => {
     }
 
     const { titleType, ...ticketData } = newTicket;
-    const now = new Date();
-    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000);
 
     try {
       const lastTicket = await fetchLastTicketByType(titleType);
@@ -230,24 +228,10 @@ const TicketCreate: React.FC = () => {
         });
         return;
       }
-
-      const changeData = {
-        userId: newTicket.user_id,
-        ticketId: createdTicket.id,
-        changes: [
-          {
-            field: `Abertura`,
-            value: `Chamado aberto por: ${username}`,
-            date: roundedDate.toLocaleString('pt-BR', {
-              timeZone: 'America/Sao_Paulo',
-            }),
-          },
-        ],
-      };
       
       await createChange(
         createdTicket.id,
-        `Chamado aberto por: ${username}`,
+        `Chamado aberto`,
         username,
         'Abertura'
       );
@@ -271,20 +255,21 @@ const TicketCreate: React.FC = () => {
   return (
     <FormContainer>
       <CreateForm>
-        <SelectContainer>
+      <SelectContainer>
           <StyledLabel>Tipo de Chamado</StyledLabel>
           <Select
             style={{ width: '100%' }}
             value={newTicket.titleType}
             onChange={(value) => handleSelectChange('titleType', value)}
             options={[
+              { value: '', label: 'Selecione o Tipo de Chamado' },
               { value: 'serviceRequest', label: 'Solicitação de Serviço' },
               { value: 'incident', label: 'Incidente' },
             ]}
           />
         </SelectContainer>
 
-        {newTicket.titleType !== 'incident' && (
+        {newTicket.titleType === 'serviceRequest' && (
           <SelectContainer>
             <StyledLabel>Categoria</StyledLabel>
             <Select
