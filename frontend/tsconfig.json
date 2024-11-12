@@ -20,7 +20,7 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["src"],
+  "include": ["src", "../frontend_old/TicketTableold.tsx"],
   "files": [
     "src/styles/styled.d.ts"
   ]
