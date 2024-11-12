@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { MainContainer, ButtonContainer, StyledButton, LoadingContainer } from './styles';
 import TicketCreate from './components/create/TicketCreate';
 import TicketSearch from './components/search/TicketSearch';
-import { useTheme } from 'styled-components';
 import { Spin } from 'antd';
 
 const Tickets: React.FC = () => {
   const [view, setView] = useState<'create' | 'list' | null>(null);
   const [loading, setLoading] = useState(false);
   const [buttonLoading] = useState(false);
-  const theme = useTheme();
 
   const handleViewChange = (view: 'create' | 'list') => {
     setLoading(true);

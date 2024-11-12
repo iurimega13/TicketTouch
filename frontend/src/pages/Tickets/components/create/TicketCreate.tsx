@@ -244,7 +244,13 @@ const TicketCreate: React.FC = () => {
           },
         ],
       };
-      await createChange(changeData);
+      
+      await createChange(
+        createdTicket.id,
+        `Chamado aberto por: ${username}`,
+        username,
+        'Abertura'
+      );
 
       notification.success({
         message: 'Sucesso',
