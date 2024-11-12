@@ -4,7 +4,7 @@ declare module 'style-components' {
   export interface DefaultTheme {
     colors: {
       primary: string;
-      secondary: string;
+      secundary: string;
       background: string;
       text: string;
       textAlt: string;
