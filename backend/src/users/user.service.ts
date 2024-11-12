@@ -106,6 +106,21 @@ export class UserService {
     }
   }
 
+  async getUsersByUnit(unitId: string): Promise<UserEntity[]> {
+    try {
+      const users = await this.userRepository.find({
+        where: [
+          { role: 'Analyst', unit: { id: unitId } },
+          { role: 'admin', unit: { id: unitId } }
+        ],
+        relations: ['unit', 'department'],
+      });
+      return users;
+    } catch (error) {
+      throw new Error('Erro ao buscar usuários por unidade');
+    }
+  }
+
   async deleteUser(id: string): Promise<void> {
     try {
       const user = await this.findById(id);

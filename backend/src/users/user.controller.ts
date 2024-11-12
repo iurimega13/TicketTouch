@@ -65,6 +65,12 @@ export class UserController {
     return new ReturnUserDto(user);
   }
 
+  @Get('unit/:unitId')
+  async getUsersByUnit(@Param('unitId') unitId: string): Promise<ReturnUserDto[]> {
+    const users = await this.userService.getUsersByUnit(unitId);
+    return users.map(user => new ReturnUserDto(user));
+  }
+
   // Rota para atualizar um usuário
   @UsePipes(ValidationPipe)
   @Put(':id')
