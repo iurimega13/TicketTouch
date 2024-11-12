@@ -108,6 +108,17 @@ export const getUsers = async () => {
   }
 };
 
+// Função para buscar usuários por unidade
+export const getUsersByUnit = async (unitId: string) => {
+  try {
+    const response = await api.get(`/user/unit/${unitId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar usuários por unidade:', error);
+    throw error;
+  }
+};
+
 // Função para resetar a senha do usuário e retornar a nova senha
 export const resetPasswordAuto = async (userId: string) => {
   try {
@@ -511,6 +522,23 @@ export const createTicket = async (ticketData: any) => {
   }
 };
 
+// Função para atualizar um ticket
+export const updateTicket = async (ticketId: string, updateData: any) => {
+  try {
+    const response = await api.put(
+      `/tickets/${ticketId}`,
+      updateData,
+      getAuthHeaders(),
+    );
+    console.log('Ticket atualizado:', response.data);
+    
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar o ticket:', error);
+    throw error;
+  }
+};
+
 export const getTicketById = async (ticketId: string) => {
   try {
     const response = await api.get(`/tickets/${ticketId}`);
@@ -537,6 +565,33 @@ export const fetchTickets = async (filter: string) => {
   }
 };
 
+export const fetchTicketsSupport = async (filter: string, type?: string) => {
+  try {
+    const response = await api.get('/tickets/all', {
+      params: { filter, type },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar tickets:', error);
+    throw error;
+  }
+};
+
+export const fetchTicketsByTechnician = async (
+  technicianId: string,
+  filter: string,
+) => {
+  try {
+    const response = await api.get(`/tickets/technician/${technicianId}`, {
+      params: { filter },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar tickets por técnico:', error);
+    throw error;
+  }
+};
+
 // Função para buscar o último ticket por tipo
 export const fetchLastTicketByType = async (
   type: 'incident' | 'serviceRequest',
@@ -555,7 +610,6 @@ export const cancelTicket = async (ticketId: string) => {
   }
 };
 
-// Função para adicionar um comentário ao ticket
 export const addCommentToTicket = async (
   ticketChangeId: string,
   comment: string,
@@ -563,18 +617,19 @@ export const addCommentToTicket = async (
   field: string = 'comentário',
 ) => {
   try {
-    const now = new Date();
-    const roundedDate = new Date(Math.round(now.getTime() / 60000) * 60000); // Arredonda para o minuto mais próximo
-    const response = await api.put(`/ticket-changes/${ticketChangeId}`, {
-      id: ticketChangeId,
-      changes: [
-        {
-          field,
-          value: `${username}: ${comment}`,
-          date: roundedDate.toISOString(),
-        },
-      ],
-    });
+    const response = await api.put(
+      `/ticket-changes/${ticketChangeId}`,
+      {
+        changes: [
+          {
+            field,
+            value: comment,
+            username, // Adiciona o nome de usuário
+          },
+        ],
+      },
+      getAuthHeaders(),
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao adicionar comentário ao ticket:', error);
@@ -586,6 +641,8 @@ export const addCommentToTicket = async (
 export const getChangesByTicketId = async (ticketId: string) => {
   try {
     const response = await api.get(`/ticket-changes/${ticketId}`);
+    console.log('Histórico de atualizações:', response.data);
+
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar histórico de atualizações:', error);
@@ -594,12 +651,26 @@ export const getChangesByTicketId = async (ticketId: string) => {
 };
 
 // Função para criar uma mudança (change)
-export const createChange = async (changeData: any) => {
+export const createChange = async (
+  ticketId: string,
+  comment: string,
+  username: string,
+  field: string = 'comentário',
+) => {
   try {
-    const response = await api.post('/ticket-changes', changeData);
+
+    const response = await api.post(`/ticket-changes`, {
+      ticketId,
+      changes: [
+        {
+          field,
+          value: `${username}: ${comment}`,
+        },
+      ],
+    });
     return response.data;
   } catch (error) {
-    console.error('Erro ao criar mudança:', error);
+    console.error('Erro ao criar mudança para o ticket:', error);
     throw error;
   }
 };
@@ -687,6 +758,12 @@ const apiService = {
   createSla,
   getSlaByTicket,
   getChangesByTicketId,
+  createChange,
+  fetchTicketsByTechnician,
+  fetchTicketsSupport,
+  updateTicket,
+  getUsersWithPagination,
+  getUsersByUnit,
 };
 
 export default apiService;
