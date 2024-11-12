@@ -1,24 +1,21 @@
-import { IsNotEmpty, IsString, ValidateNested, IsArray } from 'class-validator';
+import { IsString, IsArray, ValidateNested, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
-class ChangeDetail {
-  @IsNotEmpty()
+class Change {
   @IsString()
   field: string;
 
-  @IsNotEmpty()
   @IsString()
   value: string;
+
+  @IsString()
+  @IsOptional()
+  date?: string;
 }
 
 export class UpdateChangeDto {
-  @IsNotEmpty()
-  @IsString()
-  id: string;
-
-  @IsNotEmpty()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => ChangeDetail)
-  changes: ChangeDetail[];
+  @Type(() => Change)
+  changes: Change[];
 }

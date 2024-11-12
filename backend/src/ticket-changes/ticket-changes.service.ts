@@ -19,7 +19,9 @@ export class TicketChangesService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async createChange(createChangeDto: CreateChangeDto): Promise<TicketChangeEntity> {
+  async createChange(
+    createChangeDto: CreateChangeDto,
+  ): Promise<TicketChangeEntity> {
     const { userId, ticketId, changes } = createChangeDto;
     const user = await this.userRepository.findOneBy({ id: userId });
     const ticket = await this.ticketRepository.findOneBy({ id: ticketId });
@@ -42,16 +44,22 @@ export class TicketChangesService {
     return changes.map((change) => new ReturnChangeDto(change));
   }
 
-  async updateChange(updateChangeDto: UpdateChangeDto): Promise<TicketChangeEntity> {
-    const { id, changes } = updateChangeDto;
+  async updateChange(
+    id: string,
+    updateChangeDto: UpdateChangeDto,
+  ): Promise<TicketChangeEntity> {
+    const { changes } = updateChangeDto;
+
+    console.log('ID recebido no serviço:', id); // Verifique o ID aqui
+
     const change = await this.ticketChangeRepository.findOneBy({ id });
-  
     if (!change) {
       throw new NotFoundException(`Change with ID ${id} not found`);
     }
-  
+
+    // Atualize o array de mudanças
     change.changes = [...change.changes, ...changes];
-  
+
     return await this.ticketChangeRepository.save(change);
   }
 }
