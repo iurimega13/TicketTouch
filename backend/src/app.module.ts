@@ -18,6 +18,7 @@ import { FaqsModule } from './faqs/faqs.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { UnitsModule } from './units/units.module';
 import { UserSettingsModule } from './user-settings/user-settings.module';
+import { UserFeedbackModule } from './user-feedback/user-feedback.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { UserSettingsModule } from './user-settings/user-settings.module';
     UnitsModule,
     DepartmentsModule,
     UserSettingsModule,
+    UserFeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
