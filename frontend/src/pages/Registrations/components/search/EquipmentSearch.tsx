@@ -4,7 +4,7 @@ import { getEquipmentsWithPagination } from '../../../../services/api';
 import EquipmentCard from '../cards/EquipmentCard';
 import EquipmentPopup from '../popups/EquipmentPopup';
 import { Equipment } from '../types';
-import { ActionButton } from './styles';
+import { ActionButton, StyledDiv } from './styles';
 
 const { Option } = Select;
 
@@ -104,7 +104,7 @@ const EquipmentSearch: React.FC = () => {
       {loading ? (
         <Spin />
       ) : searchInitiated && equipments.length > 0 ? (
-        <div>
+        <StyledDiv>
           {equipments.map((equipment) => (
             <EquipmentCard
               key={equipment.id}
@@ -112,7 +112,7 @@ const EquipmentSearch: React.FC = () => {
               onDetailsClick={handleDetailsClick}
             />
           ))}
-        </div>
+        </StyledDiv>
       ) : searchInitiated ? (
         <Empty description="Nenhum equipamento encontrado" />
       ) : null}

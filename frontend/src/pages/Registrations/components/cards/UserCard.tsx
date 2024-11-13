@@ -8,6 +8,7 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user, onDetailsClick }) => {
+
   return (
     <Card>
       <CardTitle>

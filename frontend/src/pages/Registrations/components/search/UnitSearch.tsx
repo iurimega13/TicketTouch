@@ -4,7 +4,7 @@ import { getUnitsWithPagination } from '../../../../services/api';
 import UnitCard from '../cards/UnitCard';
 import UnitPopup from '../popups/UnitPopup';
 import { Unit } from '../types';
-import { ActionButton, SortLabel } from './styles';
+import { ActionButton, SortLabel, StyledDiv } from './styles';
 
 const { Option } = Select;
 
@@ -139,7 +139,7 @@ const UnitSearch: React.FC = () => {
       {loading ? (
         <Spin />
       ) : searchInitiated && units.length > 0 ? (
-        <div>
+        <StyledDiv>
           {units.map((unit) => (
             <UnitCard
               key={unit.id}
@@ -147,7 +147,7 @@ const UnitSearch: React.FC = () => {
               onDetailsClick={handleDetailsClick}
             />
           ))}
-        </div>
+        </StyledDiv>
       ) : searchInitiated ? (
         <Empty description="Nenhuma unidade encontrada" />
       ) : null}

@@ -4,7 +4,7 @@ import { getDepartmentsWithPagination } from '../../../../services/api';
 import DepartmentCard from '../cards/DepartmentCard';
 import DepartmentPopup from '../popups/DepartmentPopup';
 import { Department } from '../types';
-import { ActionButton, SortLabel } from './styles';
+import { ActionButton, SortLabel, StyledDiv } from './styles';
 
 const { Option } = Select;
 
@@ -108,7 +108,7 @@ const DepartmentSearch: React.FC = () => {
       {loading ? (
         <Spin />  
       ) : searchInitiated && departments.length > 0 ? (
-        <div>
+        <StyledDiv>
           {departments.map((department) => (
             <DepartmentCard
               key={department.id}
@@ -116,7 +116,7 @@ const DepartmentSearch: React.FC = () => {
               onDetailsClick={handleDetailsClick}  
             />
           ))}
-        </div>
+        </StyledDiv>
       ) : searchInitiated ? (
         <Empty description="Nenhum departamento encontrado" />  
       ) : null}

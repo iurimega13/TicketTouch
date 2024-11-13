@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Pagination, notification, Empty, Input, Spin, Select } from 'antd';
-import { ActionButton, SortLabel } from './styles';
+import { ActionButton, SortLabel, StyledDiv } from './styles';
 import { getUsersWithPagination } from '../../../../services/api';
 import { AxiosError } from 'axios';
 import UserCard from '../cards/UserCard';
@@ -20,6 +20,7 @@ const UserSearch: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC');
   const [loading, setLoading] = useState(false);
   const [searchInitiated, setSearchInitiated] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   // Função para buscar usuários da API
   const fetchUsers = useCallback(
@@ -57,6 +58,7 @@ const UserSearch: React.FC = () => {
         }
       } finally {
         setLoading(false);
+        setForceUpdate((prev) => !prev);
       }
     },
     [],
@@ -156,15 +158,16 @@ const UserSearch: React.FC = () => {
       {loading ? (
         <Spin />
       ) : searchInitiated && users.length > 0 ? (
-        <div>
+        <StyledDiv>
           {users.map((user) => (
               <UserCard
                 key={user.id}
                 user={user}
                 onDetailsClick={handleDetailsClick}
+                
               />
             ))}
-        </div>
+        </StyledDiv>
       ) : searchInitiated ? (
         <Empty description="Nenhum usuário encontrado" />
       ) : null}

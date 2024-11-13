@@ -74,3 +74,7 @@ export const CreateForm = styled(Form)`
     margin-bottom: 10px;
   }
 `;
+
+export const StyledDiv = styled.div`
+background-color: ${(props) => props.theme.colors.primary};
+`;

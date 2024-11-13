@@ -34,6 +34,7 @@ const DepartmentCard: React.FC<DepartmentCardProps> = ({ department, onDetailsCl
   }, [department.unit_id]); // Chama a função toda vez que o ID da unidade muda
 
   return (
+    
     <Card>
       <CardTitle>
         <p>Nome: {department.name}</p>
