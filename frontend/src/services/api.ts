@@ -530,7 +530,6 @@ export const updateTicket = async (ticketId: string, updateData: any) => {
       updateData,
       getAuthHeaders(),
     );
-    console.log('Ticket atualizado:', response.data);
     
     return response.data;
   } catch (error) {
@@ -641,7 +640,6 @@ export const addCommentToTicket = async (
 export const getChangesByTicketId = async (ticketId: string) => {
   try {
     const response = await api.get(`/ticket-changes/${ticketId}`);
-    console.log('Histórico de atualizações:', response.data);
 
     return response.data;
   } catch (error) {
@@ -704,12 +702,26 @@ export const getSlaByTicket = async (slaId: string) => {
 };
 
 // ==================== FEEDBACK ====================
-export const submitFeedback = async (
-  ticketId: string,
-  rating: number,
-  comment: string,
-) => {
-  await api.post(`/tickets/${ticketId}/feedback`, { rating, comment });
+// Função para criar um feedback
+export const createFeedback = async (feedbackData: any) => {
+  try {
+    const response = await api.post(`/user-feedback`, feedbackData, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar feedback:', error);
+    throw error;
+  }
+};
+
+// Função para obter feedback de um ticket
+export const getFeedbackByTicketId = async (ticketId: string) => {
+  try {
+    const response = await api.get(`/user-feedback/${ticketId}`, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao obter feedback:', error);
+    throw error;
+  }
 };
 
 // Exportação dos serviços da API
@@ -754,7 +766,8 @@ const apiService = {
   fetchLastTicketByType,
   cancelTicket,
   addCommentToTicket,
-  submitFeedback,
+  createFeedback,
+  getFeedbackByTicketId,
   createSla,
   getSlaByTicket,
   getChangesByTicketId,
