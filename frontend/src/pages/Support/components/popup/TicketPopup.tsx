@@ -23,6 +23,7 @@ import {
   updateTicket,
   getUsersByUnit,
   createChange,
+  getFeedbackByTicketId,
 } from '../../../../services/api';
 import {
   ChangesContainer,
@@ -31,6 +32,7 @@ import {
   StyledSpan,
 } from './styles';
 import { Change } from '../../../../types/types';
+import TicketFeedback from '../feedback/ticketFeedback';
 
 const { Option } = Select;
 
@@ -66,6 +68,9 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
   const [loadingUnits, setLoadingUnits] = useState(false);
   const [loadingDepartments, setLoadingDepartments] = useState(false);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [showFeedback, setShowFeedback] = useState<boolean>(false);
+  const [feedbackExists, setFeedbackExists] = useState<boolean>(false);
+  const [loadingFeedback, setLoadingFeedback] = useState<boolean>(false);
 
   const userId = localStorage.getItem('userId');
 
@@ -93,13 +98,13 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
         (user: any) => user.role === 'admin' || user.role === 'analista',
       );
       setUsers(filteredUsers);
-      return filteredUsers.length > 0; 
+      return filteredUsers.length > 0;
     } catch (error) {
       notification.error({
         message: 'Erro',
         description: 'Erro ao buscar usuários',
       });
-      return false; 
+      return false;
     } finally {
       setLoadingUsers(false);
     }
@@ -125,13 +130,13 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     try {
       const response = await getDepartmentsByUnit(unitId);
       const departmentsData = response.data;
-  
+
       if (!Array.isArray(departmentsData) || departmentsData.length === 0) {
         setDepartments([]);
-        return false; 
+        return false;
       } else {
         setDepartments(departmentsData);
-        return true; 
+        return true;
       }
     } catch (error) {
       notification.error({
@@ -139,7 +144,7 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
         description: 'Erro ao buscar departamentos',
       });
       console.error('Erro ao buscar departamentos:', error);
-      return false; 
+      return false;
     } finally {
       setLoadingDepartments(false);
     }
@@ -204,6 +209,23 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     }
   }, [ticketId]);
 
+  const fetchFeedback = useCallback(async () => {
+    try {
+      const feedbackData = await getFeedbackByTicketId(ticketId);
+      if (feedbackData) {
+        setFeedbackExists(true);
+        return feedbackData;
+      } else {
+        setFeedbackExists(false);
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro ao buscar feedback:', error);
+      setFeedbackExists(false);
+      return null;
+    }
+  }, [ticketId]);
+
   useEffect(() => {
     if (visible && ticketId && !dataFetched) {
       fetchUserProfile();
@@ -229,115 +251,126 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
     dataFetched,
     fetchDepartments,
     ticket?.unit?.id,
+    ticket?.status,
   ]);
 
   const handleFieldChange = async (field: string, value: any) => {
-  if (field === 'unit_id') {
-    if (value !== ticket.unit?.id) {
-      setUpdatedFields((prevFields) => ({
-        ...prevFields,
-        unit_id: value,
-        department_id: null,
-        technician_id: null,
-      }));
-
-      const hasDepartments = await fetchDepartments(value);
-      const hasValidUsers = await fetchUsers(value);
-
-      if (!hasDepartments || !hasValidUsers) {
-        notification.warning({
-          message: 'Unidade Inválida',
-          description: 'A unidade selecionada não possui departamentos ou usuários adequados. Por favor, selecione outra unidade.',
-        });
+    if (field === 'unit_id') {
+      if (value !== ticket.unit?.id) {
         setUpdatedFields((prevFields) => ({
           ...prevFields,
-          unit_id: null, 
+          unit_id: value,
+          department_id: null,
+          technician_id: null,
         }));
-      }
-    } else {
-      setUpdatedFields((prevFields) => ({ ...prevFields, unit_id: value }));
-    }
-  } else if (field === 'status' && value === 'Aberto') {
-    setUpdatedFields((prevFields) => ({
-      ...prevFields,
-      status: value,
-      technician_id: null,
-    }));
-  } else {
-    setUpdatedFields((prevFields) => ({ ...prevFields, [field]: value }));
-  }
-};
 
+        const hasDepartments = await fetchDepartments(value);
+        const hasValidUsers = await fetchUsers(value);
 
-const handleUpdateTicket = async () => {
-  setLoading(true);
-  try {
-    // Filtra apenas os campos que foram alterados
-    const { fieldsToUpdate, fieldsDescription } = Object.keys(updatedFields).reduce(
-      (acc, key) => {
-        if (key === 'technician_id') {
-          acc.fieldsToUpdate['technician_id'] = updatedFields[key];
-          acc.fieldsDescription['responsável'] = formatFieldValue(key, updatedFields[key]);
-        } else if (key === 'unit_id') {
-          const unit = units.find((unit) => unit.id === updatedFields[key]);
-          acc.fieldsToUpdate['unit_id'] = updatedFields[key];
-          acc.fieldsDescription['unidade'] = unit ? unit.name : 'Unidade não encontrada';
-        } else if (key === 'department_id') {
-          const department = departments.find((dept) => dept.id === updatedFields[key]);
-          acc.fieldsToUpdate['department_id'] = updatedFields[key];
-          acc.fieldsDescription['departamento'] = department ? department.name : 'Departamento não encontrado';
-        } else if (updatedFields[key] !== ticket[key]) {
-          acc.fieldsToUpdate[key] = updatedFields[key];
-          acc.fieldsDescription[key] = updatedFields[key];
+        if (!hasDepartments || !hasValidUsers) {
+          notification.warning({
+            message: 'Unidade Inválida',
+            description:
+              'A unidade selecionada não possui departamentos ou usuários adequados. Por favor, selecione outra unidade.',
+          });
+          setUpdatedFields((prevFields) => ({
+            ...prevFields,
+            unit_id: null,
+          }));
         }
-        return acc;
-      },
-      { fieldsToUpdate: {}, fieldsDescription: {} } as { fieldsToUpdate: { [key: string]: any }, fieldsDescription: { [key: string]: any } },
-    );
-
-    if (Object.keys(fieldsToUpdate).length === 0) {
-      notification.info({
-        message: 'Nenhuma alteração',
-        description: 'Nenhuma alteração foi detectada para atualizar.',
-      });
-      setLoading(false);
-      return;
+      } else {
+        setUpdatedFields((prevFields) => ({ ...prevFields, unit_id: value }));
+      }
+    } else if (field === 'status' && value === 'Aberto') {
+      setUpdatedFields((prevFields) => ({
+        ...prevFields,
+        status: value,
+        technician_id: null,
+      }));
+    } else {
+      setUpdatedFields((prevFields) => ({ ...prevFields, [field]: value }));
     }
+  };
 
-    // Cria a descrição das mudanças seguindo o padrão especificado
-    const changesDescription = Object.entries(fieldsDescription)
-      .map(
-        ([key, value]) =>
-          `${fieldLabels[key] || key} atualizado para ${value};`,
-      )
-      .join('\n');
+  const handleUpdateTicket = async () => {
+    setLoading(true);
+    try {
+      const { fieldsToUpdate, fieldsDescription } = Object.keys(
+        updatedFields,
+      ).reduce(
+        (acc, key) => {
+          if (key === 'technician_id') {
+            acc.fieldsToUpdate['technician_id'] = updatedFields[key];
+            acc.fieldsDescription['responsável'] = formatFieldValue(
+              key,
+              updatedFields[key],
+            );
+          } else if (key === 'unit_id') {
+            const unit = units.find((unit) => unit.id === updatedFields[key]);
+            acc.fieldsToUpdate['unit_id'] = updatedFields[key];
+            acc.fieldsDescription['unidade'] = unit
+              ? unit.name
+              : 'Unidade não encontrada';
+          } else if (key === 'department_id') {
+            const department = departments.find(
+              (dept) => dept.id === updatedFields[key],
+            );
+            acc.fieldsToUpdate['department_id'] = updatedFields[key];
+            acc.fieldsDescription['departamento'] = department
+              ? department.name
+              : 'Departamento não encontrado';
+          } else if (updatedFields[key] !== ticket[key]) {
+            acc.fieldsToUpdate[key] = updatedFields[key];
+            acc.fieldsDescription[key] = updatedFields[key];
+          }
+          return acc;
+        },
+        { fieldsToUpdate: {}, fieldsDescription: {} } as {
+          fieldsToUpdate: { [key: string]: any };
+          fieldsDescription: { [key: string]: any };
+        },
+      );
 
-    // Atualiza o ticket com os campos modificados
-    await updateTicket(ticket.id, fieldsToUpdate);
+      if (Object.keys(fieldsToUpdate).length === 0) {
+        notification.info({
+          message: 'Nenhuma alteração',
+          description: 'Nenhuma alteração foi detectada para atualizar.',
+        });
+        setLoading(false);
+        return;
+      }
 
-    // Registra a alteração com a descrição detalhada
-    await createChange(
-      ticket.id,
-      changesDescription,
-      username,
-      'atualização',
-    );
+      const changesDescription = Object.entries(fieldsDescription)
+        .map(
+          ([key, value]) =>
+            `${fieldLabels[key] || key} atualizado para ${value};`,
+        )
+        .join('\n');
 
-    notification.success({
-      message: 'Sucesso',
-      description: 'Ticket atualizado com sucesso',
-    });
-    onClose();
-  } catch (error) {
-    notification.error({
-      message: 'Erro',
-      description: 'Erro ao atualizar o ticket',
-    });
-    console.error('Erro ao atualizar o ticket:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+      await updateTicket(ticket.id, fieldsToUpdate);
+
+      await createChange(
+        ticket.id,
+        changesDescription,
+        username,
+        'atualização',
+      );
+
+      notification.success({
+        message: 'Sucesso',
+        description: 'Ticket atualizado com sucesso',
+      });
+      onClose();
+    } catch (error) {
+      notification.error({
+        message: 'Erro',
+        description: 'Erro ao atualizar o ticket',
+      });
+      console.error('Erro ao atualizar o ticket:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCancelTicket = async () => {
     setLoading(true);
@@ -348,6 +381,7 @@ const handleUpdateTicket = async () => {
         description: 'Ticket cancelado com sucesso',
       });
       onTicketCancelled();
+      setConfirmCancelVisible(false);
     } catch (error) {
       notification.error({
         message: 'Erro',
@@ -355,7 +389,6 @@ const handleUpdateTicket = async () => {
       });
     } finally {
       setLoading(false);
-      setConfirmCancelVisible(false);
     }
   };
 
@@ -368,16 +401,11 @@ const handleUpdateTicket = async () => {
     }
 
     try {
-      // Cria a descrição da mudança para o comentário
       const commentDescription = `${username}: ${comment}`;
 
-      // Envia o comentário para o ticket
       const lastChange = changes[changes.length - 1];
       const targetId = lastChange?.id || ticket.id;
 
-      console.log(`Enviando comentário: "${comment}" para o ID: ${targetId}`);
-
-      // Adiciona o comentário ao ticket
       await addCommentToTicket(
         targetId,
         commentDescription,
@@ -385,7 +413,6 @@ const handleUpdateTicket = async () => {
         'comentário',
       );
 
-      // Registra a alteração com a descrição do comentário
       await createChange(targetId, commentDescription, username, 'comentário');
 
       notification.success({
@@ -393,7 +420,6 @@ const handleUpdateTicket = async () => {
         description: 'Comentário adicionado com sucesso',
       });
 
-      // Limpa o campo de comentário e refaz a busca por mudanças
       setComment('');
       fetchChanges();
     } catch (error) {
@@ -421,16 +447,12 @@ const handleUpdateTicket = async () => {
       createdAt.getTime() + slaDetails.resolution_time * 60 * 60 * 1000,
     );
 
-    // 1. Verifica se o ticket está fechado
     if (closingDate) return 'Fechado';
 
-    // 2. Verifica se o prazo de resolução foi ultrapassado
     if (effectiveEndDate > resolutionDeadline) return 'Atrasado para resolução';
 
-    // 3. Verifica se o prazo de resposta foi ultrapassado
     if (effectiveEndDate > responseDeadline) return 'Atrasado para resposta';
 
-    // 4. Caso contrário, está dentro do prazo
     return 'Dentro do Prazo';
   };
 
@@ -474,7 +496,6 @@ const handleUpdateTicket = async () => {
     return null;
   }
 
-  // Labels dos campos traduzidos para exibição
   const fieldLabels: Record<string, string> = {
     technician_id: 'responsável',
     status: 'status',
@@ -484,7 +505,6 @@ const handleUpdateTicket = async () => {
     Abertura: 'Abertura',
   };
 
-  // Formata o valor de um campo, com busca pelo nome do responsável
   const formatFieldValue = (field: string, value: any) => {
     if (field === 'technician_id') {
       const technician = users.find((user) => user.id === value);
@@ -595,7 +615,7 @@ const handleUpdateTicket = async () => {
         >
           <Select
             showSearch
-            allowClear 
+            allowClear
             style={{ width: '100%' }}
             placeholder="Selecione um Responsável"
             optionFilterProp="label"
@@ -604,7 +624,7 @@ const handleUpdateTicket = async () => {
                 .toLowerCase()
                 .localeCompare(String(optionB?.label ?? '').toLowerCase())
             }
-            value={updatedFields.technician_id ?? null} 
+            value={updatedFields.technician_id ?? null}
             onChange={(value) => handleFieldChange('technician_id', value)}
             options={[
               { value: null, label: 'Vazio' },
@@ -690,8 +710,6 @@ const handleUpdateTicket = async () => {
                                   )}`
                                 : ` ${change.value}`}
                             </span>
-
-                            
                           </p>
                         ))}
                     </div>
@@ -731,7 +749,7 @@ const handleUpdateTicket = async () => {
               </Button>
               <Button
                 danger
-                onClick={handleCancelTicket}
+                onClick={() => setConfirmCancelVisible(true)}
                 loading={loading}
                 style={{ marginRight: '10px' }}
               >
@@ -743,25 +761,53 @@ const handleUpdateTicket = async () => {
           <Form.Item style={{ textAlign: 'right', marginTop: '20px' }}>
             <Button
               type="primary"
-              onClick={() => console.log('Feedback button clicked')}
+              onClick={async () => {
+                if (ticket.status === 'Fechado') {
+                  if (!loadingFeedback) {
+                    setLoadingFeedback(true);
+                    const feedbackData = await fetchFeedback();
+                    setLoadingFeedback(false);
+                    if (feedbackData) {
+                      setShowFeedback(true);
+                    } else {
+                      notification.info({
+                        message: 'Informação',
+                        description: 'Ainda não há feedback para este ticket.',
+                      });
+                    }
+                  }
+                } else {
+                  notification.info({
+                    message: 'Informação',
+                    description:
+                      'O feedback só pode ser visualizado quando o ticket estiver fechado.',
+                  });
+                }
+              }}
+              loading={loadingFeedback}
               style={{ marginRight: '10px' }}
             >
-              Feedback
+              Ver Feedback
             </Button>
           </Form.Item>
         )}
-
-        <Modal
-          title="Confirmação"
-          open={confirmCancelVisible}
-          onOk={handleCancelTicket}
-          onCancel={() => setConfirmCancelVisible(false)}
-          okText="Sim"
-          cancelText="Não"
-        >
-          <p>Tem certeza que deseja cancelar este ticket?</p>
-        </Modal>
       </Form>
+      <Modal
+        title="Confirmação"
+        open={confirmCancelVisible}
+        onOk={handleCancelTicket}
+        onCancel={() => setConfirmCancelVisible(false)}
+        okText="Sim"
+        cancelText="Não"
+      >
+        <p>Tem certeza que deseja cancelar este ticket?</p>
+      </Modal>
+      {showFeedback && (
+        <TicketFeedback
+          ticketId={ticketId}
+          onClose={() => setShowFeedback(false)}
+        />
+      )}
     </StyledModal>
   );
 };
