@@ -7,6 +7,7 @@ import { UserFeedbackService } from './user-feedback.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([FeedbackEntity]),
+    
   ],
   controllers: [UserFeedbackController],
   providers: [UserFeedbackService],
