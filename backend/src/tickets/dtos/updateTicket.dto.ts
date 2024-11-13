@@ -28,8 +28,4 @@ export class UpdateTicketDto {
   @IsDate()
   @IsOptional()
   closed_at?: Date;
-
-  @IsUUID()
-  @IsOptional()
-  feedback_id?: string;
 }

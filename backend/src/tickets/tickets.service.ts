@@ -60,8 +60,14 @@ export class TicketsService {
   }
 
   async getAllTickets(filter: string): Promise<TicketEntity[]> {
-    const whereCondition =
-      filter === 'closed' ? { status: 'Fechado' } : { status: 'Aberto' };
+    const whereCondition: any = {};
+
+    if (filter === 'closed') {
+      whereCondition.status = 'Fechado';
+    } else if (filter === 'open') {
+      whereCondition.status = In(['Aberto', 'Em Andamento']);
+    }
+
     console.log('getAllTickets - Condição de busca:', whereCondition);
     return await this.ticketRepository.find({ where: whereCondition });
   }
@@ -167,12 +173,7 @@ export class TicketsService {
         ? await this.departmentRepository.findOneBy({ id: updateTicketDto.department_id })
         : null;
     }
-  
-    if (updateTicketDto.feedback_id !== undefined) {
-      ticket.user_feedback = updateTicketDto.feedback_id
-        ? await this.feedbackRepository.findOneBy({ id: updateTicketDto.feedback_id })
-        : null;
-    }
+
   
     Object.assign(ticket, updateTicketDto);
     const updatedTicket = await this.ticketRepository.save(ticket);
