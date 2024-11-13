@@ -42,13 +42,11 @@ import { UserFeedbackModule } from './user-feedback/user-feedback.module';
       }),
     }),
 
-    // Configuração para servir arquivos estáticos a partir da pasta de uploads
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads/tickets'), // Serve os arquivos da pasta `uploads/tickets`
-      serveRoot: '/uploads/tickets', // URL pública para acessar os arquivos
+      rootPath: join(__dirname, '..', 'uploads/tickets'),
+      serveRoot: '/uploads/tickets',
     }),
 
-    // Importação dos módulos
     UserModule,
     TicketsModule,
     NotificationsModule,
@@ -68,10 +66,5 @@ import { UserFeedbackModule } from './user-feedback/user-feedback.module';
 
 export class AppModule {
   constructor() {
-    // Verifica e cria o diretório `uploads/tickets` se ele não existir
-    const uploadDir = join(__dirname, '..', 'uploads/tickets');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
   }
 }
