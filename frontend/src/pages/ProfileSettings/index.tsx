@@ -29,7 +29,7 @@ const ProfileSettings: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [form] = Form.useForm();
-  const redirectToLogin = useNavigate(); // Para redirecionar após o logout
+  const redirectToLogin = useNavigate();
 
   useEffect(() => {
     const fetchUserProfileAndSettings = async () => {
@@ -56,18 +56,6 @@ const ProfileSettings: React.FC = () => {
     fetchUserProfileAndSettings();
   }, []);
 
-  const toggleNotifications = async () => {
-    try {
-      const updatedSettings = {
-        ...settings,
-        notifications_settings: !settings.notifications_settings,
-      };
-      await updateUserSettings(updatedSettings);
-      setSettings(updatedSettings);
-    } catch (error) {
-      console.error('Erro ao atualizar configurações de notificações:', error);
-    }
-  };
 
   const changeTheme = async () => {
     try {
@@ -77,13 +65,12 @@ const ProfileSettings: React.FC = () => {
       };
       await updateUserSettings(updatedSettings);
       setSettings(updatedSettings);
-      window.location.reload(); // Recarrega a página para aplicar o novo tema
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao atualizar tema:', error);
     }
   };
 
-  // Função para validar a nova senha
   const validatePassword = (password: string) => {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -100,12 +87,10 @@ const ProfileSettings: React.FC = () => {
     );
   };
 
-  // Type guard para verificar se o erro tem uma resposta HTTP
   const isAxiosError = (error: any): error is { response: { status: number, data: { message: string } } } => {
     return error && error.response && typeof error.response.status === 'number';
   };
 
-  // Função para mudar a senha
   const handleChangePassword = async (values: {
     currentPassword: string;
     newPassword: string;
@@ -140,12 +125,10 @@ const ProfileSettings: React.FC = () => {
     }
   };
 
-  // Abrir o modal de alteração de senha
   const openPasswordModal = () => {
     setPasswordModalVisible(true);
   };
 
-  // Fechar o modal
   const closePasswordModal = () => {
     setPasswordModalVisible(false);
     form.resetFields();
@@ -174,17 +157,6 @@ const ProfileSettings: React.FC = () => {
 
         <SectionTitle>Configurações</SectionTitle>
         <Grid>
-          <GridItem>
-            <Label>Notificações:</Label>
-            <Info>
-              {settings.notifications_settings ? 'Ativadas' : 'Desativadas'}
-            </Info>
-            <ButtonContainer>
-              <Button type="primary" onClick={toggleNotifications}>
-                {settings.notifications_settings ? 'Desativar' : 'Ativar'}
-              </Button>
-            </ButtonContainer>
-          </GridItem>
           <GridItem>
             <Label>Tema:</Label>
             <Info>{settings.theme === 'light' ? 'Claro' : 'Escuro'}</Info>
