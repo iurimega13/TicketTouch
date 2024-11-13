@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Title } from './styles'; // Importe os estilos conforme necessário
+import { Container, Title, Message, Button } from './styles'; // Importe os estilos conforme necessário
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ const NotFound: React.FC = () => {
   return (
     <Container>
       <Title>Página Não Encontrada</Title>
-      <p>A página que você está procurando não existe.</p>
-      <button onClick={handleGoHome}>Voltar para Home</button>
+      <Message>A página que você está procurando não existe.</Message>
+      <Button onClick={handleGoHome}>Voltar para Home</Button>
     </Container>
   );
 };
