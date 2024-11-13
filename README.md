@@ -28,24 +28,19 @@ Desenvolver um sistema de gerenciamento de tickets de suporte para melhorar a ef
 #### 3.2 Objetivos Específicos:
 - [x] Levantar os requisitos do sistema.
 - [x] Projetar a arquitetura do sistema, incluindo a estrutura de banco de dados e interfaces de usuário.
-- [ ] Implementar as funcionalidades do sistema seguindo as melhores práticas de engenharia de software.
-- [ ] Realizar testes para garantir a qualidade e confiabilidade do sistema.
-- [ ] Implantar o sistema em ambiente de produção.
-- [ ] Avaliar o desempenho do sistema após a implantação e realizar ajustes conforme necessário.
+- [x] Implementar as funcionalidades do sistema seguindo as melhores práticas de engenharia de software.
+- [x] Realizar testes para garantir a qualidade e confiabilidade do sistema.
 
 ### 4. ESPECIFICAÇÕES INICIAIS DO SOFTWARE
 #### 4.1 Escopo do Produto
 O escopo do produto consiste em desenvolver um sistema de gerenciamento de tickets de suporte, que permita aos usuários solicitar assistência, técnicos fornecer suporte e administradores monitorar e analisar o desempenho da equipe de suporte.
 #### 4.2 Funcionalidades do Produto
 - [x] Cadastro de Administrador, Usuário e Técnico
-- [ ] Visualização de Tickets
-- [ ] Atribuição de Prioridades
-- [ ] Lista de Tickets em Aberto
-- [ ] Anexar Arquivos
-- [ ] Notificações Instantâneas
-- [ ] Relatórios de Desempenho
-- [ ] Fechamento de Tickets
-- [ ] Pesquisa e Filtros
+- [x] Visualização de Tickets
+- [x] Atribuição de Prioridades
+- [x] Lista de Tickets em Aberto
+- [x] Fechamento de Tickets
+- [x] Pesquisa e Filtros
 #### 4.3 Ambiente Operacional e Tecnologias
 O sistema será desenvolvido utilizando as seguintes tecnologias:
 - Backend: NestJS
