@@ -3,11 +3,11 @@ import { IsNumber, IsString } from "class-validator";
 
 export class CreateFeedbackDto {
 
-    @IsNumber()
-    user_id: string
+    @IsString()
+    user: string
 
-    @IsNumber()
-    ticket_id: string;
+    @IsString()
+    ticket: string
 
     @IsNumber()
     rating: number;
