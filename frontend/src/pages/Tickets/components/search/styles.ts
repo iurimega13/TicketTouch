@@ -76,7 +76,8 @@ export const CreateForm = styled(Form)`
 `;
 
 export const SortButton = styled(Button)`
-  color: ${(props) => props.theme.colors.textAlt} !important;
+  background-color: ${(props) => props.theme.colors.primary} !important;
+  color: ${(props) => props.theme.colors.text} !important;
 
   &:hover {
     background-color: ${(props) => props.theme.colors.secundary} !important;
