@@ -15,6 +15,7 @@ import {
   getSlaByTicket,
   getTicketById,
   getUserProfile,
+  getFeedbackByTicketId,
 } from '../../../../services/api';
 import {
   ChangesContainer,
@@ -22,6 +23,7 @@ import {
   StyledModal,
   StyledSpan,
 } from './styles';
+import TicketFeedback from '../feedback/ticketFeedback';
 
 interface TicketPopupProps {
   visible: boolean;
@@ -50,6 +52,8 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
   const [username, setUsername] = useState<string>('');
   const [extraResponseTime, setExtraResponseTime] = useState<number>(0);
   const [closingDate, setClosingDate] = useState<Date | null>(null);
+  const [showFeedback, setShowFeedback] = useState<boolean>(false);
+  const [feedbackExists, setFeedbackExists] = useState<boolean>(false);
 
   const userId = localStorage.getItem('userId');
 
@@ -95,24 +99,11 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
         changesData.forEach((changeItem) => {
           if (Array.isArray(changeItem.changes)) {
             changeItem.changes.forEach((change: Change) => {
-              if (
-                change.field === 'comentário' &&
-                (change.value.includes('admin') ||
-                  change.value.includes('analista'))
-              ) {
-                if (ticket && ticket.type === 'incidente') {
-                  additionalTime += 1 * 60 * 60 * 1000;
-                } else if (ticket && ticket.type === 'solicitacao') {
-                  additionalTime += 4 * 60 * 60 * 1000;
-                }
+              if (change.field === 'extraResponseTime') {
+                additionalTime += parseInt(change.value, 10);
               }
-
-              if (
-                (change.field === 'cancelamento' ||
-                  change.field === 'fechamento') &&
-                change.date
-              ) {
-                foundClosingDate = new Date(change.date);
+              if (change.field === 'closed_at') {
+                foundClosingDate = new Date(change.value);
               }
             });
           }
@@ -130,15 +121,25 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
       });
       console.error('Erro ao buscar histórico de mudanças:', error);
     }
-  }, [ticketId, ticket]);
+  }, [ticketId]);
+
+  const fetchFeedback = useCallback(async () => {
+    try {
+      const feedbackData = await getFeedbackByTicketId(ticketId);
+      setFeedbackExists(!!feedbackData);
+    } catch (error) {
+      console.error('Erro ao buscar feedback:', error);
+    }
+  }, [ticketId]);
 
   useEffect(() => {
     if (visible) {
       fetchUserProfile();
       fetchTicketDetails();
       fetchChanges();
+      fetchFeedback();
     }
-  }, [visible, fetchUserProfile, fetchTicketDetails, fetchChanges]);
+  }, [visible, fetchUserProfile, fetchTicketDetails, fetchChanges, fetchFeedback]);
 
   const calculateSlaStatus = () => {
     if (!slaDetails || !ticket) return 'SLA não definido';
@@ -156,16 +157,12 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
       createdAt.getTime() + slaDetails.resolution_time * 60 * 60 * 1000,
     );
 
-    // 1. Verifica se o ticket está fechado
     if (closingDate) return ' Fechado';
 
-    // 2. Verifica se o prazo de resolução foi ultrapassado
     if (effectiveEndDate > resolutionDeadline) return 'Atrasado para resolução';
 
-    // 3. Verifica se o prazo de resposta foi ultrapassado
     if (effectiveEndDate > responseDeadline) return 'Atrasado para resposta';
 
-    // 4. Caso contrário, está dentro do prazo
     return 'Dentro do Prazo';
   };
 
@@ -377,14 +374,17 @@ const TicketPopup: React.FC<TicketPopupProps> = ({
           <Form.Item style={{ textAlign: 'right', marginTop: '20px' }}>
             <Button
               type="primary"
-              onClick={() => console.log('Feedback button clicked')}
+              onClick={() => setShowFeedback(true)} 
               style={{ marginRight: '10px' }}
             >
-              Adicionar Feedback
+              {feedbackExists ? 'Ver Feedback' : 'Adicionar Feedback'}
             </Button>
           </Form.Item>
         )}
       </Form>
+      {showFeedback && (
+        <TicketFeedback ticketId={ticketId} onClose={() => setShowFeedback(false)} />
+      )}
     </StyledModal>
   );
 };
